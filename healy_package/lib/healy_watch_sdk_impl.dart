@@ -1042,8 +1042,8 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
 
     final Map<String, dynamic> queryParameters = {};
 
-    //queryParameters["version"] = currentVersionConverted;
-    queryParameters["version"] = "000";
+    queryParameters["version"] = currentVersionConverted;
+   // queryParameters["version"] = "000";
     queryParameters["type"] = "1929";
 
     final Response response = await Dio().get(
