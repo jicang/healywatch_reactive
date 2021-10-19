@@ -102,8 +102,9 @@ class WorkOutReminderPageState extends State<WorkOutReminderPage> {
                               InputDecoration(labelText: "IntervalTime"),
                           textAlign: TextAlign.center,
                           controller: _intervalTimeController,
+                          keyboardType: TextInputType.number,
                           inputFormatters: [
-                            WhitelistingTextInputFormatter.digitsOnly
+                            FilteringTextInputFormatter.digitsOnly
                           ],
                         ),
                       ),
@@ -115,8 +116,9 @@ class WorkOutReminderPageState extends State<WorkOutReminderPage> {
                           decoration: InputDecoration(labelText: "WorkOutDays"),
                           textAlign: TextAlign.center,
                           controller: _workDaysController,
+                          keyboardType: TextInputType.number,
                           inputFormatters: [
-                            WhitelistingTextInputFormatter.digitsOnly
+                            FilteringTextInputFormatter.digitsOnly
                           ],
                         ),
                       ),

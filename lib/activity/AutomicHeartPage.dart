@@ -125,8 +125,9 @@ class AutomicHeartPageState extends State<AutomicHeartPage> {
                               InputDecoration(labelText: "IntervalTime"),
                           textAlign: TextAlign.center,
                           controller: _intervalTimeController,
+                          keyboardType: TextInputType.number,
                           inputFormatters: [
-                            WhitelistingTextInputFormatter.digitsOnly
+                            FilteringTextInputFormatter.digitsOnly
                           ],
                         ),
                       ),

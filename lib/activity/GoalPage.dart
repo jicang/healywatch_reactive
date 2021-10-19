@@ -44,8 +44,9 @@ class GoalPageState extends State<GoalPage> {
                     decoration: InputDecoration(labelText: "Goal"),
                     textAlign: TextAlign.center,
                     controller: _userAgeController,
+                    keyboardType: TextInputType.number,
                     inputFormatters: [
-                      WhitelistingTextInputFormatter.digitsOnly
+                      FilteringTextInputFormatter.digitsOnly
                     ],
                   ),
                 ),

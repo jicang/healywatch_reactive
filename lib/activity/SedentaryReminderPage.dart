@@ -116,12 +116,13 @@ class SedentaryReminderPageState extends State<SedentaryReminderPage> {
                     children: <Widget>[
                       Expanded(
                         child: TextField(
+                          keyboardType: TextInputType.number,
                           decoration:
                               InputDecoration(labelText: "IntervalTime"),
                           textAlign: TextAlign.center,
                           controller: _intervalTimeController,
                           inputFormatters: [
-                            WhitelistingTextInputFormatter.digitsOnly
+                            FilteringTextInputFormatter.digitsOnly
                           ],
                         ),
                       ),
@@ -133,8 +134,9 @@ class SedentaryReminderPageState extends State<SedentaryReminderPage> {
                           decoration: InputDecoration(labelText: "LeastStep"),
                           textAlign: TextAlign.center,
                           controller: _leastStepController,
+                          keyboardType: TextInputType.number,
                           inputFormatters: [
-                            WhitelistingTextInputFormatter.digitsOnly
+                            FilteringTextInputFormatter.digitsOnly
                           ],
                         ),
                       ),

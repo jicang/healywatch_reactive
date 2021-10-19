@@ -242,8 +242,9 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
                         InputDecoration(labelText: "Base HeartRate(>40)"),
                     textAlign: TextAlign.center,
                     controller: _userAgeController,
+                    keyboardType: TextInputType.number,
                     inputFormatters: [
-                      WhitelistingTextInputFormatter.digitsOnly
+                      FilteringTextInputFormatter.digitsOnly
                     ],
                   ),
                 ),

@@ -74,13 +74,19 @@ class ExercisePageState extends State<ExercisePage> {
                 decoration: InputDecoration(labelText: "Breath Level"),
                 textAlign: TextAlign.center,
                 controller: _titleController,
-                inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly
+                ],
               ),
               TextField(
                 decoration: InputDecoration(labelText: "Breath Duration"),
                 textAlign: TextAlign.center,
                 controller: _infoController,
-                inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly
+                ],
               ),
             ],
           ),
