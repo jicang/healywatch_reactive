@@ -447,7 +447,6 @@ class BluetoothConnectionUtil {
         // _deviceConnectionController.add(update);
         print("enableNotification ${update.connectionState}");
         if (update.connectionState == DeviceConnectionState.connected) {
-
           enableNotification(deviceId);
         }
       },
@@ -469,10 +468,10 @@ class BluetoothConnectionUtil {
         serviceId: Uuid.parse("0000fff0-0000-1000-8000-00805f9b34fb"),
         deviceId: deviceId);
 
-    notifyStream = bleManager.subscribeToCharacteristic(_characteristicNotify);
-    notifyStream.listen((event) {
-      print("notifyData ${BleSdk.hex2String(event)}");
-    });
+    // notifyStream = bleManager.subscribeToCharacteristic(_characteristicNotify);
+    // notifyStream.listen((event) {
+    //   print("notifyData ${BleSdk.hex2String(event)}");
+    // });
   }
 
   Future<void> disconnect() async {

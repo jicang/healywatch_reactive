@@ -4,17 +4,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
+import 'package:healy_watch_sdk/util/bluetooth_conection_util.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-
+import 'package:provider/provider.dart';
 
 import 'activity/DeviceDetail.dart';
 import 'activity/DeviceSettingPage.dart';
 import 'activity/EcgPage.dart';
 import 'activity/UserInfo.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  HealyWatchSDKImplementation healyWatchSDKImplementation=HealyWatchSDKImplementation.instance;
+  BluetoothConnectionUtil bluetoothConnectionUtil=healyWatchSDKImplementation.bluetoothUtil;
+  final ble=bluetoothConnectionUtil.bleManager;
+  runApp(MultiProvider(
+    providers: [
+      Provider.value(
+          value: ble),
+      StreamProvider.value(value: ble.connectedDeviceStream, initialData: null)
+    ],
+    child: MyApp(),
+  ));
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -51,7 +64,7 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
   @override
   void initState() {
     super.initState();
-    getPath();
+
     deviceListStream =
         Stream.periodic(Duration(seconds: 1)).where((event) => isResume);
   }
@@ -65,14 +78,14 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
   //   return isHealyDevice;
   // }
 
-
   List<ScanResult> listDevice = [];
   late Stream deviceListStream;
 
   @override
   Widget build(BuildContext context) {
     final results = StreamBuilder<List<DiscoveredDevice>>(
-      stream: HealyWatchSDKImplementation.instance.scanResults(filterForName: "healy"),
+      stream: HealyWatchSDKImplementation.instance
+          .scanResults(filterForName: "healy"),
       initialData: [],
       builder: (c, snapshot) => ListView(
         children: ListTile.divideTiles(
@@ -218,13 +231,11 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
     HealyWatchSDKImplementation.instance.connectDevice(device);
     isResume = false;
     await Navigator.push<void>(
-        context,
-        MaterialPageRoute(
-            builder: (_) =>
-                DeviceDetail(device)));
-  ;
+        context, MaterialPageRoute(builder: (_) => DeviceDetail(device)));
+    ;
     isResume = true;
   }
+
   @override
   void dispose() {
     // TODO: implement dispose

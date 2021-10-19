@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
+import 'package:provider/provider.dart';
 
 import '../LoadingDialog.dart';
 import '../button_view.dart';
@@ -10,7 +11,7 @@ import 'HistoryDataPage.dart';
 class DeviceDetail extends StatefulWidget {
   final DiscoveredDevice device;
 
-  DeviceDetail( this.device);
+  DeviceDetail(this.device);
 
   @override
   State<StatefulWidget> createState() {
@@ -48,26 +49,25 @@ class DeviceDetailState extends State<DeviceDetail> {
               padding: EdgeInsets.symmetric(vertical: 2.0),
               child: Row(
                 children: <Widget>[
-                  ButtonView(
-                    "Connect",
-                    action: () => connected(),
-                  )
-                ],
-              ),
-            ),
-            Expanded(
-              child: GridView.count(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 3.5,
-                padding: EdgeInsets.all(4),
-                children: getItemList(),
-              ),
+                ButtonView("Connected",
+                action: () => connected(),
             ),
           ],
         ),
       ),
+      Expanded(
+        child: GridView.count(
+          crossAxisCount: 2,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          childAspectRatio: 3.5,
+          padding: EdgeInsets.all(4),
+          children: getItemList(),
+        ),
+      ),
+      ],
+    ),)
+    ,
     );
   }
 
@@ -98,16 +98,17 @@ class DeviceDetailState extends State<DeviceDetail> {
     return StreamBuilder<ConnectionStateUpdate>(
       stream: HealyWatchSDKImplementation.instance.connectionStateStream(),
       initialData: null,
-      builder: (c, snapshot) => RaisedButton(
-        color: Colors.blue,
-        child: Text(value.toString()),
-        textColor: Colors.white,
-        onPressed: (snapshot.data?.connectionState ==
+      builder: (c, snapshot) =>
+          RaisedButton(
+            color: Colors.blue,
+            child: Text(value.toString()),
+            textColor: Colors.white,
+            onPressed: (snapshot.data?.connectionState ==
                 DeviceConnectionState.connected)
-            ? () =>
-                index < 3 ? itemClick(listRoute[index]) : itemClickName(value)
-            : null,
-      ),
+                ? () =>
+            index < 3 ? itemClick(listRoute[index]) : itemClickName(value)
+                : null,
+          ),
     );
   }
 
@@ -122,12 +123,10 @@ class DeviceDetailState extends State<DeviceDetail> {
   }
 
   connected() async {
-    showLoading(context);
     await HealyWatchSDKImplementation.instance.connectDevice(device);
-    disMiss();
   }
 
-   LoadingDialog ?loadingDialog;
+  LoadingDialog? loadingDialog;
 
   void showLoading(BuildContext context) {
     showDialog(
@@ -135,7 +134,7 @@ class DeviceDetailState extends State<DeviceDetail> {
       barrierDismissible: true,
       builder: (BuildContext context) {
         if (loadingDialog == null) {
-          return LoadingDialog("Connectting...");
+          return LoadingDialog("Connecting...");
         } else {
           return loadingDialog!;
         }

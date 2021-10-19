@@ -216,7 +216,7 @@ class BleSdk {
     value[0] = DeviceCmd.setDeviceInfo;
     if (deviceBaseParameter.distanceUnit != null) {
       value[1] =
-          deviceBaseParameter.distanceUnit == DistanceUnit.metric ? 0x81 : 0x80;
+          deviceBaseParameter.distanceUnit == DistanceUnit.imperial ? 0x81 : 0x80;
     }
     if (deviceBaseParameter.hourMode != null) {
       value[2] =
@@ -723,7 +723,8 @@ class BleSdk {
   static List<int> setDeviceId(String deviceID) {
     final List<int> value = _generateInitValue();
     value[0] = DeviceCmd.setDeviceId;
-    for (int i = 0; i < 6; i++) {
+    int length=deviceID.length;
+    for (int i = 0; i < length; i++) {
       value[i + 1] = deviceID.codeUnitAt(i);
     }
     crcValue(value);
@@ -808,7 +809,7 @@ class BleSdk {
     }
     int startIndex = 1;
     for (final int i in list) {
-      value[startIndex] = i;
+      value[startIndex] = (i < 6 ? i : i + 1);;
       startIndex++;
     }
     crcValue(value);

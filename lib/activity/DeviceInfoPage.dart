@@ -71,7 +71,7 @@ class DeviceInfoPageState extends State<DeviceInfoPage> {
       appBar: AppBar(
         title: Text("DeviceInfo"),
       ),
-      body: Column(
+      body: SingleChildScrollView(child: Column(
         children: <Widget>[
           Row(
             children: <Widget>[
@@ -121,13 +121,14 @@ class DeviceInfoPageState extends State<DeviceInfoPage> {
           Row(
             children: <Widget>[
               Expanded(
-                child: TextField(
+                child:              TextField(
                   decoration: InputDecoration(labelText: "DeviceId"),
                   maxLength: 6,
                   textAlign: TextAlign.center,
                   controller: _userAgeController,
-                ),
-              ),
+                ) ,
+              )
+              ,
               ButtonView(
                 "Set DeviceId",
                 action: () => setDeviceID(context),
@@ -145,7 +146,7 @@ class DeviceInfoPageState extends State<DeviceInfoPage> {
           ),
           Text(info)
         ],
-      ),
+      ),)
     );
   }
 

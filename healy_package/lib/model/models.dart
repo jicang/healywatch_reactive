@@ -540,62 +540,62 @@ class HealyDeviceBaseParameter extends HealyBaseModel {
   /// distance unit
   ///
   /// can be called and set individually [BleSdk.setDistanceUnit]
-  late DistanceUnit distanceUnit;
+   DistanceUnit? distanceUnit;
 
   /// hour mode (12h/24h)
   ///
   /// can be called and set individually [BleSdk.setTimeModeUnit]设置
-  late HourMode hourMode;
+   HourMode? hourMode;
 
   /// default wearing wrist (left/right wrist)
   ///
   /// can be called and set individually [BleSdk.setWearingWrist(wearingWrist)]设置
-  late WearingWrist wearingWrist;
+   WearingWrist? wearingWrist;
 
   /// enable wrist-on function
   ///
   /// can be called and set individually [BleSdk.enableWristOn(enable)]设置
-  late bool wristOnEnable;
+   bool ?wristOnEnable;
 
   /// display enablement of sos interface on the watch
   ///
   /// can be called and set individually [BleSdk.setSosEnable(enable)]设置
-  late bool sosEnable;
+   bool? sosEnable;
 
   /// connection vibration
   ///
   /// [BleSdk.setConnectVibration(enable)]设置
-  late bool connectVibration;
+   bool ?connectVibration;
 
   /// ancs enablement
   ///
   /// can be called and set individually [BleSdk.enableAncs()],[BleSdk.disableAncs()] 设置
-  late bool ancsState;
+   bool ancsState=false;
 
   /// wrist-on sensitivity
   ///
   /// can be called and set individually [BleSdk.setWristOnSensitivity(sensitivity)]设置
-  late int wristOnSensitivity;
+   int ?wristOnSensitivity;
 
   /// screen-on time
   ///
   /// can be called and set individually [BleSdk.setScreenOnTime(screenOnTime)]设置
-  late int screenOnTime;
+   int? screenOnTime;
 
   /// vibration intensity
   ///
   /// can be called and set individually [BleSdk.setVibrationLevel(level)]设置
-  late int vibrationLevel;
+   int? vibrationLevel;
 
   /// basic heart rate
   ///
   /// can be called and set individually [BleSdk.setBaseHeartRate(hr)]设置
-  late int baseHeart;
+   int ?baseHeart;
 
   /// brightness level
   ///
   /// can be called and set individually [BleSdk.setBrightnessLevel(level)]设置
-  late int brightnessLevel;
+   int ?brightnessLevel;
 }
 
 class WeatherData extends HealyBaseModel {

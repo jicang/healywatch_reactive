@@ -58,8 +58,8 @@ class ResolveUtil {
     final HealyDeviceBaseParameter deviceBaseParameter =
         HealyDeviceBaseParameter();
     deviceBaseParameter.distanceUnit = _hexByte2Int(value[1], 0) == 1
-        ? DistanceUnit.metric
-        : DistanceUnit.imperial;
+        ? DistanceUnit.imperial
+        : DistanceUnit.metric;
     deviceBaseParameter.hourMode = _hexByte2Int(value[2], 0) == 1
         ? HourMode.hourMode_12
         : HourMode.hourMode_24;

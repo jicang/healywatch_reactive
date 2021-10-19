@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,7 +7,6 @@ import 'package:healy_watch_sdk/model/models.dart';
 
 import '../button_view.dart';
 
-
 class DeviceBasicPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -18,10 +15,9 @@ class DeviceBasicPage extends StatefulWidget {
 }
 
 class DeviceBasicPageState extends State<DeviceBasicPage> {
-
-   DistanceUnit ?distanceUnit;
-   HourMode? timeMode;
-   WearingWrist ?wearingWrist;
+  DistanceUnit? distanceUnit;
+  HourMode? timeMode;
+  WearingWrist? wearingWrist;
   bool enableWristOn = false;
   bool enableSos = false;
   bool enableConnectVibration = false;
@@ -35,10 +31,7 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
   @override
   void dispose() {
     super.dispose();
-
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +57,8 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
                     title: Text("Metric"),
                     value: DistanceUnit.metric,
                     groupValue: distanceUnit,
-                    onChanged: (DistanceUnit? value) => changeDistanceUnit(value),
+                    onChanged: (DistanceUnit? value) =>
+                        changeDistanceUnit(value),
                   ),
                 ),
                 Flexible(
@@ -73,7 +67,8 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
                     title: Text("Imperial"),
                     value: DistanceUnit.imperial,
                     groupValue: distanceUnit,
-                    onChanged: (DistanceUnit ?value) => changeDistanceUnit(value),
+                    onChanged: (DistanceUnit? value) =>
+                        changeDistanceUnit(value),
                   ),
                 ),
               ],
@@ -106,7 +101,7 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
                     title: Text("24h"),
                     value: HourMode.hourMode_24,
                     groupValue: timeMode,
-                    onChanged: (HourMode ?value) => changeTimeMode(value),
+                    onChanged: (HourMode? value) => changeTimeMode(value),
                   ),
                 ),
               ],
@@ -130,7 +125,7 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
                     title: Text("Left"),
                     value: WearingWrist.left,
                     groupValue: wearingWrist,
-                    onChanged: (WearingWrist ?value) => changeHand(value),
+                    onChanged: (WearingWrist? value) => changeHand(value),
                   ),
                 ),
                 Flexible(
@@ -139,7 +134,7 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
                     title: Text("Right"),
                     value: WearingWrist.right,
                     groupValue: wearingWrist,
-                    onChanged: (WearingWrist ?value) => changeHand(value),
+                    onChanged: (WearingWrist? value) => changeHand(value),
                   ),
                 ),
               ],
@@ -270,41 +265,43 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
                 )
               ],
             ),
-
           ],
         ),
       ),
     );
   }
 
-  getDeviceInfo() async{
-    HealyDeviceBaseParameter deviceBaseParameter=await HealyWatchSDKImplementation.instance.getDeviceBaseParameter();
+  getDeviceInfo() async {
+    HealyDeviceBaseParameter deviceBaseParameter =
+        await HealyWatchSDKImplementation.instance.getDeviceBaseParameter();
     distanceUnit = deviceBaseParameter.distanceUnit;
     timeMode = deviceBaseParameter.hourMode;
     wearingWrist = deviceBaseParameter.wearingWrist;
-    enableWristOn = deviceBaseParameter.wristOnEnable;
-    wristOnSensitivity = deviceBaseParameter.wristOnSensitivity.toDouble();
+    enableWristOn = deviceBaseParameter.wristOnEnable!;
+    wristOnSensitivity = deviceBaseParameter.wristOnSensitivity!.toDouble();
     if (wristOnSensitivity < 1 || wristOnSensitivity > 3)
       wristOnSensitivity =
           HealyDeviceBaseParameter.defaultWristOnSensitivity.toDouble();
-    vibrationLevel = deviceBaseParameter.vibrationLevel.toDouble();
+    vibrationLevel = deviceBaseParameter.vibrationLevel!.toDouble();
     if (vibrationLevel < 1 || vibrationLevel > 5)
-      vibrationLevel = HealyDeviceBaseParameter.defaultVibrationLevel.toDouble();
-    screenOnTime = deviceBaseParameter.screenOnTime.toDouble();
+      vibrationLevel =
+          HealyDeviceBaseParameter.defaultVibrationLevel.toDouble();
+    screenOnTime = deviceBaseParameter.screenOnTime!.toDouble();
     if (screenOnTime < 1 || screenOnTime > 8)
       screenOnTime = HealyDeviceBaseParameter.defaultScreenOnTime.toDouble();
-    screenLight = deviceBaseParameter.brightnessLevel.toDouble();
+    screenLight = deviceBaseParameter.brightnessLevel!.toDouble();
     if (screenLight < 1 || screenLight > 15)
       screenLight = HealyDeviceBaseParameter.defaultBrightnessLevel.toDouble();
 
-    enableSos = deviceBaseParameter.sosEnable;
+    enableSos = deviceBaseParameter.sosEnable!;
     _userAgeController.text = deviceBaseParameter.baseHeart.toString();
-    enableConnectVibration = deviceBaseParameter.connectVibration;
+    enableConnectVibration = deviceBaseParameter.connectVibration!;
     setState(() {});
   }
 
-  setDeviceInfo() async{
-    HealyDeviceBaseParameter deviceBaseParameter = new HealyDeviceBaseParameter();
+  setDeviceInfo() async {
+    HealyDeviceBaseParameter deviceBaseParameter =
+        new HealyDeviceBaseParameter();
     String hr = _userAgeController.text;
     if (hr != null && hr.length != 0)
       deviceBaseParameter.baseHeart = int.parse(hr);
@@ -315,14 +312,13 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
     deviceBaseParameter.sosEnable = enableSos;
     deviceBaseParameter.connectVibration = enableConnectVibration;
     deviceBaseParameter.wristOnEnable = enableWristOn;
-    deviceBaseParameter.distanceUnit = distanceUnit!;
-    deviceBaseParameter.hourMode = timeMode!;
-    deviceBaseParameter.wearingWrist = wearingWrist!;
-    bool isSuccess=await HealyWatchSDKImplementation.instance.setDeviceBaseParameter(deviceBaseParameter);
+    deviceBaseParameter.distanceUnit = distanceUnit;
+    deviceBaseParameter.hourMode = timeMode;
+    deviceBaseParameter.wearingWrist = wearingWrist;
+    bool isSuccess = await HealyWatchSDKImplementation.instance
+        .setDeviceBaseParameter(deviceBaseParameter);
     print("$isSuccess");
   }
-
-
 
   Widget getDialog(String dataType, String msg) {
     return new AlertDialog(
@@ -342,7 +338,7 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
     );
   }
 
-  AlertDialog ?alertDialog;
+  AlertDialog? alertDialog;
 
   void showMsgDialog(BuildContext context, String title, String content) {
     showDialog(
@@ -354,17 +350,13 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
     );
   }
 
-
-
-
-
   changeDistanceUnit(DistanceUnit? value) {
     distanceUnit = value!;
     HealyWatchSDKImplementation.instance.setDistanceUnit(distanceUnit!);
     setState(() {});
   }
 
-  changeTimeMode(HourMode ?value) {
+  changeTimeMode(HourMode? value) {
     timeMode = value!;
     HealyWatchSDKImplementation.instance.setTimeModeUnit(timeMode!);
     setState(() {});
@@ -390,7 +382,8 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
 
   _enableConnectVibration(bool enable) {
     this.enableConnectVibration = enable;
-    HealyWatchSDKImplementation.instance.setConnectVibration(enableConnectVibration);
+    HealyWatchSDKImplementation.instance
+        .setConnectVibration(enableConnectVibration);
     setState(() {});
   }
 
@@ -432,9 +425,7 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
 
   setBaseHr() {
     String hr = _userAgeController.text;
-    if (hr == null || hr.length == 0) return;
+    if ( hr.length == 0) return;
     HealyWatchSDKImplementation.instance.setBaseHeartRate(int.parse(hr));
   }
-
-
 }

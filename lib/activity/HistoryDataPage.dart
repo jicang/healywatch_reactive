@@ -261,12 +261,9 @@ class HistoryDataPageState extends State<HistoryDataPage> {
   }
 
   startReadData() async {
-    index = 0;
-
     list.clear();
     setState(() {});
     showLoading(context);
-
     switch (page) {
       case PageDetailData:
         Stream<List<HealyDailyEvaluationBlock>> healySleepData =
@@ -334,11 +331,45 @@ class HistoryDataPageState extends State<HistoryDataPage> {
     // BleManager.instance.writeData(sendValue);
   }
 
-  deleteData() {
+  deleteData() async {
+    switch (page) {
+      case PageDetailData:
+        await HealyWatchSDKImplementation.instance
+            .deleteDailyEvaluationBlocks();
+        break;
+      case PageTotalData:
+        await HealyWatchSDKImplementation.instance.deleteAllDailyActivities();
+        break;
+      case PageDynamicHrData:
+        await HealyWatchSDKImplementation.instance.deleteAllDynamicHeartRates();
+        break;
+      case PageStaticHrData:
+        await HealyWatchSDKImplementation.instance.deleteAllStaticHeartRates();
+        break;
+      case PageSleepData:
+        await HealyWatchSDKImplementation.instance.deleteAllSleepData();
+        break;
+      case PageExerciseData:
+        await HealyWatchSDKImplementation.instance.deleteAllWorkoutData();
+        break;
+      case PageHrvData:
+        await HealyWatchSDKImplementation.instance.deleteAllECGData();
+        break;
+      case PageAllData:
+        await HealyWatchSDKImplementation.instance
+            .deleteDailyEvaluationBlocks();
+        await HealyWatchSDKImplementation.instance.deleteAllDailyActivities();
+        await HealyWatchSDKImplementation.instance.deleteAllDynamicHeartRates();
+        await HealyWatchSDKImplementation.instance.deleteAllStaticHeartRates();
+        await HealyWatchSDKImplementation.instance.deleteAllSleepData();
+        await HealyWatchSDKImplementation.instance.deleteAllWorkoutData();
+        await HealyWatchSDKImplementation.instance.deleteAllECGData();
+        break;
+    }
+    print("delete");
     startReadData();
   }
 
-  late int index;
   List<dynamic> list = [];
 
   void showMsgDialog(BuildContext context, String title, String msg) {
@@ -410,7 +441,7 @@ class HistoryDataPageState extends State<HistoryDataPage> {
         FlatButton(
           onPressed: () {
             Navigator.of(context).pop();
-            //deleteData();
+            deleteData();
           },
           child: Text("Confirm"),
         ),

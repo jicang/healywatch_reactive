@@ -35,8 +35,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
 
   late BluetoothConnectionUtil _bluetoothUtil;
 
-  BluetoothConnectionUtil get bluetoothUtil =>
-      _bluetoothUtil ;
+  BluetoothConnectionUtil get bluetoothUtil => _bluetoothUtil;
 
   // static Future<BluetoothConnectionUtil>  bluetoothUtil;
 
@@ -189,8 +188,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   @override
   Future<bool> deleteDailyEvaluationBlocks() async {
     await _writeData(BleSdk.deleteAllDailyEvaluationBlocks());
-    return _filterDeleteValue(DeviceCmd.getStaticHeartData)
-        .then((value) => true);
+    return _filterDeleteValue(DeviceCmd.getDetailData).then((value) => true);
   }
 
   @override
@@ -955,7 +953,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   Future<bool> sendHeartPackage(
       HealyHeartPackageData healyHeartPackageData) async {
     await _writeData(BleSdk.sendHeartPackage(healyHeartPackageData));
-    return _filterValue(DeviceCmd.heartPackage).then((value) => true);
+    return true;
   }
 
   @override
@@ -964,12 +962,12 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     _writeData(BleSdk.startBreath(breathingSession));
     final StreamController<HealyBaseExerciseData> controller =
         StreamController<HealyBaseExerciseData>();
-    StreamSubscription<List<int>>? streamSubscription;
-    streamSubscription = bluetoothUtil
+   bluetoothUtil
         .monitorNotify()
         .where((values) => _workOutData(values))
         .listen((value) {
       HealyBaseExerciseData? healyBaseExerciseData;
+      print("ex${value}");
       switch (value[0]) {
         case DeviceCmd.startExercise:
           healyBaseExerciseData = ResolveUtil.enterWorkOutModeData(value);
@@ -983,7 +981,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
       }
       if (healyBaseExerciseData is HealyExerciseData) {
         if (healyBaseExerciseData.heartRate == 255)
-          streamSubscription!.cancel();
+          controller.close();
       }
     });
 
@@ -1043,7 +1041,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     final Map<String, dynamic> queryParameters = {};
 
     queryParameters["version"] = currentVersionConverted;
-   // queryParameters["version"] = "000";
+    // queryParameters["version"] = "000";
     queryParameters["type"] = "1929";
 
     final Response response = await Dio().get(
@@ -1246,20 +1244,16 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
 
     StreamSubscription streamSubscription =
         scanResults(filterForName: "dfu").listen(
-      (event)  {
-
-      },
+      (event) {},
     );
-    streamSubscription.onData((data) async{
+    streamSubscription.onData((data) async {
       for (DiscoveredDevice peripheral in data) {
-        print("dfu "+peripheral.id.toString());
+        print("dfu " + peripheral.id.toString());
         streamSubscription.cancel();
         await cancelScanningDevices();
-        await startOta(
-            peripheral.id, "$rootPath/firmware.zip", progressStream);
+        await startOta(peripheral.id, "$rootPath/firmware.zip", progressStream);
       }
     });
-
   }
 
   /// After entering dfu mode, the mac address will change, (last bit +1)
