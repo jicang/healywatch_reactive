@@ -124,6 +124,7 @@ class UserInfoState extends State<UserInfo> {
                 ),
                 Expanded(
                   child: TextField(
+                    enabled: false,
                     textAlign: TextAlign.center,
                     decoration: InputDecoration(labelText: "Stride"),
                     controller: _userStrideController,
