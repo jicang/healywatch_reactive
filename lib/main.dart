@@ -59,7 +59,7 @@ class ScanDeviceWidget extends StatefulWidget {
 
 class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
   bool isResume = true;
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
 
   @override
   void initState() {
@@ -134,7 +134,7 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
     // );
 
     return Scaffold(
-      key: _scaffoldKey,
+
       appBar: AppBar(
         title: Text("DeviceList"),
         actions: <Widget>[],
@@ -167,9 +167,9 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
     BleStatus bluetoothState =
         await HealyWatchSDKImplementation.instance.getBluetoothState();
     if (bluetoothState == BleStatus.poweredOff) {
-      SnackBar snackBar =
-          new SnackBar(content: new Text('BluetoothState is off'));
-      _scaffoldKey.currentState!.showSnackBar(snackBar);
+
+      // _scaffoldKey.currentState!.showSnackBar(snackBar);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:  Text('BluetoothState is off')));
       return;
     }
     if (Platform.isAndroid) {

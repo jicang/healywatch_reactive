@@ -75,18 +75,14 @@ class ExercisePageState extends State<ExercisePage> {
                 textAlign: TextAlign.center,
                 controller: _titleController,
                 keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly
-                ],
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
               TextField(
                 decoration: InputDecoration(labelText: "Breath Duration"),
                 textAlign: TextAlign.center,
                 controller: _infoController,
                 keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly
-                ],
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
             ],
           ),
@@ -125,14 +121,17 @@ class ExercisePageState extends State<ExercisePage> {
     return value.length == 0;
   }
 
+  StreamSubscription<HealyBaseExerciseData>? healyExerciseDataSubscription;
+
   enableExercise(bool enable) async {
+    healyExerciseDataSubscription?.cancel();
     if (notifyType == HealyWorkoutMode.breathing) {
       String levelString = _titleController.text;
       String durationString = _infoController.text;
       if (levelString.isEmpty || durationString.isEmpty) return;
       if (enable) {
         Stream<HealyBaseExerciseData> healyExerciseDataStream =
-            await HealyWatchSDKImplementation.instance.startBreathingSession(
+            HealyWatchSDKImplementation.instance.startBreathingSession(
                 HealyBreathingSession(
                     level: int.parse(levelString),
                     durationInSeconds: int.parse(durationString)));
@@ -161,7 +160,7 @@ class ExercisePageState extends State<ExercisePage> {
   }
 
   showExerciseData(Stream<HealyBaseExerciseData> healyExerciseDataStream) {
-    healyExerciseDataStream.listen((event) {
+    healyExerciseDataSubscription = healyExerciseDataStream.listen((event) {
       if (event is HealyExerciseData) {
         startTimer();
         var heartRate = event.heartRate;
@@ -191,6 +190,7 @@ class ExercisePageState extends State<ExercisePage> {
     if (countdownTimer != null && countdownTimer!.isActive) return;
     countdownTimer =
         new Timer.periodic(new Duration(seconds: 3), (timer) async {
+      if (!mounted) countdownTimer!.cancel();
       bool success = await HealyWatchSDKImplementation.instance
           .sendHeartPackage(HealyHeartPackageData(
               distanceInKm: 0.5,

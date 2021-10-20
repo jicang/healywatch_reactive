@@ -447,6 +447,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   }
 
   bool _workOutData(List<int> values) {
+    print("notify${BleSdk.hex2String(values)}");
     return values.isNotEmpty &&
         (values[0] == DeviceCmd.startExercise ||
             values[0] == DeviceCmd.exerciseData);
@@ -659,7 +660,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
         controller.add(list);
       }
       index++;
-      final bool isEnd = _isDataResponseEnd(data as List<int>, cmd);
+      final bool isEnd = _isDataResponseEnd(data, cmd);
       if (isEnd) {
         streamSubscription.cancel();
         controller.close();
@@ -774,7 +775,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   }
 
   Future<void> _writeData(List<int> value, {String? transactionId}) async {
-    // if (!(await bluetoothUtil.isConnected())) return;
+    if (!(await bluetoothUtil.isConnected())) return;
     await bluetoothUtil.writeData(Uint8List.fromList(value),
         transactionId: transactionId);
     final String write = BleSdk.hex2String(value);
@@ -962,43 +963,46 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     _writeData(BleSdk.startBreath(breathingSession));
     final StreamController<HealyBaseExerciseData> controller =
         StreamController<HealyBaseExerciseData>();
-   bluetoothUtil
+    StreamSubscription streamSubscription = bluetoothUtil
         .monitorNotify()
         .where((values) => _workOutData(values))
-        .listen((value) {
+        .listen((value) {});
+    streamSubscription.onData((data) {
       HealyBaseExerciseData? healyBaseExerciseData;
-      print("ex${value}");
-      switch (value[0]) {
+      print("ex ${data}");
+      switch (data[0]) {
         case DeviceCmd.startExercise:
-          healyBaseExerciseData = ResolveUtil.enterWorkOutModeData(value);
+          healyBaseExerciseData = ResolveUtil.enterWorkOutModeData(data);
           break;
         case DeviceCmd.exerciseData:
-          healyBaseExerciseData = ResolveUtil.getActivityExerciseData(value);
+          healyBaseExerciseData = ResolveUtil.getActivityExerciseData(data);
           break;
+      }
+
+      if (healyBaseExerciseData is HealyExerciseData) {
+        if (healyBaseExerciseData.heartRate == 255) {
+          controller.close();
+          streamSubscription.cancel();
+        }
       }
       if (!controller.isClosed) {
         controller.add(healyBaseExerciseData!);
       }
-      if (healyBaseExerciseData is HealyExerciseData) {
-        if (healyBaseExerciseData.heartRate == 255)
-          controller.close();
-      }
     });
-
     return controller.stream;
   }
 
   @override
   Future<bool> stopBreathingSession() async {
     await _writeData(BleSdk.stopBreathSession());
-    return bluetoothUtil
-        .monitorNotify()
-        .where((values) =>
-            values.isNotEmpty &&
-            values[0] == DeviceCmd.exerciseData &&
-            values[1] == 0Xff)
-        .first
-        .then((value) => true);
+    return true;
+    // return bluetoothUtil
+    //     .monitorNotify()
+    //     .where((values) =>
+    //         values.isNotEmpty &&
+    //         values[0] == DeviceCmd.exerciseData &&
+    //         values[1] == 0Xff)
+    //     .then((value) => true);
   }
 
   @override
