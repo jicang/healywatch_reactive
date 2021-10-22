@@ -188,7 +188,7 @@ class UserInfoState extends State<UserInfo> {
     print(value);
   }
 
-  Widget getDialog(String dataType, String msg) {
+  Widget getDialog(BuildContext context,String dataType, String msg) {
     return new AlertDialog(
       title: Container(
         width: MediaQuery.of(context).size.width,
@@ -213,7 +213,7 @@ class UserInfoState extends State<UserInfo> {
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return getDialog(title, msg);
+        return getDialog(context,title, msg);
       },
     );
   }

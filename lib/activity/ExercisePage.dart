@@ -18,6 +18,8 @@ class ExercisePage extends StatefulWidget {
 }
 
 class ExercisePageState extends State<ExercisePage> {
+  double breathLevel = 0;
+  double breathCount = 1;
   bool enterCamera = false;
   HealyWorkoutMode notifyType = HealyWorkoutMode.running;
   String title = "";
@@ -35,8 +37,6 @@ class ExercisePageState extends State<ExercisePage> {
     "Hiking",
     "Gym",
   ];
-  TextEditingController _titleController = TextEditingController();
-  TextEditingController _infoController = TextEditingController();
 
   @override
   void dispose() {
@@ -68,24 +68,43 @@ class ExercisePageState extends State<ExercisePage> {
               }).toList(),
             ),
           ),
-          Column(
+          Visibility(
+            visible: notifyType==HealyWorkoutMode.breathing,
+            child:  Column(
             children: <Widget>[
-              TextField(
-                decoration: InputDecoration(labelText: "Breath Level"),
-                textAlign: TextAlign.center,
-                controller: _titleController,
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              Padding(
+                padding: EdgeInsets.only(top: 8),
+                child: Text(getBreathLevelText(breathLevel.toInt()),textAlign: TextAlign.center,),
               ),
-              TextField(
-                decoration: InputDecoration(labelText: "Breath Duration"),
-                textAlign: TextAlign.center,
-                controller: _infoController,
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              Slider(
+                value: breathLevel,
+                onChanged: (value) => changeBreathLevel(value),
+                min: 0,
+                divisions: 2,
+                max: 2,
+              ),
+              Divider(
+                height: 1.0,
+                color: Colors.amber,
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 8),
+                child: Text("Breath Count\n ${breathCount.toInt()}",textAlign: TextAlign.center,),
+              ),
+              Slider(
+                value: breathCount,
+                onChanged: (value) => changeBreathCount(value),
+                min: 1.0,
+                divisions: 59,
+                max: 60,
+              ),
+              Divider(
+                height: 1.0,
+                color: Colors.amber,
               ),
             ],
-          ),
+          ),),
+
           Expanded(
             flex: 1,
             child: Container(
@@ -121,20 +140,33 @@ class ExercisePageState extends State<ExercisePage> {
     return value.length == 0;
   }
 
+  String getBreathLevelText(int value) {
+    String mode = "";
+    switch (value) {
+      case 0:
+        mode="Beginner";
+        break;
+      case 1:
+        mode="Skilled";
+        break;
+      case 2:
+        mode="Advanced";
+        break;
+    }
+    return "Breath Mode\n$mode";
+  }
+
   StreamSubscription<HealyBaseExerciseData>? healyExerciseDataSubscription;
 
   enableExercise(bool enable) async {
     healyExerciseDataSubscription?.cancel();
     if (notifyType == HealyWorkoutMode.breathing) {
-      String levelString = _titleController.text;
-      String durationString = _infoController.text;
-      if (levelString.isEmpty || durationString.isEmpty) return;
       if (enable) {
         Stream<HealyBaseExerciseData> healyExerciseDataStream =
             HealyWatchSDKImplementation.instance.startBreathingSession(
                 HealyBreathingSession(
-                    level: int.parse(levelString),
-                    durationInSeconds: int.parse(durationString)));
+                    level: breathLevel.toInt(),
+                    durationInSeconds: breathCount.toInt()));
         showExerciseData(healyExerciseDataStream);
       } else {
         bool isSuccess =
@@ -235,9 +267,19 @@ class ExercisePageState extends State<ExercisePage> {
     return reasonInfo;
   }
 
+  changeBreathLevel(double value) {
+    this.breathLevel = value;
+    setState(() {});
+  }
+
+  changeBreathCount(double value) {
+    this.breathCount = value;
+    setState(() {});
+  }
+
   void showMsgDialog(BuildContext context, String title, String content) {
     showDialog(
-      context: context,
+      context: this.context,
       barrierDismissible: true,
       builder: (BuildContext context) {
         return getDialog(title, content);

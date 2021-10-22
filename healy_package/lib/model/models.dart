@@ -88,9 +88,9 @@ class HealyEnterEcgData extends HealyBaseMeasuremenetData {
     required this.ecgResultCode,
   });
 }
-class HealyOnlyPPGFinish extends HealyBaseMeasuremenetData {
 
-}
+class HealyOnlyPPGFinish extends HealyBaseMeasuremenetData {}
+
 enum EnterEcgResultCode {
   //success 成功
   success,
@@ -175,7 +175,7 @@ class HealyEcgSuccessData extends HealyBaseMeasuremenetData {
 
   late List<HealyECGQualityData> qualityPoints;
   late List<HealyPPGData> ppgData;
-  late  List<HealyECGData> ecgData;
+  late List<HealyECGData> ecgData;
 
   HealyEcgSuccessData({
     required this.dateTime,
@@ -540,62 +540,62 @@ class HealyDeviceBaseParameter extends HealyBaseModel {
   /// distance unit
   ///
   /// can be called and set individually [BleSdk.setDistanceUnit]
-   DistanceUnit? distanceUnit;
+  DistanceUnit? distanceUnit;
 
   /// hour mode (12h/24h)
   ///
   /// can be called and set individually [BleSdk.setTimeModeUnit]设置
-   HourMode? hourMode;
+  HourMode? hourMode;
 
   /// default wearing wrist (left/right wrist)
   ///
   /// can be called and set individually [BleSdk.setWearingWrist(wearingWrist)]设置
-   WearingWrist? wearingWrist;
+  WearingWrist? wearingWrist;
 
   /// enable wrist-on function
   ///
   /// can be called and set individually [BleSdk.enableWristOn(enable)]设置
-   bool ?wristOnEnable;
+  bool? wristOnEnable;
 
   /// display enablement of sos interface on the watch
   ///
   /// can be called and set individually [BleSdk.setSosEnable(enable)]设置
-   bool? sosEnable;
+  bool? sosEnable;
 
   /// connection vibration
   ///
   /// [BleSdk.setConnectVibration(enable)]设置
-   bool ?connectVibration;
+  bool? connectVibration;
 
   /// ancs enablement
   ///
   /// can be called and set individually [BleSdk.enableAncs()],[BleSdk.disableAncs()] 设置
-   bool ancsState=false;
+  bool ancsState = false;
 
   /// wrist-on sensitivity
   ///
   /// can be called and set individually [BleSdk.setWristOnSensitivity(sensitivity)]设置
-   int ?wristOnSensitivity;
+  int? wristOnSensitivity;
 
   /// screen-on time
   ///
   /// can be called and set individually [BleSdk.setScreenOnTime(screenOnTime)]设置
-   int? screenOnTime;
+  int? screenOnTime;
 
   /// vibration intensity
   ///
   /// can be called and set individually [BleSdk.setVibrationLevel(level)]设置
-   int? vibrationLevel;
+  int? vibrationLevel;
 
   /// basic heart rate
   ///
   /// can be called and set individually [BleSdk.setBaseHeartRate(hr)]设置
-   int ?baseHeart;
+  int? baseHeart;
 
   /// brightness level
   ///
   /// can be called and set individually [BleSdk.setBrightnessLevel(level)]设置
-   int ?brightnessLevel;
+  int? brightnessLevel;
 }
 
 class WeatherData extends HealyBaseModel {
@@ -665,7 +665,7 @@ class HealyClock extends HealyBaseModel {
   late int minute;
 
   /// alarm content（healy watch doesn't use this, can be skipped）
-   String content="";
+  String content = "";
 
   /// alarm turn on /off
   late bool enable;
@@ -783,4 +783,11 @@ class HealySleepModeData {
       required this.startMin,
       required this.endHour,
       required this.endMin});
+}
+
+class HealyResUpdateData {
+  bool needUpdate;
+  int updateIndex;
+
+  HealyResUpdateData({required this.needUpdate, required this.updateIndex});
 }

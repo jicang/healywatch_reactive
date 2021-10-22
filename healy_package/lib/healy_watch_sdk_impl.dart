@@ -52,6 +52,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   Stream<List<DiscoveredDevice>> scanResults(
       {String filterForName = HealyWatchSDKImplementation.filterName,
       List<String>? ids}) {
+    print(filterForName);
     return bluetoothUtil.startScan(filterForName, List.empty());
   }
 
@@ -66,6 +67,10 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     await bluetoothUtil.connect(device.id);
   }
 
+  Future<void> connectDeviceWithId(String deviceId,
+      {bool autoReconnect = true}) async {
+    await bluetoothUtil.connect(deviceId);
+  }
   @override
   Future<void> disconnectDevice() {
     return bluetoothUtil.disconnect();
@@ -77,10 +82,11 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   // }
   //
   // // returns wether the watch is PROPERLY connected, meaning the devices are paired and it is possible to call functions on the watch
-  // @override
-  // Future<bool> isConnected() {
-  //   return bluetoothUtil.isConnected();
-  // }
+  @override
+  bool isConnected() {
+    return bluetoothUtil.isConnected();
+  }
+
   //
   // // returns the connected device synchronously
   // // will return null if the device has not been reinitialized properly even if there is a connected device
@@ -775,16 +781,15 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   }
 
   Future<void> _writeData(List<int> value, {String? transactionId}) async {
-    if (!(await bluetoothUtil.isConnected())) return;
+    if (!isConnected()) return;
     await bluetoothUtil.writeData(Uint8List.fromList(value),
         transactionId: transactionId);
     final String write = BleSdk.hex2String(value);
-    // ignore: avoid_print
     print("write: $write");
   }
 
   Future<List<int>> _filterValue(int cmd) async {
-    // if (!(await bluetoothUtil.isConnected())) return [];
+    if (!( bluetoothUtil.isConnected())) return [];
     return bluetoothUtil
         .monitorNotify()
         .where((values) => values.isNotEmpty && values[0] == cmd)
@@ -901,16 +906,21 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     return _filterValue(DeviceCmd.resDataSend).then((value) => value[1] == 1);
   }
 
+  //是否升级成功
   Future<bool> checkResUpdateData(List<int> value) {
     _writeData(value);
     return _filterValue(DeviceCmd.resCheck)
         .then((value) => value[1] == 2 && value[2] == 1);
   }
 
-  Future<bool> checkNeedResUpdate(List<int> value) {
+  //是否需要升级
+  Future<HealyResUpdateData> checkNeedResUpdate(List<int> value) {
     _writeData(value);
     return _filterValue(DeviceCmd.resCheck)
-        .then((value) => value[1] == 1 && value[2] == 1);
+        .then((value){
+
+      return ResolveUtil.getHealyResUpdate(value);
+    });
   }
 
   List<List<int>> quList = [];
@@ -925,7 +935,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
 
   void _writeOfferData() {
     final List<int>? value = quList.isEmpty ? null : quList.removeAt(0);
-    if (value == null) return;
+    if (value == null || !isConnected()) return;
     bluetoothUtil
         .writeData(Uint8List.fromList(value))
         .whenComplete(() => _writeOfferData());
@@ -938,9 +948,9 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   }
 
   @override
-  bool enterDfuMode() {
+  Future<bool> enterDfuMode() {
     _writeData(BleSdk.startOTA());
-    return true;
+    return _filterValue(DeviceCmd.startOta).then((value) => true);
     // cant read anymore after entering dfu mode
     // try {
     //   return _filterValue(DeviceCmd.startOta).then((value) => true);
@@ -1044,8 +1054,8 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
 
     final Map<String, dynamic> queryParameters = {};
 
-    queryParameters["version"] = currentVersionConverted;
-    // queryParameters["version"] = "000";
+    //queryParameters["version"] = currentVersionConverted;
+    queryParameters["version"] = "000";
     queryParameters["type"] = "1929";
 
     final Response response = await Dio().get(
@@ -1120,9 +1130,9 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     final List<int> checkBytes =
         resUpdateUtils.checkAllFile(ResCmdMode.startCheck);
 
-    final bool needUpdate = await checkNeedResUpdate(checkBytes);
+    final HealyResUpdateData healyResUpdateData = await checkNeedResUpdate(checkBytes);
 
-    return needUpdate;
+    return healyResUpdateData.needUpdate;
   }
 
   /// TODO whats this for?
@@ -1152,23 +1162,42 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
       }
     }
 
-    // TODO ask what this all does and why its needed?
-    // final healySetDeviceTime = await HealyWatchSDKImplementation.instance
-    //     .setDeviceTime(DateTime.now());
-    // final resUpdateUtils =
-    //     ResourceUpdateUtil(rootPath, healySetDeviceTime.maxLength);
-    // try {
-    //   // aparently needs a artificial delay, becasue it works when a debugging breakpoint is set
-    //   await Future.delayed(Duration(seconds: 1), () {});
-    //   await resUpdateUtils.sendFileByte(
-    //       progressCallback: (progress) =>
-    //           addProgress(progressStream, 1 / 3 + progress / 3));
-    // } on Exception catch (e) {
-    //   print(e.toString());
-    //   progressStream.addError(e);
-    // }
-
     await startDfuMode(rootPath, progressStream);
+  }
+
+  ///检测是否需要资源文件升级，还需先判断文件是否存在
+  ///升级完成后会断开连接，此时需要重新连接
+  startCheckResUpdate(StreamController<double> progressStream) async {
+    final Directory directory = await getApplicationDocumentsDirectory();
+    final String rootPath = directory.path;
+    final File binFile = File("$rootPath/color565.bin");
+    if (!binFile.existsSync()) return;
+    final healySetDeviceTime = await HealyWatchSDKImplementation.instance
+        .setDeviceTime(DateTime.now());
+    final resUpdateUtils =
+        ResourceUpdateUtil(rootPath, healySetDeviceTime.maxLength);
+    final List<int> checkBytes =
+        resUpdateUtils.checkAllFile(ResCmdMode.startCheck);
+    final HealyResUpdateData healyResUpdateData = await checkNeedResUpdate(checkBytes);
+    bool needUpdate=healyResUpdateData.needUpdate;
+    print("resUpdate $needUpdate");
+    if (needUpdate) {
+      startResUpdate(resUpdateUtils, healyResUpdateData.updateIndex,progressStream);
+    }
+  }
+
+  startResUpdate(ResourceUpdateUtil resUpdateUtils,int startIndex,
+      StreamController<double> progressStream) async {
+    try {
+      // aparently needs a artificial delay, becasue it works when a debugging breakpoint is set
+      await Future.delayed(Duration(seconds: 1), () {});
+      await resUpdateUtils.sendFileByte(startIndex,
+          progressCallback: (progress) =>
+              addProgress(progressStream, 1 / 3 + progress / 3));
+    } on Exception catch (e) {
+      print(e.toString());
+      progressStream.addError(e);
+    }
   }
 
   /// TODO what is "ota"
@@ -1200,6 +1229,8 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
         log("startOta: onDeviceConnectedHandle");
       }, onDfuCompletedHandle: (address) {
         log("startOta: onComplete");
+        bluetoothUtil.isFirmwareUpdating = false;
+        bluetoothUtil.reconnectDevice(bluetoothUtil.deviceId);
         progressStream.close();
       }, onErrorHandle:
               (String deviceAddress, int error, int errorType, String message) {
@@ -1213,11 +1244,10 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   Future<void> startDfuMode(
       String rootPath, StreamController<double> progressStream) async {
     try {
-      enterDfuMode();
       bluetoothUtil.isFirmwareUpdating = true;
+      await enterDfuMode();
       // implementation below seems to be deprecated, will stay in as comment since the whole update flow is still very shakey and might need to be reworked
       await searchDeviceAndUpdateFirmware(rootPath, progressStream);
-      bluetoothUtil.isFirmwareUpdating = false;
 
       /// Android has the mac address of the device, you can directly calculate
       /// the mac address to enter dfu mode according to the nodric's dfu mac address change method

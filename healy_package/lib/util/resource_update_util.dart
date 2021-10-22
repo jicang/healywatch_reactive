@@ -147,8 +147,8 @@ class ResourceUpdateUtil {
     return wCRC;
   }
 
-  Future<void> sendFileByte({void Function(double) ?progressCallback}) async {
-    for (int i = 0; i < byteList.length; i++) {
+  Future<void> sendFileByte(int startIndex,{void Function(double) ?progressCallback}) async {
+    for (int i = startIndex; i < byteList.length; i++) {
       final List<List<int>> sendValue = getSendData(i, maxLength);
       await sendData(sendValue);
 

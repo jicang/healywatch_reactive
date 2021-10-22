@@ -5,9 +5,11 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
 import 'package:healy_watch_sdk/util/bluetooth_conection_util.dart';
+import 'package:healy_watch_sdk/util/shared_pref.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'activity/DeviceDetail.dart';
 import 'activity/DeviceSettingPage.dart';
@@ -16,13 +18,19 @@ import 'activity/UserInfo.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  HealyWatchSDKImplementation healyWatchSDKImplementation=HealyWatchSDKImplementation.instance;
-  BluetoothConnectionUtil bluetoothConnectionUtil=healyWatchSDKImplementation.bluetoothUtil;
-  final ble=bluetoothConnectionUtil.bleManager;
+  toRunMyapp();
+}
+
+toRunMyapp() async {
+  await SharedPrefUtils.instance.init();
+  HealyWatchSDKImplementation healyWatchSDKImplementation =
+      HealyWatchSDKImplementation.instance;
+  BluetoothConnectionUtil bluetoothConnectionUtil =
+      healyWatchSDKImplementation.bluetoothUtil;
+  final ble = bluetoothConnectionUtil.bleManager;
   runApp(MultiProvider(
     providers: [
-      Provider.value(
-          value: ble),
+      Provider.value(value: ble),
       StreamProvider.value(value: ble.connectedDeviceStream, initialData: null)
     ],
     child: MyApp(),
@@ -58,15 +66,28 @@ class ScanDeviceWidget extends StatefulWidget {
 }
 
 class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
-  bool isResume = true;
 
+  bool isResume = true;
+  String? deviceId;
 
   @override
   void initState() {
     super.initState();
+    print("init");
+    deviceId = SharedPrefUtils.instance.getConnectedDeviceID();
+    Future.delayed(Duration(milliseconds: 200)).then((e) {
+      toDetailPage();
+    });
 
-    deviceListStream =
-        Stream.periodic(Duration(seconds: 1)).where((event) => isResume);
+  }
+
+  toDetailPage() async {
+
+    String? deviceName = SharedPrefUtils.instance.getConnectedDeviceName();
+    if (deviceId != null) {
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+        builder: (_) => DeviceDetail(deviceName, deviceId),), (route) => false);
+    }
   }
 
   // bool filterDevice(ScanResult scanResult) {
@@ -83,12 +104,14 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final results = StreamBuilder<List<DiscoveredDevice>>(
+    print("build deviceId $deviceId");
+    final results = deviceId == null ? StreamBuilder<List<DiscoveredDevice>>(
       stream: HealyWatchSDKImplementation.instance
           .scanResults(filterForName: "healy"),
       initialData: [],
-      builder: (c, snapshot) => ListView(
-        children: ListTile.divideTiles(
+      builder: (c, snapshot) =>
+          ListView(
+            children: ListTile.divideTiles(
                 context: context,
                 tiles: snapshot.data!.map((peripheral) {
                   return ListTile(
@@ -101,9 +124,9 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
                   );
                 }),
                 color: Colors.red)
-            .toList(),
-      ),
-    );
+                .toList(),
+          ),
+    ) : SizedBox();
     // final connectedDevice = StreamBuilder<List<Peripheral>>(
     //   stream: Stream.periodic(Duration(seconds: 1))
     //       .where((event) => isResume)
@@ -134,7 +157,6 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
     // );
 
     return Scaffold(
-
       appBar: AppBar(
         title: Text("DeviceList"),
         actions: <Widget>[],
@@ -145,7 +167,7 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             RaisedButton(
-              onPressed: toStartScan,
+              onPressed: () => toStartScan(),
               child: const Text("StartScan"),
             ),
             Expanded(
@@ -157,28 +179,26 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
     );
   }
 
-  getPath() async {
-    Directory directory = await getApplicationDocumentsDirectory();
-    Directory directorySupport = await getApplicationSupportDirectory();
-    print(directory.path + " $directorySupport");
-  }
 
-  Future toStartScan() async {
+  Future<void> toStartScan() async {
     BleStatus bluetoothState =
-        await HealyWatchSDKImplementation.instance.getBluetoothState();
+    await HealyWatchSDKImplementation.instance.getBluetoothState();
     if (bluetoothState == BleStatus.poweredOff) {
-
       // _scaffoldKey.currentState!.showSnackBar(snackBar);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:  Text('BluetoothState is off')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('BluetoothState is off')));
       return;
     }
+    print("scan");
     if (Platform.isAndroid) {
-      final bool isGranted = await Permission.location.request().isGranted;
+      final bool isGranted = await Permission.location
+          .request()
+          .isGranted;
       if (isGranted) {
         startScan();
       } else {
         final bool isPermanentlyDenied =
-            await Permission.location.isPermanentlyDenied;
+        await Permission.location.isPermanentlyDenied;
         if (isPermanentlyDenied) {
           showDialog(
             context: context,
@@ -229,17 +249,27 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
   _connected(DiscoveredDevice device) async {
     HealyWatchSDKImplementation.instance.cancelScanningDevices();
     HealyWatchSDKImplementation.instance.connectDevice(device);
-    isResume = false;
-    await Navigator.push<void>(
-        context, MaterialPageRoute(builder: (_) => DeviceDetail(device)));
-    ;
-    isResume = true;
+
+    SharedPrefUtils.instance.setConnectedDeviceID(device.id);
+    SharedPrefUtils.instance.setConnectedDeviceName( device.name);
+
+
+    // isResume = false;
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+      builder: (_) => DeviceDetail(device.name, device.id),), (route) => false);
+    // await Navigator.push<void>(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (_) => DeviceDetail(device.name, device.id)));
+    // ;
+    // isResume = true;
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    HealyWatchSDKImplementation.instance.disconnectDevice();
+    // HealyWatchSDKImplementation.instance.cancelScanningDevices();
+    //  HealyWatchSDKImplementation.instance.disconnectDevice();
   }
 }

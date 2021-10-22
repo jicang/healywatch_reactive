@@ -4,27 +4,31 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
+import 'package:healy_watch_sdk/util/shared_pref.dart';
 import 'package:provider/provider.dart';
 
 import '../LoadingDialog.dart';
 import '../button_view.dart';
+import '../main.dart';
 import 'HistoryDataPage.dart';
 
 class DeviceDetail extends StatefulWidget {
-  final DiscoveredDevice device;
+  String? deviceName;
+  String? deviceId;
 
-  DeviceDetail(this.device);
+  DeviceDetail(this.deviceName, this.deviceId);
 
   @override
   State<StatefulWidget> createState() {
-    return DeviceDetailState(device);
+    return DeviceDetailState(deviceName, deviceId);
   }
 }
 
 class DeviceDetailState extends State<DeviceDetail> {
-  late DiscoveredDevice device;
+  String? deviceName;
+  String? deviceId;
 
-  DeviceDetailState(this.device);
+  DeviceDetailState(this.deviceName, this.deviceId);
 
   @override
   void dispose() {
@@ -38,15 +42,39 @@ class DeviceDetailState extends State<DeviceDetail> {
       appBar: AppBar(
         title: ListTile(
           title: Text(
-            device.name,
+            deviceName!,
             style: TextStyle(fontSize: 18, fontStyle: FontStyle.italic),
           ),
-          subtitle: Text(device.id.toString()),
+          subtitle: Text(deviceId!),
         ),
       ),
       body: Center(
         child: Column(
           children: <Widget>[
+            Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(4.0),
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                          foregroundColor:
+                              MaterialStateProperty.all(Color(0xFFffffff)),
+                          backgroundColor:
+                              MaterialStateProperty.resolveWith<Color>(
+                                  (states) {
+                            if (states.contains(MaterialState.disabled)) {
+                              return Colors.grey; // Disabled color
+                            }
+                            return Colors.blue; // Regular color
+                          })),
+                      child: Text("UnPair"),
+                      onPressed: () => unPair(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 2.0),
               child: StreamBuilder<ConnectionStateUpdate>(
@@ -100,7 +128,7 @@ class DeviceDetailState extends State<DeviceDetail> {
                               onPressed: (status.data?.connectionState ==
                                       DeviceConnectionState.connected)
                                   ? () => HealyWatchSDKImplementation.instance
-                                  .disconnectDevice()
+                                      .disconnectDevice()
                                   : null,
                             )))
                   ],
@@ -183,7 +211,7 @@ class DeviceDetailState extends State<DeviceDetail> {
 
   connected() async {
     showLoading(context);
-    await HealyWatchSDKImplementation.instance.connectDevice(device);
+    await HealyWatchSDKImplementation.instance.connectDeviceWithId(deviceId!);
     streamSubscription?.cancel();
     streamSubscription = HealyWatchSDKImplementation.instance
         .connectionStateStream()
@@ -215,5 +243,15 @@ class DeviceDetailState extends State<DeviceDetail> {
       Navigator.of(context).pop(loadingDialog);
       loadingDialog = null;
     }
+  }
+
+  unPair() {
+    SharedPrefUtils.instance.clearConnectedDeviceID();
+    SharedPrefUtils.instance.clearConnectedDeviceName();
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => ScanDeviceWidget(),
+        ),(route)=>false
+       );
   }
 }

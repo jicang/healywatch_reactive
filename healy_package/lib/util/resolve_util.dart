@@ -823,4 +823,9 @@ class ResolveUtil {
       dateTime: DateTime.now(),
     );
   }
+  static HealyResUpdateData getHealyResUpdate(List<int> value){
+    int updateIndex=_hexByte2Int(value[3], 0);
+    bool needUpdate=value[1] == 1 && value[2] == 1;
+    return HealyResUpdateData(needUpdate: needUpdate, updateIndex: updateIndex);
+  }
 }

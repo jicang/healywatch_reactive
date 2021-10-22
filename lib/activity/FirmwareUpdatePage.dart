@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:developer';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
@@ -15,7 +17,7 @@ class FirmwareUpdatePage extends StatefulWidget {
 }
 
 class FirmwareUpdatePageState extends State<FirmwareUpdatePage> {
-  double dfuPercent = 2/3;
+  double dfuPercent = 2 / 3;
   bool isDfuMode = false;
   String _downloadUrl = '';
 
@@ -37,7 +39,16 @@ class FirmwareUpdatePageState extends State<FirmwareUpdatePage> {
                     final String currentVersion =
                         await HealyWatchSDKImplementation.instance
                             .getFirmwareVersion();
-
+                    var connectivityResult =
+                        await (Connectivity().checkConnectivity());
+                    if (connectivityResult == ConnectivityResult.none) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Network unavailable'),
+                        behavior: SnackBarBehavior.floating,
+                        duration: Duration(seconds: 2),
+                      ));
+                      return;
+                    }
                     final String? downloadUrl =
                         await HealyWatchSDKImplementation.instance
                             .checkIfFirmwareUpdateAvailable(currentVersion);
@@ -55,12 +66,25 @@ class FirmwareUpdatePageState extends State<FirmwareUpdatePage> {
                 ButtonView(
                   "RunFirmwareUpdate",
                   action: () async {
-                    HealyWatchSDKImplementation.instance
+                    if (_downloadUrl.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('LastVersion has already'),
+                        behavior: SnackBarBehavior.floating,
+                        duration: Duration(seconds: 2),
+                      ));
+                      return;
+                    }
+                    StreamSubscription? stream;
+                    stream = HealyWatchSDKImplementation.instance
                         .downloadLatestFirmwareUpdate(_downloadUrl)
                         .listen((event) {
                       isDfuMode = true;
-                      dfuPercent=(event*3-2)*100;
+                      dfuPercent = (event * 3 - 2) * 100;
                       setState(() {});
+                    }, onError: (msg) {
+                      print("dfu error $msg");
+                    }, onDone: () {
+                      print("dfu onDone");
                     });
                   },
                 ),

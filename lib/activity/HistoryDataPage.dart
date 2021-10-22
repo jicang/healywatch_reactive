@@ -261,6 +261,7 @@ class HistoryDataPageState extends State<HistoryDataPage> {
   }
 
   startReadData() async {
+    if(!mounted)return;
     list.clear();
     setState(() {});
     showLoading(context);

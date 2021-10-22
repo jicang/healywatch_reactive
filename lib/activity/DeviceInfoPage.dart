@@ -63,9 +63,10 @@ class DeviceInfoPageState extends State<DeviceInfoPage> {
   void dispose() {
     super.dispose();
   }
-
+  BuildContext? mContext;
   @override
   Widget build(BuildContext context) {
+    mContext=context;
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -152,7 +153,7 @@ class DeviceInfoPageState extends State<DeviceInfoPage> {
 
   getDeviceBattery() async {
     int level = await HealyWatchSDKImplementation.instance.getBatteryLevel();
-    showMsgDialog(context, "battery", "$level %");
+    showMsgDialog(this.context, "battery", "$level %");
   }
 
   getDeviceVersion() async {
@@ -186,14 +187,14 @@ class DeviceInfoPageState extends State<DeviceInfoPage> {
   Widget getDialog(String dataType, String msg) {
     return new AlertDialog(
       title: Container(
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery.of(mContext!).size.width,
         child: Text(dataType),
       ),
       content: Text(msg),
       actions: <Widget>[
         FlatButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(mContext!).pop();
           },
           child: Text("Confirm"),
         ),
@@ -205,7 +206,7 @@ class DeviceInfoPageState extends State<DeviceInfoPage> {
 
   void showMsgDialog(BuildContext context, String title, String content) {
     showDialog(
-      context: context,
+      context: mContext!,
       barrierDismissible: true,
       builder: (BuildContext context) {
         return getDialog(title, content);
