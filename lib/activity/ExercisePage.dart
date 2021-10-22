@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
 import 'package:healy_watch_sdk/model/models.dart';
+import 'package:provider/provider.dart';
 
 import '../button_view.dart';
 
@@ -17,6 +18,8 @@ class ExercisePage extends StatefulWidget {
 }
 
 class ExercisePageState extends State<ExercisePage> {
+  double breathLevel = 0;
+  double breathCount = 1;
   bool enterCamera = false;
   HealyWorkoutMode notifyType = HealyWorkoutMode.running;
   String title = "";
@@ -34,11 +37,11 @@ class ExercisePageState extends State<ExercisePage> {
     "Hiking",
     "Gym",
   ];
-  TextEditingController _titleController = TextEditingController();
-  TextEditingController _infoController = TextEditingController();
+
   @override
   void dispose() {
     super.dispose();
+    cancelTimer();
   }
 
   @override
@@ -65,22 +68,43 @@ class ExercisePageState extends State<ExercisePage> {
               }).toList(),
             ),
           ),
-          Column(
+          Visibility(
+            visible: notifyType==HealyWorkoutMode.breathing,
+            child:  Column(
             children: <Widget>[
-              TextField(
-                decoration: InputDecoration(labelText: "Breath Level"),
-                textAlign: TextAlign.center,
-                controller: _titleController,
-                inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+              Padding(
+                padding: EdgeInsets.only(top: 8),
+                child: Text(getBreathLevelText(breathLevel.toInt()),textAlign: TextAlign.center,),
               ),
-              TextField(
-                decoration: InputDecoration(labelText: "Breath Duration"),
-                textAlign: TextAlign.center,
-                controller: _infoController,
-                inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+              Slider(
+                value: breathLevel,
+                onChanged: (value) => changeBreathLevel(value),
+                min: 0,
+                divisions: 2,
+                max: 2,
+              ),
+              Divider(
+                height: 1.0,
+                color: Colors.amber,
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 8),
+                child: Text("Breath Count\n ${breathCount.toInt()}",textAlign: TextAlign.center,),
+              ),
+              Slider(
+                value: breathCount,
+                onChanged: (value) => changeBreathCount(value),
+                min: 1.0,
+                divisions: 59,
+                max: 60,
+              ),
+              Divider(
+                height: 1.0,
+                color: Colors.amber,
               ),
             ],
-          ),
+          ),),
+
           Expanded(
             flex: 1,
             child: Container(
@@ -107,33 +131,49 @@ class ExercisePageState extends State<ExercisePage> {
     );
   }
 
-  sendNotify(HealyWorkoutMode ?value) {
+  sendNotify(HealyWorkoutMode? value) {
     notifyType = value!;
     setState(() {});
   }
 
   bool isEmpty(String value) {
-    return null == value || value.length == 0;
+    return value.length == 0;
   }
 
+  String getBreathLevelText(int value) {
+    String mode = "";
+    switch (value) {
+      case 0:
+        mode="Beginner";
+        break;
+      case 1:
+        mode="Skilled";
+        break;
+      case 2:
+        mode="Advanced";
+        break;
+    }
+    return "Breath Mode\n$mode";
+  }
+
+  StreamSubscription<HealyBaseExerciseData>? healyExerciseDataSubscription;
+
   enableExercise(bool enable) async {
+    healyExerciseDataSubscription?.cancel();
     if (notifyType == HealyWorkoutMode.breathing) {
-      String levelString = _titleController.text;
-      String durationString = _infoController.text;
-      if (isEmpty(levelString) || isEmpty(durationString)) return;
       if (enable) {
+        Stream<HealyBaseExerciseData> healyExerciseDataStream =
+            HealyWatchSDKImplementation.instance.startBreathingSession(
+                HealyBreathingSession(
+                    level: breathLevel.toInt(),
+                    durationInSeconds: breathCount.toInt()));
+        showExerciseData(healyExerciseDataStream);
+      } else {
         bool isSuccess =
             await HealyWatchSDKImplementation.instance.stopBreathingSession();
         if (isSuccess) {
           showMsgDialog(context, "isExit", "");
         }
-      } else {
-        Stream<HealyBaseExerciseData> healyExerciseDataStream =
-            await HealyWatchSDKImplementation.instance.startBreathingSession(
-                HealyBreathingSession(
-                    level: int.parse(levelString),
-                    durationInSeconds: int.parse(durationString)));
-        showExerciseData(healyExerciseDataStream);
       }
     } else {
       if (enable) {
@@ -152,7 +192,7 @@ class ExercisePageState extends State<ExercisePage> {
   }
 
   showExerciseData(Stream<HealyBaseExerciseData> healyExerciseDataStream) {
-    healyExerciseDataStream.listen((event) {
+    healyExerciseDataSubscription = healyExerciseDataStream.listen((event) {
       if (event is HealyExerciseData) {
         startTimer();
         var heartRate = event.heartRate;
@@ -163,7 +203,7 @@ class ExercisePageState extends State<ExercisePage> {
             "Calories: $cal KCAL\n"
             "HeartRate: $heartRate bpm\n"
             "ExerciseTime: $time second";
-        setState(() {});
+        if (mounted) setState(() {});
       } else if (event is HealyEnterExerciseSuccess) {
         showMsgDialog(context, "isEnterSuccess", "");
       } else if (event is HealyEnterExerciseFailed) {
@@ -176,11 +216,13 @@ class ExercisePageState extends State<ExercisePage> {
     });
   }
 
-  late Timer countdownTimer;
+  Timer? countdownTimer;
+
   void startTimer() {
-    if (countdownTimer != null && countdownTimer.isActive) return;
+    if (countdownTimer != null && countdownTimer!.isActive) return;
     countdownTimer =
-        new Timer.periodic(new Duration(seconds: 1), (timer) async {
+        new Timer.periodic(new Duration(seconds: 3), (timer) async {
+      if (!mounted) countdownTimer!.cancel();
       bool success = await HealyWatchSDKImplementation.instance
           .sendHeartPackage(HealyHeartPackageData(
               distanceInKm: 0.5,
@@ -191,8 +233,8 @@ class ExercisePageState extends State<ExercisePage> {
   }
 
   void cancelTimer() {
-    if (countdownTimer != null && countdownTimer.isActive)
-      countdownTimer.cancel();
+    if (countdownTimer != null && countdownTimer!.isActive)
+      countdownTimer!.cancel();
   }
 
   String getReasonInfo(EnterExerciseFailed enterExerciseFailedCode) {
@@ -225,9 +267,19 @@ class ExercisePageState extends State<ExercisePage> {
     return reasonInfo;
   }
 
+  changeBreathLevel(double value) {
+    this.breathLevel = value;
+    setState(() {});
+  }
+
+  changeBreathCount(double value) {
+    this.breathCount = value;
+    setState(() {});
+  }
+
   void showMsgDialog(BuildContext context, String title, String content) {
     showDialog(
-      context: context,
+      context: this.context,
       barrierDismissible: true,
       builder: (BuildContext context) {
         return getDialog(title, content);

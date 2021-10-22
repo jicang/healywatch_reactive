@@ -82,12 +82,13 @@ class UserInfoState extends State<UserInfo> {
               children: <Widget>[
                 Expanded(
                   child: TextField(
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(labelText: "Age"),
                     textAlign: TextAlign.center,
                     controller: _userAgeController,
                     onSubmitted: (value) => textSaved(value),
                     inputFormatters: [
-                      WhitelistingTextInputFormatter.digitsOnly
+                      FilteringTextInputFormatter.digitsOnly
                     ],
                   ),
                 ),
@@ -96,12 +97,13 @@ class UserInfoState extends State<UserInfo> {
                 ),
                 Expanded(
                   child: TextField(
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(labelText: "Height"),
                     textAlign: TextAlign.center,
                     controller: _userHeightController,
                     onSubmitted: (value) => textSaved(value),
                     inputFormatters: [
-                      WhitelistingTextInputFormatter.digitsOnly
+                      FilteringTextInputFormatter.digitsOnly
                     ],
                   ),
                 ),
@@ -110,12 +112,13 @@ class UserInfoState extends State<UserInfo> {
                 ),
                 Expanded(
                   child: TextField(
+                    keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
                     decoration: InputDecoration(labelText: "Weight"),
                     controller: _userWeightController,
                     onSubmitted: (value) => textSaved(value),
                     inputFormatters: [
-                      WhitelistingTextInputFormatter.digitsOnly
+                      FilteringTextInputFormatter.digitsOnly
                     ],
                   ),
                 ),
@@ -124,12 +127,13 @@ class UserInfoState extends State<UserInfo> {
                 ),
                 Expanded(
                   child: TextField(
+                    enabled: false,
                     textAlign: TextAlign.center,
                     decoration: InputDecoration(labelText: "Stride"),
                     controller: _userStrideController,
                     onSubmitted: (value) => textSaved(value),
                     inputFormatters: [
-                      WhitelistingTextInputFormatter.digitsOnly
+                      FilteringTextInputFormatter.digitsOnly
                     ],
                   ),
                 ),
@@ -184,7 +188,7 @@ class UserInfoState extends State<UserInfo> {
     print(value);
   }
 
-  Widget getDialog(String dataType, String msg) {
+  Widget getDialog(BuildContext context,String dataType, String msg) {
     return new AlertDialog(
       title: Container(
         width: MediaQuery.of(context).size.width,
@@ -209,7 +213,7 @@ class UserInfoState extends State<UserInfo> {
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return getDialog(title, msg);
+        return getDialog(context,title, msg);
       },
     );
   }

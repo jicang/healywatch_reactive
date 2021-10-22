@@ -29,6 +29,8 @@ dependencies:
   intl: null
   fl_chart: ^0.40.0
   permission_handler: ^8.2.5
+  connectivity: ^3.0.6
+  shared_preferences: any
   healy_watch_sdk:
     path: healy_package
   # The following adds the Cupertino Icons font to your application.

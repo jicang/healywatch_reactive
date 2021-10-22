@@ -21,7 +21,7 @@ abstract class HealyWatchSDK {
   void cancelScanningDevices();
 
   /// returns [bool] wether or not a bluetooth device is properly connected and can be used
-  //Future<bool> isConnected();
+  bool isConnected();
 
   /// Connect to a healy watch device [BluetoothDevice]
   Future<void> connectDevice(DiscoveredDevice device);
@@ -117,7 +117,7 @@ abstract class HealyWatchSDK {
 
   Future<bool> setFactoryMode();
 
-  bool enterDfuMode();
+  Future<bool> enterDfuMode();
 
   Future<bool> setNotifyData(HealyNotifier healyNotifier);
 

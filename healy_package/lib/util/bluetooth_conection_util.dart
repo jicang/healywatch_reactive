@@ -6,11 +6,14 @@ import 'dart:typed_data';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
 import 'package:healy_watch_sdk/util/resolve_util.dart';
+import 'package:healy_watch_sdk/util/shared_pref.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ble_sdk.dart';
 
 class BluetoothConnectionUtil {
-   StreamController<List<DiscoveredDevice>> ?_stateStreamController =
+  StreamController<List<DiscoveredDevice>>? _stateStreamController =
       StreamController();
 
   final _devices = <DiscoveredDevice>[];
@@ -18,7 +21,7 @@ class BluetoothConnectionUtil {
 
   /// Connection class supplied by Flutter BLE package
   late FlutterReactiveBle bleManager;
-  late StreamSubscription<ConnectionStateUpdate> _connection;
+  StreamSubscription<ConnectionStateUpdate>? _connection;
 
   /// Actual device that is currently connected
 
@@ -38,13 +41,13 @@ class BluetoothConnectionUtil {
   late StreamSubscription<CharacteristicValue> streamSubscriptionNotify;
 
   StreamController<BluetoothConnectionState> get connectionStateController =>
-      _connectionStateController ;
+      _connectionStateController;
 
   /// Stream that returns devices while scanning for watch
 
   late Timer _autoConnectionTimer;
   late StreamSubscription _deviceConnectionSubscription;
-
+  bool isNeedReconnect = true;
   bool isFirmwareUpdating = false;
 
   bool _isPairing = false;
@@ -63,6 +66,22 @@ class BluetoothConnectionUtil {
 
   BluetoothConnectionUtil() {
     bleManager = FlutterReactiveBle();
+    bleManager.statusStream.listen((event) {
+      print(event);
+      if (event == BleStatus.poweredOff) {
+        //disconnect();
+      } else if (event == BleStatus.ready) {
+        if (isNeedReconnect) {
+          toConnectExistId();
+        }
+      }
+    });
+  }
+
+  toConnectExistId() async {
+   // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String? deviceId = SharedPrefUtils.instance.getConnectedDeviceID();
+    connect(deviceId);
   }
 
   Future<void> init() async {
@@ -117,16 +136,16 @@ class BluetoothConnectionUtil {
   /// stream has to be canceled by calling [stopScan]
   Stream<List<DiscoveredDevice>> startScan(
       String? filterForName, List<Uuid> serviceIds) {
-     print('Start ble discovery');
+    print('Start ble discovery');
     _devices.clear();
     _subscription?.cancel();
-     _stateStreamController?.close();
-     _stateStreamController =
-         StreamController();
+    _stateStreamController?.close();
+    _stateStreamController = StreamController();
     _subscription = bleManager
         .scanForDevices(withServices: serviceIds)
-        .where((event) =>
-            filterForName==null ? true : event.name.toLowerCase().contains(filterForName))
+        .where((event) => filterForName == null
+            ? true
+            : event.name.toLowerCase().contains(filterForName))
         .listen((device) {
       final knownDeviceIndex = _devices.indexWhere((d) => d.id == device.id);
       if (knownDeviceIndex >= 0) {
@@ -360,12 +379,9 @@ class BluetoothConnectionUtil {
   // }
 
   /// returns a [bool] whether the current device is correctly connected
-  // Future<bool> isConnected() async {
-  //   return bluetoothDevice != null &&
-  //       _characteristicData != null &&
-  //       _characteristicNotify != null &&
-  //       await bluetoothDevice.isConnected();
-  // }
+  bool isConnected() {
+    return isConnect;
+  }
 
   // void _startDeviceConnectionObserver(Peripheral device, bool autoConnect) {
   //   _deviceConnectionSubscription ??=
@@ -416,25 +432,26 @@ class BluetoothConnectionUtil {
   Future<void> writeData(
     Uint8List data,
     // ignore: avoid_positional_boolean_parameters
-     {
+    {
     String? transactionId,
   }) async {
     //await reconnectPairedDevice();
     //if (await isConnected()) {
-    return  bleManager.writeCharacteristicWithoutResponse(_characteristicData,
-            value: data);
+    return bleManager.writeCharacteristicWithoutResponse(_characteristicData,
+        value: data);
 
     // }
   }
 
   Stream<List<int>> monitorNotify() {
-    Stream<List<int>>notifyStream=bleManager.subscribeToCharacteristic(_characteristicNotify);
-    return notifyStream;
+    return streamController!.stream;
   }
 
-  Future<void> connect(String deviceId) async {
-    print('Start connecting to $deviceId');
+  String? deviceId;
 
+  Future<void> connect(String? deviceId) async {
+    print('Start connecting to $deviceId');
+    if (deviceId == null) return;
     _connection = bleManager
         .connectToDevice(
             id: deviceId,
@@ -447,8 +464,18 @@ class BluetoothConnectionUtil {
         // _deviceConnectionController.add(update);
         print("enableNotification ${update.connectionState}");
         if (update.connectionState == DeviceConnectionState.connected) {
-
+          this.deviceId = deviceId;
           enableNotification(deviceId);
+          HealyWatchSDKImplementation.instance
+              .startCheckResUpdate(StreamController());
+        } else if (update.connectionState ==
+            DeviceConnectionState.disconnected) {
+          isConnect = false;
+          if (isNeedReconnect) {
+            reconnectDevice(deviceId);
+          }
+          streamController?.close();
+          streamSubscription?.cancel();
         }
       },
       onError: (Object e) =>
@@ -456,10 +483,16 @@ class BluetoothConnectionUtil {
     );
   }
 
+  StreamController<List<int>>? streamController;
+  StreamSubscription? streamSubscription;
+  late bool isConnect;
+
   Future<void> enableNotification(String deviceId) async {
-    print('enableNotification');
-    bleManager.discoverServices(deviceId);
-    _characteristicNotify = QualifiedCharacteristic(
+    // await bleManager.discoverServices(deviceId);
+    // bleManager.characteristicValueStream.listen((event) {
+    //   print("listen ${BleSdk.hex2String(event.result.dematerialize())}");
+    // });
+    QualifiedCharacteristic _characteristicNotify = QualifiedCharacteristic(
         characteristicId: Uuid.parse("0000fff7-0000-1000-8000-00805f9b34fb"),
         serviceId: Uuid.parse("0000fff0-0000-1000-8000-00805f9b34fb"),
         deviceId: deviceId);
@@ -469,17 +502,30 @@ class BluetoothConnectionUtil {
         serviceId: Uuid.parse("0000fff0-0000-1000-8000-00805f9b34fb"),
         deviceId: deviceId);
 
-    notifyStream = bleManager.subscribeToCharacteristic(_characteristicNotify);
-    notifyStream.listen((event) {
+    await streamController?.close();
+    streamController = StreamController.broadcast();
+    await streamSubscription?.cancel();
+    streamSubscription = bleManager
+        .subscribeToCharacteristic(_characteristicNotify)
+        .listen((event) {
       print("notifyData ${BleSdk.hex2String(event)}");
+      if (!streamController!.isClosed) streamController!.add(event);
+    }, onError: (msg) {
+      print("connectError $msg");
     });
+    isConnect = true;
+    isNeedReconnect = true;
   }
 
   Future<void> disconnect() async {
     try {
       //  print('disconnecting to device: $deviceId');
       //await streamSubscriptionNotify.cancel();
-      await _connection.cancel();
+      isConnect = false;
+      isNeedReconnect = false;
+      streamController?.close();
+      streamSubscription?.cancel();
+      await _connection?.cancel();
     } on Exception catch (e, _) {
       print("Error disconnecting from a device: $e");
     } finally {
@@ -508,6 +554,18 @@ class BluetoothConnectionUtil {
   /// returns [Stream<bool>] of the current setup state of the connection
   Stream<bool> isSetupDone() async* {
     yield* isSetup.stream;
+  }
+
+  void reconnectDevice(String? deviceId) {
+    if (bleManager.status == BleStatus.poweredOff ||
+        isFirmwareUpdating ||
+        deviceId == null) return;
+    print("reconnect $deviceId");
+    bleManager
+        .scanForDevices(withServices: List.empty())
+        .where((event) => event.id == deviceId)
+        .first
+        .then((value) => connect(value.id));
   }
 }
 

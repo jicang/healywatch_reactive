@@ -43,8 +43,9 @@ class EcgPageState extends State<EcgPage> {
                     decoration: InputDecoration(labelText: "Duration"),
                     textAlign: TextAlign.center,
                     controller: _userAgeController,
+                    keyboardType: TextInputType.number,
                     inputFormatters: [
-                      WhitelistingTextInputFormatter.digitsOnly
+                      FilteringTextInputFormatter.digitsOnly
                     ],
                   ),
                 ),

@@ -1,27 +1,34 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
+import 'package:healy_watch_sdk/util/shared_pref.dart';
+import 'package:provider/provider.dart';
 
 import '../LoadingDialog.dart';
 import '../button_view.dart';
+import '../main.dart';
 import 'HistoryDataPage.dart';
 
 class DeviceDetail extends StatefulWidget {
-  final DiscoveredDevice device;
+  String? deviceName;
+  String? deviceId;
 
-  DeviceDetail( this.device);
+  DeviceDetail(this.deviceName, this.deviceId);
 
   @override
   State<StatefulWidget> createState() {
-    return DeviceDetailState(device);
+    return DeviceDetailState(deviceName, deviceId);
   }
 }
 
 class DeviceDetailState extends State<DeviceDetail> {
-  late DiscoveredDevice device;
+  String? deviceName;
+  String? deviceId;
 
-  DeviceDetailState(this.device);
+  DeviceDetailState(this.deviceName, this.deviceId);
 
   @override
   void dispose() {
@@ -35,24 +42,97 @@ class DeviceDetailState extends State<DeviceDetail> {
       appBar: AppBar(
         title: ListTile(
           title: Text(
-            device.name,
+            deviceName!,
             style: TextStyle(fontSize: 18, fontStyle: FontStyle.italic),
           ),
-          subtitle: Text(device.id.toString()),
+          subtitle: Text(deviceId!),
         ),
       ),
       body: Center(
         child: Column(
           children: <Widget>[
+            Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(4.0),
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                          foregroundColor:
+                              MaterialStateProperty.all(Color(0xFFffffff)),
+                          backgroundColor:
+                              MaterialStateProperty.resolveWith<Color>(
+                                  (states) {
+                            if (states.contains(MaterialState.disabled)) {
+                              return Colors.grey; // Disabled color
+                            }
+                            return Colors.blue; // Regular color
+                          })),
+                      child: Text("UnPair"),
+                      onPressed: () => unPair(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 2.0),
-              child: Row(
-                children: <Widget>[
-                  ButtonView(
-                    "Connect",
-                    action: () => connected(),
-                  )
-                ],
+              child: StreamBuilder<ConnectionStateUpdate>(
+                stream: HealyWatchSDKImplementation.instance
+                    .connectionStateStream(),
+                initialData: ConnectionStateUpdate(
+                    deviceId: "",
+                    connectionState: DeviceConnectionState.connecting,
+                    failure: null),
+                builder: (c, status) => Row(
+                  children: [
+                    Expanded(
+                        child: Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                            foregroundColor:
+                                MaterialStateProperty.all(Color(0xFFffffff)),
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                                    (states) {
+                              if (states.contains(MaterialState.disabled)) {
+                                return Colors.grey; // Disabled color
+                              }
+                              return Colors.blue; // Regular color
+                            })),
+                        child: Text("Connect"),
+                        onPressed: (status.data?.connectionState ==
+                                DeviceConnectionState.connected)
+                            ? null
+                            : () => connected(),
+                      ),
+                    )),
+                    Expanded(
+                        child: Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                  foregroundColor: MaterialStateProperty.all(
+                                      Color(0xFFffffff)),
+                                  backgroundColor:
+                                      MaterialStateProperty.resolveWith<Color>(
+                                          (states) {
+                                    if (states
+                                        .contains(MaterialState.disabled)) {
+                                      return Colors.grey; // Disabled color
+                                    }
+                                    return Colors.blue; // Regular color
+                                  })),
+                              child: Text("Disconnect"),
+                              onPressed: (status.data?.connectionState ==
+                                      DeviceConnectionState.connected)
+                                  ? () => HealyWatchSDKImplementation.instance
+                                      .disconnectDevice()
+                                  : null,
+                            )))
+                  ],
+                ),
               ),
             ),
             Expanded(
@@ -98,10 +178,16 @@ class DeviceDetailState extends State<DeviceDetail> {
     return StreamBuilder<ConnectionStateUpdate>(
       stream: HealyWatchSDKImplementation.instance.connectionStateStream(),
       initialData: null,
-      builder: (c, snapshot) => RaisedButton(
-        color: Colors.blue,
+      builder: (c, snapshot) => ElevatedButton(
+        style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all(Color(0xFFffffff)),
+            backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+              if (states.contains(MaterialState.disabled)) {
+                return Colors.grey; // Disabled color
+              }
+              return Colors.blue; // Regular color
+            })),
         child: Text(value.toString()),
-        textColor: Colors.white,
         onPressed: (snapshot.data?.connectionState ==
                 DeviceConnectionState.connected)
             ? () =>
@@ -121,29 +207,51 @@ class DeviceDetailState extends State<DeviceDetail> {
     }));
   }
 
+  StreamSubscription? streamSubscription;
+
   connected() async {
     showLoading(context);
-    await HealyWatchSDKImplementation.instance.connectDevice(device);
-    disMiss();
+    await HealyWatchSDKImplementation.instance.connectDeviceWithId(deviceId!);
+    streamSubscription?.cancel();
+    streamSubscription = HealyWatchSDKImplementation.instance
+        .connectionStateStream()
+        .listen((event) {
+      if (event.connectionState == DeviceConnectionState.connected) {
+        disMiss();
+      } else if (event.connectionState == DeviceConnectionState.disconnected) {
+        disMiss();
+      }
+    });
   }
 
-   LoadingDialog ?loadingDialog;
+  LoadingDialog? loadingDialog = LoadingDialog("Connecting...");
 
   void showLoading(BuildContext context) {
     showDialog(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        if (loadingDialog == null) {
-          return LoadingDialog("Connectting...");
-        } else {
-          return loadingDialog!;
-        }
+        loadingDialog = LoadingDialog("Connecting...");
+        return loadingDialog!;
       },
     );
   }
 
   void disMiss() {
-    Navigator.of(context).pop(loadingDialog);
+    if (loadingDialog == null) return;
+    if (mounted) {
+      Navigator.of(context).pop(loadingDialog);
+      loadingDialog = null;
+    }
+  }
+
+  unPair() {
+    SharedPrefUtils.instance.clearConnectedDeviceID();
+    SharedPrefUtils.instance.clearConnectedDeviceName();
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => ScanDeviceWidget(),
+        ),(route)=>false
+       );
   }
 }

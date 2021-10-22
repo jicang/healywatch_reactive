@@ -58,6 +58,7 @@ class WeatherPageState extends State<WeatherPage> {
                         labelText: "WeatherId", helperText: "(0-38)"),
                     textAlign: TextAlign.center,
                     controller: _weatherIdController,
+                    keyboardType: TextInputType.number,
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp("[0-9]"))
                     ],
@@ -69,6 +70,7 @@ class WeatherPageState extends State<WeatherPage> {
               children: <Widget>[
                 Expanded(
                   child: TextField(
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(labelText: "TempNow"),
                     textAlign: TextAlign.center,
                     controller: _userAgeController,
@@ -83,6 +85,7 @@ class WeatherPageState extends State<WeatherPage> {
               children: <Widget>[
                 Expanded(
                   child: TextField(
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(labelText: "TempHigh"),
                     textAlign: TextAlign.center,
                     controller: _tempHighController,
@@ -97,6 +100,7 @@ class WeatherPageState extends State<WeatherPage> {
               children: <Widget>[
                 Expanded(
                   child: TextField(
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(labelText: "TempLow"),
                     textAlign: TextAlign.center,
                     controller: _tempLowController,

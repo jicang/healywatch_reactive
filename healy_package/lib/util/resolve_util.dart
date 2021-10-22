@@ -58,8 +58,8 @@ class ResolveUtil {
     final HealyDeviceBaseParameter deviceBaseParameter =
         HealyDeviceBaseParameter();
     deviceBaseParameter.distanceUnit = _hexByte2Int(value[1], 0) == 1
-        ? DistanceUnit.metric
-        : DistanceUnit.imperial;
+        ? DistanceUnit.imperial
+        : DistanceUnit.metric;
     deviceBaseParameter.hourMode = _hexByte2Int(value[2], 0) == 1
         ? HourMode.hourMode_12
         : HourMode.hourMode_24;
@@ -822,5 +822,10 @@ class ResolveUtil {
       ecgQuantity: ecgQuantity,
       dateTime: DateTime.now(),
     );
+  }
+  static HealyResUpdateData getHealyResUpdate(List<int> value){
+    int updateIndex=_hexByte2Int(value[3], 0);
+    bool needUpdate=value[1] == 1 && value[2] == 1;
+    return HealyResUpdateData(needUpdate: needUpdate, updateIndex: updateIndex);
   }
 }
