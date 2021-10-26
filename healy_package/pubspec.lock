@@ -241,12 +241,12 @@ packages:
     source: hosted
     version: "2.0.0"
   reactive_ble_mobile:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: reactive_ble_mobile
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.0.1"
+    version: "4.0.0"
   reactive_ble_platform_interface:
     dependency: transitive
     description:

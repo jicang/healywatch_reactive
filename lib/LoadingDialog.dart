@@ -27,6 +27,7 @@ class LoadingDialog extends Dialog {
                     padding: EdgeInsets.only(top: 20),
                     child: Text(
                       msg,
+                      textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.black),
                     ),
                   )
