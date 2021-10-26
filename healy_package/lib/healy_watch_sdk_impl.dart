@@ -71,16 +71,17 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
       {bool autoReconnect = true}) async {
     await bluetoothUtil.connect(deviceId);
   }
+
   @override
   Future<void> disconnectDevice() {
     return bluetoothUtil.disconnect();
   }
 
-  // @override
-  // Future<Peripheral> reconnectDevice({bool autoReconnect = true}) async {
-  //   return bluetoothUtil.reconnectPairedDevice(autoReconnect: autoReconnect);
-  // }
-  //
+  @override
+  Future<DiscoveredDevice> reconnectDevice({bool autoReconnect = true}) async {
+    throw UnimplementedError();
+  }
+
   // // returns wether the watch is PROPERLY connected, meaning the devices are paired and it is possible to call functions on the watch
   @override
   bool isConnected() {
@@ -90,20 +91,19 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   //
   // // returns the connected device synchronously
   // // will return null if the device has not been reinitialized properly even if there is a connected device
-  // @override
-  // Peripheral getConnectedDevice() {
-  //   return bluetoothUtil.bluetoothDevice;
-  // }
-  //
-  // @override
-  // Stream<BluetoothConnectionState> connectionStateStream() {
-  //   return bluetoothUtil.connectionStateStream();
-  // }
-  //
-  // @override
-  // Future<BluetoothConnectionState> getConnectionState() {
-  //   return bluetoothUtil.checkCurrentState();
-  // }
+  @override
+  DiscoveredDevice getConnectedDevice() {
+    // TODO: implement getConnectedDevice
+    throw UnimplementedError();
+  }
+
+
+
+  @override
+  Future<BluetoothConnectionState> getConnectionState() {
+    // TODO: implement getConnectionState
+    throw UnimplementedError();
+  }
 
   Stream<bool> isSetupDone() async* {
     yield* bluetoothUtil.isSetupDone();
@@ -789,7 +789,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   }
 
   Future<List<int>> _filterValue(int cmd) async {
-    if (!( bluetoothUtil.isConnected())) return [];
+    if (!(bluetoothUtil.isConnected())) return [];
     return bluetoothUtil
         .monitorNotify()
         .where((values) => values.isNotEmpty && values[0] == cmd)
@@ -916,9 +916,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   //是否需要升级
   Future<HealyResUpdateData> checkNeedResUpdate(List<int> value) {
     _writeData(value);
-    return _filterValue(DeviceCmd.resCheck)
-        .then((value){
-
+    return _filterValue(DeviceCmd.resCheck).then((value) {
       return ResolveUtil.getHealyResUpdate(value);
     });
   }
@@ -1130,7 +1128,8 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     final List<int> checkBytes =
         resUpdateUtils.checkAllFile(ResCmdMode.startCheck);
 
-    final HealyResUpdateData healyResUpdateData = await checkNeedResUpdate(checkBytes);
+    final HealyResUpdateData healyResUpdateData =
+        await checkNeedResUpdate(checkBytes);
 
     return healyResUpdateData.needUpdate;
   }
@@ -1178,15 +1177,17 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
         ResourceUpdateUtil(rootPath, healySetDeviceTime.maxLength);
     final List<int> checkBytes =
         resUpdateUtils.checkAllFile(ResCmdMode.startCheck);
-    final HealyResUpdateData healyResUpdateData = await checkNeedResUpdate(checkBytes);
-    bool needUpdate=healyResUpdateData.needUpdate;
+    final HealyResUpdateData healyResUpdateData =
+        await checkNeedResUpdate(checkBytes);
+    bool needUpdate = healyResUpdateData.needUpdate;
     print("resUpdate $needUpdate");
     if (needUpdate) {
-      startResUpdate(resUpdateUtils, healyResUpdateData.updateIndex,progressStream);
+      startResUpdate(
+          resUpdateUtils, healyResUpdateData.updateIndex, progressStream);
     }
   }
 
-  startResUpdate(ResourceUpdateUtil resUpdateUtils,int startIndex,
+  startResUpdate(ResourceUpdateUtil resUpdateUtils, int startIndex,
       StreamController<double> progressStream) async {
     try {
       // aparently needs a artificial delay, becasue it works when a debugging breakpoint is set
@@ -1335,13 +1336,19 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
 
   @override
   BleStatus getBluetoothState() {
-    // TODO: implement getBluetoothState
+
     return bluetoothUtil.getBluetoothState();
   }
 
   @override
   Stream<ConnectionStateUpdate> connectionStateStream() {
-    // TODO: implement connectionStateStream
+
     return bluetoothUtil.connectionStateStream();
+  }
+
+  @override
+  Stream<BluetoothConnectionState> listenBluetoothState({bool emitCurrentValue = true}) {
+    // TODO: implement listenBluetoothState
+    throw UnimplementedError();
   }
 }

@@ -82,6 +82,7 @@ class BluetoothConnectionUtil {
    // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String? deviceId = SharedPrefUtils.instance.getConnectedDeviceID();
     connect(deviceId);
+
   }
 
   Future<void> init() async {
@@ -451,11 +452,11 @@ class BluetoothConnectionUtil {
 
   Future<void> connect(String? deviceId) async {
     print('Start connecting to $deviceId');
+    stopScan();
     if (deviceId == null) return;
     _connection = bleManager
         .connectToDevice(
             id: deviceId,
-            //autoConnectFLag
             connectionTimeout: const Duration(seconds: 30))
         .listen(
       (update) {
@@ -465,7 +466,7 @@ class BluetoothConnectionUtil {
         print("enableNotification ${update.connectionState}");
         if (update.connectionState == DeviceConnectionState.connected) {
           this.deviceId = deviceId;
-          enableNotification(deviceId);
+           enableNotification(deviceId);
           HealyWatchSDKImplementation.instance
               .startCheckResUpdate(StreamController());
         } else if (update.connectionState ==
@@ -488,18 +489,16 @@ class BluetoothConnectionUtil {
   late bool isConnect;
 
   Future<void> enableNotification(String deviceId) async {
-    // await bleManager.discoverServices(deviceId);
-    // bleManager.characteristicValueStream.listen((event) {
-    //   print("listen ${BleSdk.hex2String(event.result.dematerialize())}");
-    // });
+
+    //ios端的是短uuid。android端可以是长uuid
     QualifiedCharacteristic _characteristicNotify = QualifiedCharacteristic(
-        characteristicId: Uuid.parse("0000fff7-0000-1000-8000-00805f9b34fb"),
-        serviceId: Uuid.parse("0000fff0-0000-1000-8000-00805f9b34fb"),
+        characteristicId: Uuid.parse("fff7"),
+        serviceId: Uuid.parse("fff0"),
         deviceId: deviceId);
 
     _characteristicData = QualifiedCharacteristic(
-        characteristicId: Uuid.parse("0000fff6-0000-1000-8000-00805f9b34fb"),
-        serviceId: Uuid.parse("0000fff0-0000-1000-8000-00805f9b34fb"),
+        characteristicId: Uuid.parse("fff6"),
+        serviceId: Uuid.parse("fff0"),
         deviceId: deviceId);
 
     await streamController?.close();
@@ -547,6 +546,7 @@ class BluetoothConnectionUtil {
     return bleManager.status;
   }
 
+
   Stream<ConnectionStateUpdate> connectionStateStream() {
     return bleManager.connectedDeviceStream;
   }
@@ -565,7 +565,9 @@ class BluetoothConnectionUtil {
         .scanForDevices(withServices: List.empty())
         .where((event) => event.id == deviceId)
         .first
-        .then((value) => connect(value.id));
+        .then((value) =>{
+      connect(value.id)
+    } );
   }
 }
 
