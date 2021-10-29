@@ -109,28 +109,32 @@ class DeviceDetailState extends State<DeviceDetail> {
                       ),
                     )),
                     Expanded(
-                        child: Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                  foregroundColor: MaterialStateProperty.all(
-                                      Color(0xFFffffff)),
-                                  backgroundColor:
-                                      MaterialStateProperty.resolveWith<Color>(
-                                          (states) {
-                                    if (states
-                                        .contains(MaterialState.disabled)) {
-                                      return Colors.grey; // Disabled color
-                                    }
-                                    return Colors.blue; // Regular color
-                                  })),
-                              child: Text("Disconnect"),
-                              onPressed: (status.data?.connectionState ==
-                                      DeviceConnectionState.connected)
-                                  ? () => HealyWatchSDKImplementation.instance
-                                      .disconnectDevice()
-                                  : null,
-                            )))
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            foregroundColor: MaterialStateProperty.all(
+                              Color(0xFFffffff),
+                            ),
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (states) {
+                                if (states.contains(MaterialState.disabled)) {
+                                  return Colors.grey; // Disabled color
+                                }
+                                return Colors.blue; // Regular color
+                              },
+                            ),
+                          ),
+                          child: Text("Disconnect"),
+                          onPressed: (status.data?.connectionState ==
+                                  DeviceConnectionState.connected)
+                              ? () => HealyWatchSDKImplementation.instance
+                                  .disconnectDevice()
+                              : null,
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -202,9 +206,14 @@ class DeviceDetailState extends State<DeviceDetail> {
   }
 
   void itemClickName(String value) {
-    Navigator.push(context, new MaterialPageRoute(builder: (context) {
-      return HistoryDataPage(value);
-    }));
+    Navigator.push(
+      context,
+      new MaterialPageRoute(
+        builder: (context) {
+          return HistoryDataPage(value);
+        },
+      ),
+    );
   }
 
   StreamSubscription? streamSubscription;
@@ -249,9 +258,10 @@ class DeviceDetailState extends State<DeviceDetail> {
     SharedPrefUtils.instance.clearConnectedDeviceID();
     SharedPrefUtils.instance.clearConnectedDeviceName();
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (_) => ScanDeviceWidget(),
-        ),(route)=>false
-       );
+      MaterialPageRoute(
+        builder: (_) => ScanDeviceWidget(),
+      ),
+      (route) => false,
+    );
   }
 }
