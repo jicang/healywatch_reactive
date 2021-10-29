@@ -546,7 +546,6 @@ class BluetoothConnectionUtil {
     return bleManager.status;
   }
 
-
   Stream<ConnectionStateUpdate> connectionStateStream() {
     return bleManager.connectedDeviceStream;
   }
@@ -556,7 +555,8 @@ class BluetoothConnectionUtil {
     yield* isSetup.stream;
   }
 
-  void reconnectDevice(String? deviceId) {
+  Future<void> reconnectDevice(String? deviceId) async {
+    await Future.delayed(Duration(seconds: 1));
     if (bleManager.status == BleStatus.poweredOff ||
         isFirmwareUpdating ||
         deviceId == null) return;
@@ -565,9 +565,7 @@ class BluetoothConnectionUtil {
         .scanForDevices(withServices: List.empty())
         .where((event) => event.id == deviceId)
         .first
-        .then((value) =>{
-      connect(value.id)
-    } );
+        .then((value) => {connect(value.id)});
   }
 }
 
