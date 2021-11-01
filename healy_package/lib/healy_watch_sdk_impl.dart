@@ -8,6 +8,7 @@ import 'package:archive/archive.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_nordic_dfu/flutter_nordic_dfu.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:healy_watch_sdk/util/shared_pref.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'bleconst/device_cmd.dart';
@@ -1206,7 +1207,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
       String id, String path, StreamController<double> progressStream) async {
     int dfuPercent = 0;
     bool isDfuMode = false;
-
+    SharedPrefUtils.instance.setIsFirmware(true);
     await FlutterNordicDfu.startDfu(
       id,
       path,
@@ -1230,8 +1231,9 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
         log("startOta: onDeviceConnectedHandle");
       }, onDfuCompletedHandle: (address) {
         log("startOta: onComplete");
+        SharedPrefUtils.instance.setIsFirmware(false);
         bluetoothUtil.isFirmwareUpdating = false;
-        bluetoothUtil.reconnectDevice(bluetoothUtil.deviceId);
+        bluetoothUtil.reconnectDevice(SharedPrefUtils.instance.getConnectedDeviceID());
         progressStream.close();
       }, onErrorHandle:
               (String deviceAddress, int error, int errorType, String message) {

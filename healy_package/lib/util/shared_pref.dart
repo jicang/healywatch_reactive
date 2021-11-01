@@ -2,6 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 const String connectedDeviceKey = "connectedDeviceKey";
 const String connectedDeviceName = "connectedDeviceName";
+const String isFirmwareKey = "isFirmwareKey";
 
 class SharedPrefUtils {
   static final SharedPrefUtils _instance = SharedPrefUtils._();
@@ -34,7 +35,12 @@ class SharedPrefUtils {
   setConnectedDeviceName(String name) {
     return setString(connectedDeviceName, name);
   }
-
+  setIsFirmware(bool isFirmware) {
+    return setBool(isFirmwareKey, isFirmware);
+  }
+  isFirmware(){
+    return getBool(isFirmwareKey);
+  }
   clearConnectedDeviceID() {
     return remove(connectedDeviceKey);
   }
@@ -49,6 +55,14 @@ class SharedPrefUtils {
 
   setString(String key, String value) {
     return sp!.setString(key, value);
+  }
+
+  bool? getBool(String key) {
+    return sp!.getBool(key);
+  }
+
+  setBool(String key, bool value) {
+    return sp!.setBool(key, value);
   }
 
   remove(String key) {
