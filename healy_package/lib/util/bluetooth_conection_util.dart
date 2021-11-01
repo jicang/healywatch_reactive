@@ -3,11 +3,13 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
 import 'package:healy_watch_sdk/util/resolve_util.dart';
 import 'package:healy_watch_sdk/util/shared_pref.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ble_sdk.dart';
@@ -66,13 +68,21 @@ class BluetoothConnectionUtil {
 
   BluetoothConnectionUtil() {
     bleManager = FlutterReactiveBle();
-    bleManager.statusStream.listen((event) {
+    bleManager.statusStream.listen((event) async {
       print(event);
       if (event == BleStatus.poweredOff) {
         //disconnect();
       } else if (event == BleStatus.ready) {
-        if (isNeedReconnect) {
-          toConnectExistId();
+        bool isFirmware=SharedPrefUtils.instance.isFirmware();
+        print("isFirmware $isFirmware");
+        if(isFirmware){
+          final Directory directory = await getApplicationDocumentsDirectory();
+          final String rootPath = directory.path;
+          HealyWatchSDKImplementation.instance.searchDeviceAndUpdateFirmware(rootPath, StreamController<double>());
+        }else{
+          if (isNeedReconnect) {
+            toConnectExistId();
+          }
         }
       }
     });
@@ -459,14 +469,18 @@ class BluetoothConnectionUtil {
             id: deviceId,
             connectionTimeout: const Duration(seconds: 30))
         .listen(
-      (update) {
+      (update) async {
         print(
             'ConnectionState for device $deviceId : ${update.connectionState}');
         // _deviceConnectionController.add(update);
         print("enableNotification ${update.connectionState}");
         if (update.connectionState == DeviceConnectionState.connected) {
           this.deviceId = deviceId;
-           enableNotification(deviceId);
+           await enableNotification(deviceId);
+           if(Platform.isAndroid){
+            await HealyWatchSDKImplementation.instance
+                 .disableANCS();
+           }
           HealyWatchSDKImplementation.instance
               .startCheckResUpdate(StreamController());
         } else if (update.connectionState ==
