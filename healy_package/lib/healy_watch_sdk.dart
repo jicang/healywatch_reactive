@@ -301,4 +301,13 @@ abstract class HealyWatchSDK {
   Future<String?> checkIfFirmwareUpdateAvailable(String currentVersion);
 
   Stream<double> downloadLatestFirmwareUpdate(String downloadUrl);
+
+  /// Returns all collected and combined sleep data
+  Stream<List<HealyCombinedSleepData>> getAllCombinedSleepData();
+
+  /// Returns if an workout is currently running
+  Future<bool> isWorkoutRunning();
+
+  /// return an stream of current workout data as [HealyExerciseData]
+  Stream<HealyBaseExerciseData> currentWorkoutData();
 }
