@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
+import 'package:healy_watch_sdk/model/models.dart';
 import 'package:healy_watch_sdk/util/shared_pref.dart';
 import 'package:provider/provider.dart';
 
@@ -220,7 +221,7 @@ class DeviceDetailState extends State<DeviceDetail> {
 
   connected() async {
     showLoading(context);
-    await HealyWatchSDKImplementation.instance.connectDeviceWithId(deviceId!);
+    await HealyWatchSDKImplementation.instance.reconnectDevice(autoReconnect: true);
     streamSubscription?.cancel();
     streamSubscription = HealyWatchSDKImplementation.instance
         .connectionStateStream()

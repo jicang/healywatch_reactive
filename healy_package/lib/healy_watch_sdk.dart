@@ -30,11 +30,11 @@ abstract class HealyWatchSDK {
   void disconnectDevice();
 
   /// reconnect a already connected device from a device identifier
-  Future<DiscoveredDevice> reconnectDevice({bool autoReconnect = true});
+  Future<DiscoveredDevice?> reconnectDevice({bool autoReconnect = true});
 
   /// Get connected healy watch as [BluetoothDevice]
   /// returns [Future<BluetoothDevice>] || [null] (if no device connected)
-  DiscoveredDevice getConnectedDevice();
+  DiscoveredDevice? getConnectedDevice();
 
   /// SYNCING
   Stream<HealyBaseModel> getAllDataFromWatch();
@@ -43,14 +43,14 @@ abstract class HealyWatchSDK {
    Stream<ConnectionStateUpdate> connectionStateStream();
   //
   // ///asynchronously check and get current connection state to healy watch
-   Future<BluetoothConnectionState> getConnectionState();
+   Future<ConnectionStateUpdate> getConnectionState();
   //
   // /// get the BLE [BluetoothState] currently
   // /// needs to be handled in watch sdk since there can only be one bluetooth client
   BleStatus getBluetoothState();
   //
   // ///listen the BLE [BluetoothState]
-   Stream<BluetoothConnectionState> listenBluetoothState({bool emitCurrentValue = true});
+   Stream<BleStatus> listenBluetoothState({bool emitCurrentValue = true});
 
   ///
   /// BASIC INFORMATION FROM DEVICE
@@ -303,7 +303,9 @@ abstract class HealyWatchSDK {
   Stream<double> downloadLatestFirmwareUpdate(String downloadUrl);
 
   /// Returns all collected and combined sleep data
+
   Stream<List<HealyCombinedSleepData>> getAllCombinedSleepData();
+
 
   /// Returns if an workout is currently running
   Future<bool> isWorkoutRunning();
