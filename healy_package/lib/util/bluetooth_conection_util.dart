@@ -28,27 +28,27 @@ class BluetoothConnectionUtil {
   /// Actual device that is currently connected
 
   /// Characteristic for writing data
-  late QualifiedCharacteristic _characteristicData;
+   QualifiedCharacteristic? _characteristicData;
 
   /// Characteristic for reading data
-  late QualifiedCharacteristic _characteristicNotify;
-  late Stream<List<int>> notifyStream;
+
+
 
   /// current device connection state data
   BluetoothConnectionState lastState = BluetoothConnectionState.bluetoothOff;
 
   /// device connection state stream
-  late StreamController<BluetoothConnectionState> _connectionStateController;
+   StreamController<BluetoothConnectionState>? _connectionStateController;
 
-  late StreamSubscription<CharacteristicValue> streamSubscriptionNotify;
+   StreamSubscription<CharacteristicValue>? streamSubscriptionNotify;
 
-  StreamController<BluetoothConnectionState> get connectionStateController =>
+  StreamController<BluetoothConnectionState>? get connectionStateController =>
       _connectionStateController;
 
   /// Stream that returns devices while scanning for watch
 
-  late Timer _autoConnectionTimer;
-  late StreamSubscription _deviceConnectionSubscription;
+  //late Timer _autoConnectionTimer;
+ // late StreamSubscription _deviceConnectionSubscription;
   bool isNeedReconnect = true;
   bool isFirmwareUpdating = false;
 
@@ -112,7 +112,7 @@ class BluetoothConnectionUtil {
     log("setConnectionState ${state.toString()}");
     if (state != lastState) {
       lastState = state;
-      connectionStateController.add(state);
+      connectionStateController!.add(state);
     }
   }
 
@@ -448,7 +448,7 @@ class BluetoothConnectionUtil {
   }) async {
     //await reconnectPairedDevice();
     //if (await isConnected()) {
-    return bleManager.writeCharacteristicWithoutResponse(_characteristicData,
+    return bleManager.writeCharacteristicWithoutResponse(_characteristicData!,
         value: data);
 
     // }
