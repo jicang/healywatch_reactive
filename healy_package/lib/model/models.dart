@@ -767,7 +767,9 @@ enum HealyFunction {
   musicControlPre,
   musicControlNext,
   musicControlPlay,
-  musicControlPause
+  musicControlPause,
+  workoutStart,
+  workoutEnd,
 }
 
 class HealySleepModeData {
@@ -790,4 +792,21 @@ class HealyResUpdateData {
   int updateIndex;
 
   HealyResUpdateData({required this.needUpdate, required this.updateIndex});
+}
+
+/// In this model the sleep data is cobined. This means
+/// that this model represent an whole sleep, with all included
+/// data of sleep quality and heart rate.
+class HealyCombinedSleepData {
+  final DateTime startDateTime;
+  final DateTime endDateTime;
+  final List<int> sleepQuality;
+  final List<int> heartRate;
+
+  HealyCombinedSleepData({
+    required this.startDateTime,
+    required this.endDateTime,
+    required this.sleepQuality,
+    required this.heartRate,
+  });
 }
