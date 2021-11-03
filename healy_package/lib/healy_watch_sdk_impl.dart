@@ -1347,4 +1347,16 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   Stream<BleStatus> listenBluetoothState({bool emitCurrentValue = true}) {
     return bluetoothUtil.bleManager.statusStream;
   }
+
+  @override
+  Stream<HealyBaseExerciseData> currentWorkoutData() {
+    // TODO: implement currentWorkoutData
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> isWorkoutRunning() {
+    // TODO: implement isWorkoutRunning
+    throw UnimplementedError();
+  }
 }
