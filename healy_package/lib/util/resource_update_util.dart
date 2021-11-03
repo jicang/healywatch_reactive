@@ -11,9 +11,10 @@ class ResourceUpdateUtil {
 
   late List<int> fileByte;
   late List<int> md5Byte;
-  int maxLength;
+  late int maxLength;
 
-  ResourceUpdateUtil(this.resFilePath,  this.maxLength) {
+  ResourceUpdateUtil(this.resFilePath, {int maxLength = 200}) {
+    this.maxLength = maxLength;
     final File binFile = File("$resFilePath/color565.bin");
     final File md5File = File("$resFilePath/color565MD5.txt");
     fileByte = binFile.readAsBytesSync();
@@ -33,6 +34,7 @@ class ResourceUpdateUtil {
       byteList.add(value);
     }
   }
+
   List<int> getMd5Byte(String md5String) {
     final int length = md5String.length ~/ 2;
     final List<int> value = BleSdk.generateValue(length);
@@ -147,12 +149,13 @@ class ResourceUpdateUtil {
     return wCRC;
   }
 
-  Future<void> sendFileByte(int startIndex,{void Function(double) ?progressCallback}) async {
+  Future<void> sendFileByte(int startIndex,
+      {void Function(double)? progressCallback}) async {
     for (int i = startIndex; i < byteList.length; i++) {
       final List<List<int>> sendValue = getSendData(i, maxLength);
       await sendData(sendValue);
 
-      progressCallback?.call(i/byteList.length);
+      progressCallback?.call(i / byteList.length);
     }
     await HealyWatchSDKImplementation.instance
         .checkResUpdateData(checkAllFile(ResCmdMode.endCheck));

@@ -220,7 +220,7 @@ class DeviceDetailState extends State<DeviceDetail> {
 
   connected() async {
     showLoading(context);
-    await HealyWatchSDKImplementation.instance.connectDeviceWithId(deviceId!);
+    await HealyWatchSDKImplementation.instance.reconnectDevice(autoReconnect: true);
     streamSubscription?.cancel();
     streamSubscription = HealyWatchSDKImplementation.instance
         .connectionStateStream()

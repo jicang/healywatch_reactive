@@ -65,13 +65,10 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   @override
   Future<void> connectDevice(DiscoveredDevice device,
       {bool autoReconnect = true}) async {
-    await bluetoothUtil.connect(device.id);
+    await bluetoothUtil.connectWithDevice(device,autoReconnect: autoReconnect);
   }
 
-  Future<void> connectDeviceWithId(String deviceId,
-      {bool autoReconnect = true}) async {
-    await bluetoothUtil.connect(deviceId);
-  }
+
 
   @override
   Future<void> disconnectDevice() {
@@ -79,8 +76,8 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   }
 
   @override
-  Future<DiscoveredDevice> reconnectDevice({bool autoReconnect = true}) async {
-    throw UnimplementedError();
+  Future<DiscoveredDevice?> reconnectDevice({bool autoReconnect = true}) async {
+    return bluetoothUtil.reconnect(autoReconnect: autoReconnect);
   }
 
   // // returns wether the watch is PROPERLY connected, meaning the devices are paired and it is possible to call functions on the watch
@@ -93,17 +90,15 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   // // returns the connected device synchronously
   // // will return null if the device has not been reinitialized properly even if there is a connected device
   @override
-  DiscoveredDevice getConnectedDevice() {
-    // TODO: implement getConnectedDevice
-    throw UnimplementedError();
+  DiscoveredDevice? getConnectedDevice() {
+   return bluetoothUtil.connectedDevice;
   }
 
 
 
   @override
-  Future<BluetoothConnectionState> getConnectionState() {
-    // TODO: implement getConnectionState
-    throw UnimplementedError();
+  Future<ConnectionStateUpdate> getConnectionState() {
+    return bluetoothUtil.connectionState();
   }
 
   Stream<bool> isSetupDone() async* {
@@ -1053,8 +1048,8 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
 
     final Map<String, dynamic> queryParameters = {};
 
-    //queryParameters["version"] = currentVersionConverted;
-    queryParameters["version"] = "000";
+    queryParameters["version"] = currentVersionConverted;
+   // queryParameters["version"] = "000";
     queryParameters["type"] = "1929";
 
     final Response response = await Dio().get(
@@ -1119,21 +1114,19 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   }
 
   /// TODO whats this for?
-  Future<bool> checkShouldUpgradeResourceFiles(String path) async {
-    final HealySetDeviceTime healySetDeviceTime =
-        await setDeviceTime(DateTime.now());
-
-    final ResourceUpdateUtil resUpdateUtils =
-        ResourceUpdateUtil(path, healySetDeviceTime.maxLength);
-
-    final List<int> checkBytes =
-        resUpdateUtils.checkAllFile(ResCmdMode.startCheck);
-
-    final HealyResUpdateData healyResUpdateData =
-        await checkNeedResUpdate(checkBytes);
-
-    return healyResUpdateData.needUpdate;
-  }
+  // Future<bool> checkShouldUpgradeResourceFiles(String path) async {
+  //
+  //   final ResourceUpdateUtil resUpdateUtils =
+  //       ResourceUpdateUtil(path);
+  //
+  //   final List<int> checkBytes =
+  //       resUpdateUtils.checkAllFile(ResCmdMode.startCheck);
+  //
+  //   final HealyResUpdateData healyResUpdateData =
+  //       await checkNeedResUpdate(checkBytes);
+  //
+  //   return healyResUpdateData.needUpdate;
+  // }
 
   /// TODO whats this for?
   /*Future updateResourceFiles() async {
@@ -1172,10 +1165,9 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     final String rootPath = directory.path;
     final File binFile = File("$rootPath/color565.bin");
     if (!binFile.existsSync()) return;
-    final healySetDeviceTime = await HealyWatchSDKImplementation.instance
-        .setDeviceTime(DateTime.now());
+
     final resUpdateUtils =
-        ResourceUpdateUtil(rootPath, healySetDeviceTime.maxLength);
+        ResourceUpdateUtil(rootPath);
     final List<int> checkBytes =
         resUpdateUtils.checkAllFile(ResCmdMode.startCheck);
     final HealyResUpdateData healyResUpdateData =
@@ -1183,6 +1175,9 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     bool needUpdate = healyResUpdateData.needUpdate;
     print("resUpdate $needUpdate");
     if (needUpdate) {
+      final healySetDeviceTime = await HealyWatchSDKImplementation.instance
+          .setDeviceTime(DateTime.now());
+      resUpdateUtils.maxLength=healySetDeviceTime.maxLength;
       startResUpdate(
           resUpdateUtils, healyResUpdateData.updateIndex, progressStream);
     }
@@ -1349,8 +1344,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   }
 
   @override
-  Stream<BluetoothConnectionState> listenBluetoothState({bool emitCurrentValue = true}) {
-    // TODO: implement listenBluetoothState
-    throw UnimplementedError();
+  Stream<BleStatus> listenBluetoothState({bool emitCurrentValue = true}) {
+    return bluetoothUtil.bleManager.statusStream;
   }
 }
