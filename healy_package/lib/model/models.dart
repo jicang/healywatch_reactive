@@ -767,7 +767,9 @@ enum HealyFunction {
   musicControlPre,
   musicControlNext,
   musicControlPlay,
-  musicControlPause
+  musicControlPause,
+  workoutStart,
+  workoutEnd,
 }
 
 class HealySleepModeData {
@@ -797,9 +799,13 @@ class HealyResUpdateData {
 /// that this model represent an whole sleep, with all included
 /// data of sleep quality and heart rate.
 class HealyCombinedSleepData {
+
   late DateTime startDateTime;
   late DateTime endDateTime;
    List<int> sleepQuality=[];
    List<int> heartRate=[];
 
   HealyCombinedSleepData();}
+
+}
+
