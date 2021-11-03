@@ -1404,7 +1404,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
         if (durationMinutes > 30) {
           int totalSleepTime = healyCombinedSleepData.sleepQuality.length * 5;
           healyCombinedSleepData.endDateTime = healyCombinedSleepData
-              .startDateTime!
+              .startDateTime
               .add(Duration(minutes: totalSleepTime));
           listDatas.add(healyCombinedSleepData);
           healyCombinedSleepData = HealyCombinedSleepData(startDateTime: healyCombinedSleepData.startDateTime );
@@ -1420,7 +1420,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
       if (i == 0) {
         int totalSleepTime = healyCombinedSleepData.sleepQuality.length * 5;
         healyCombinedSleepData.endDateTime = healyCombinedSleepData
-            .startDateTime!
+            .startDateTime
             .add(Duration(minutes: totalSleepTime));
         listDatas.add(healyCombinedSleepData);
       }
