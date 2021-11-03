@@ -797,9 +797,9 @@ class HealyResUpdateData {
 /// that this model represent an whole sleep, with all included
 /// data of sleep quality and heart rate.
 class HealyCombinedSleepData {
-  late DateTime startDateTime;
-  late DateTime endDateTime;
+   DateTime startDateTime;
+   DateTime? endDateTime;
    List<int> sleepQuality=[];
    List<int> heartRate=[];
 
-  HealyCombinedSleepData();}
+  HealyCombinedSleepData({required this.startDateTime});}

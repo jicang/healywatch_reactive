@@ -106,7 +106,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     log('Error: $error');
   }
 
-  late StreamController<HealyBaseModel> allDataStreamController;
+   StreamController<HealyBaseModel>? allDataStreamController;
 
   Future _getWatchData(int cmd, StreamController streamController) async {
     final completer = Completer();
@@ -127,22 +127,22 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     allDataStreamController = StreamController<HealyBaseModel>();
 
     // fetch dailyEvaluations from watch
-    _getWatchData(DeviceCmd.getTotalData, allDataStreamController)
+    _getWatchData(DeviceCmd.getTotalData, allDataStreamController!)
         .then((_) =>
-            _getWatchData(DeviceCmd.getDetailData, allDataStreamController))
+            _getWatchData(DeviceCmd.getDetailData, allDataStreamController!))
         .then((_) =>
-            _getWatchData(DeviceCmd.getSleepData, allDataStreamController))
+            _getWatchData(DeviceCmd.getSleepData, allDataStreamController!))
         .then((_) => _getWatchData(
-            DeviceCmd.getDynamicHeartData, allDataStreamController))
+            DeviceCmd.getDynamicHeartData, allDataStreamController!))
         .then((_) => _getWatchData(
-            DeviceCmd.getStaticHeartData, allDataStreamController))
+            DeviceCmd.getStaticHeartData, allDataStreamController!))
         .then((_) =>
-            _getWatchData(DeviceCmd.getHrvHistoryData, allDataStreamController))
+            _getWatchData(DeviceCmd.getHrvHistoryData, allDataStreamController!))
         .then((_) =>
-            _getWatchData(DeviceCmd.getWorkOutData, allDataStreamController))
-        .whenComplete(() => allDataStreamController.close());
+            _getWatchData(DeviceCmd.getWorkOutData, allDataStreamController!))
+        .whenComplete(() => allDataStreamController!.close());
 
-    return allDataStreamController.stream;
+    return allDataStreamController!.stream;
   }
 
   @override
@@ -1389,7 +1389,6 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   combineDataSleep(StreamController<List<HealyCombinedSleepData>>streamController,
       List<HealySleepData> sleeps, List<HealyStaticHeartRate> hrs) {
     int length = sleeps.length;
-
     List<HealyCombinedSleepData> listDatas = [];
     HealyCombinedSleepData? healyCombinedSleepData;
     HealySleepData? lastHealySleepData;
@@ -1405,25 +1404,23 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
         if (durationMinutes > 30) {
           int totalSleepTime = healyCombinedSleepData.sleepQuality.length * 5;
           healyCombinedSleepData.endDateTime = healyCombinedSleepData
-              .startDateTime
+              .startDateTime!
               .add(Duration(minutes: totalSleepTime));
           listDatas.add(healyCombinedSleepData);
-          healyCombinedSleepData = HealyCombinedSleepData();
-          healyCombinedSleepData.startDateTime = healySleepData.startDateTime;
+          healyCombinedSleepData = HealyCombinedSleepData(startDateTime: healyCombinedSleepData.startDateTime );
           healyCombinedSleepData.sleepQuality.addAll(list);
         } else {
           healyCombinedSleepData.sleepQuality.addAll(list);
         }
       } else {
-        healyCombinedSleepData = HealyCombinedSleepData();
-        healyCombinedSleepData.startDateTime = healySleepData.startDateTime;
+        healyCombinedSleepData = HealyCombinedSleepData(startDateTime: healySleepData.startDateTime);
         healyCombinedSleepData.sleepQuality.addAll(list);
       }
       lastHealySleepData = healySleepData;
       if (i == 0) {
         int totalSleepTime = healyCombinedSleepData.sleepQuality.length * 5;
         healyCombinedSleepData.endDateTime = healyCombinedSleepData
-            .startDateTime
+            .startDateTime!
             .add(Duration(minutes: totalSleepTime));
         listDatas.add(healyCombinedSleepData);
       }
@@ -1431,10 +1428,10 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
 
     listDatas.forEach((healyCombinedSleepData) {
       DateTime startTime=healyCombinedSleepData.startDateTime;
-      DateTime endTime=healyCombinedSleepData.endDateTime;
+      DateTime? endTime=healyCombinedSleepData.endDateTime;
       hrs.forEach((element) {
         DateTime dateTime=element.dateTime;
-        if(dateTime.isAfter(startTime)&&dateTime.isBefore(endTime)){
+        if(dateTime.isAfter(startTime)&&dateTime.isBefore(endTime!)){
           healyCombinedSleepData.heartRate.add(element.heartRate);
         }
       });
