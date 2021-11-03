@@ -28,19 +28,17 @@ class BluetoothConnectionUtil {
   /// Actual device that is currently connected
 
   /// Characteristic for writing data
-   QualifiedCharacteristic? _characteristicData;
+  QualifiedCharacteristic? _characteristicData;
 
   /// Characteristic for reading data
-
-
 
   /// current device connection state data
   BluetoothConnectionState lastState = BluetoothConnectionState.bluetoothOff;
 
   /// device connection state stream
-   StreamController<BluetoothConnectionState>? _connectionStateController;
+  StreamController<BluetoothConnectionState>? _connectionStateController;
 
-   StreamSubscription<CharacteristicValue>? streamSubscriptionNotify;
+  StreamSubscription<CharacteristicValue>? streamSubscriptionNotify;
 
   StreamController<BluetoothConnectionState>? get connectionStateController =>
       _connectionStateController;
@@ -48,7 +46,7 @@ class BluetoothConnectionUtil {
   /// Stream that returns devices while scanning for watch
 
   //late Timer _autoConnectionTimer;
- // late StreamSubscription _deviceConnectionSubscription;
+  // late StreamSubscription _deviceConnectionSubscription;
   bool isNeedReconnect = true;
   bool isFirmwareUpdating = false;
 
@@ -73,9 +71,9 @@ class BluetoothConnectionUtil {
       if (event == BleStatus.poweredOff) {
         //disconnect();
       } else if (event == BleStatus.ready) {
-        bool isFirmware = SharedPrefUtils.instance.isFirmware();
+        bool? isFirmware = await SharedPrefUtils.isFirmware();
         print("isFirmware $isFirmware");
-        if (isFirmware) {
+        if (isFirmware != null && isFirmware) {
           final Directory directory = await getApplicationDocumentsDirectory();
           final String rootPath = directory.path;
           HealyWatchSDKImplementation.instance.searchDeviceAndUpdateFirmware(
@@ -91,7 +89,7 @@ class BluetoothConnectionUtil {
 
   toConnectExistId() async {
     // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String? deviceId = SharedPrefUtils.instance.getConnectedDeviceID();
+    String? deviceId = await SharedPrefUtils.getConnectedDeviceID();
     reconnectDevice(deviceId);
   }
 
@@ -459,7 +457,7 @@ class BluetoothConnectionUtil {
   }
 
   String? deviceId;
-  DiscoveredDevice ?connectedDevice;
+  DiscoveredDevice? connectedDevice;
 
   Future<void> connectWithDevice(DiscoveredDevice device,
       {bool autoReconnect = true}) async {
@@ -491,7 +489,7 @@ class BluetoothConnectionUtil {
         } else if (update.connectionState ==
             DeviceConnectionState.disconnected) {
           isConnect = false;
-          this.connectedDevice=null;
+          this.connectedDevice = null;
           if (isNeedReconnect) {
             reconnectDevice(deviceId);
           }
@@ -506,7 +504,7 @@ class BluetoothConnectionUtil {
 
   StreamController<List<int>>? streamController;
   StreamSubscription? streamSubscription;
-  late bool isConnect;
+  bool isConnect = false;
 
   Future<void> enableNotification(String deviceId) async {
     //ios端的是短uuid。android端可以是长uuid
@@ -537,13 +535,13 @@ class BluetoothConnectionUtil {
 
   Future<void> disconnect() async {
     try {
-      //  print('disconnecting to device: $deviceId');
+       print('disconnecting to device: $deviceId');
       //await streamSubscriptionNotify.cancel();
       isConnect = false;
       isNeedReconnect = false;
       streamController?.close();
       streamSubscription?.cancel();
-      connectedDevice=null;
+      connectedDevice = null;
       await _connection?.cancel();
     } on Exception catch (e, _) {
       print("Error disconnecting from a device: $e");
@@ -598,13 +596,12 @@ class BluetoothConnectionUtil {
         .where((event) => event.id == deviceId)
         .first
         .then((value) {
-          this.connectedDevice=value;
+      this.connectedDevice = value;
       connect(value.id);
       return value;
-    } );
-             // this.connectedDevice=value;connect(value.id);
-             // return value;
-
+    });
+    // this.connectedDevice=value;connect(value.id);
+    // return value;
   }
 }
 

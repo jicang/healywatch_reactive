@@ -173,9 +173,9 @@ class HealyEcgSuccessData extends HealyBaseMeasuremenetData {
   final int moodValue;
   final int breathRate;
 
-  late List<HealyECGQualityData> qualityPoints;
-  late List<HealyPPGData> ppgData;
-  late List<HealyECGData> ecgData;
+  List<HealyECGQualityData> qualityPoints = [];
+  List<HealyPPGData> ppgData = [];
+  List<HealyECGData> ecgData = [];
 
   HealyEcgSuccessData({
     required this.dateTime,
@@ -600,21 +600,24 @@ class HealyDeviceBaseParameter extends HealyBaseModel {
 
 class WeatherData extends HealyBaseModel {
   /// current temperature (Celsius)
-  late int tempNow;
+  int tempNow;
 
   /// highest temperature of the day (Celsius)
-  late int tempHigh;
+  int tempHigh;
 
   /// lowest temperature of the day (Celsius)
-  late int tempLow;
+  int tempLow;
 
   /// city name
-  late String cityName;
+  String cityName = "";
 
   /// weather ID (0~38 or 99)
   ///
   /// reference [https://docs.seniverse.com/api/start/code.html]
-  late int weatherId;
+  int weatherId;
+
+  WeatherData( {required this.cityName,required this.weatherId,
+    required this.tempNow, required this.tempHigh, required this.tempLow}  );
 }
 
 /// real-time step count
@@ -653,22 +656,22 @@ class HealyClock extends HealyBaseModel {
   /// alarm ID (this ID is meaningless while setting,
   /// the firmware will delete the previous alarm and add
   /// new ones according to the app's transmitted information)
-  late int id;
+  int id = 0;
 
   /// alarm type
-  late HealyClockMode healyClockMode;
+  HealyClockMode healyClockMode = HealyClockMode.none;
 
   /// hour of start of alarm
-  late int hour;
+  int hour = 7;
 
   /// minute of start of alarm
-  late int minute;
+  int minute = 0;
 
   /// alarm content（healy watch doesn't use this, can be skipped）
   String content = "";
 
   /// alarm turn on /off
-  late bool enable;
+  bool enable = false;
 
   ///  weekly enablement，[1,1,1,1,0,0,0]（1 as enable, 0 as close, first digit is Sunday）
   List<int> weekEnableList = [];
@@ -792,14 +795,14 @@ class HealyResUpdateData {
   HealyResUpdateData({required this.needUpdate, required this.updateIndex});
 }
 
-
 /// In this model the sleep data is cobined. This means
 /// that this model represent an whole sleep, with all included
 /// data of sleep quality and heart rate.
 class HealyCombinedSleepData {
-   DateTime startDateTime;
-   DateTime? endDateTime;
-   List<int> sleepQuality=[];
-   List<int> heartRate=[];
+  DateTime startDateTime;
+  DateTime? endDateTime;
+  List<int> sleepQuality = [];
+  List<int> heartRate = [];
 
-  HealyCombinedSleepData({required this.startDateTime});}
+  HealyCombinedSleepData({required this.startDateTime});
+}

@@ -5,67 +5,71 @@ const String connectedDeviceName = "connectedDeviceName";
 const String isFirmwareKey = "isFirmwareKey";
 
 class SharedPrefUtils {
-  static final SharedPrefUtils _instance = SharedPrefUtils._();
 
-  SharedPrefUtils._() {}
-  SharedPreferences? sp;
 
-  static SharedPrefUtils get instance => _instance;
-
-  init() async {
-    sp = await SharedPreferences.getInstance();
+  static Future<bool> existsConnectedDeviceID() async{
+    SharedPreferences sp = await getSharedPreferences();
+    return sp.containsKey(connectedDeviceKey);
   }
 
-  bool existsConnectedDeviceID() {
-    return sp!.containsKey(connectedDeviceKey);
-  }
-
-  String? getConnectedDeviceID() {
+  static Future<String?> getConnectedDeviceID() async{
     return getString(connectedDeviceKey);
   }
 
-  setConnectedDeviceID(String id) {
+  static setConnectedDeviceID(String id) {
     return setString(connectedDeviceKey, id);
   }
 
-  String? getConnectedDeviceName() {
-    return getString(connectedDeviceName);
+  static Future<String?> getConnectedDeviceName() async{
+    return  getString(connectedDeviceName);
   }
 
-  setConnectedDeviceName(String name) {
+  static  setConnectedDeviceName(String name) {
     return setString(connectedDeviceName, name);
   }
-  setIsFirmware(bool isFirmware) {
+
+  static setIsFirmware(bool isFirmware) {
     return setBool(isFirmwareKey, isFirmware);
   }
-  isFirmware(){
-    return getBool(isFirmwareKey);
+
+  static Future<bool?> isFirmware() async{
+    bool? isFirmware = await getBool(isFirmwareKey);
+    return isFirmware;
   }
-  clearConnectedDeviceID() {
+
+  static clearConnectedDeviceID() {
     return remove(connectedDeviceKey);
   }
 
-  clearConnectedDeviceName() {
+  static clearConnectedDeviceName() {
     return remove(connectedDeviceName);
   }
 
-  String? getString(String key) {
-    return sp!.getString(key);
+  static Future<String?> getString(String key) async {
+    SharedPreferences sp = await getSharedPreferences();
+    return sp.getString(key);
   }
 
-  setString(String key, String value) {
-    return sp!.setString(key, value);
+ static  setString(String key, String value) async {
+    SharedPreferences sp = await getSharedPreferences();
+    return sp.setString(key, value);
   }
 
-  bool? getBool(String key) {
-    return sp!.getBool(key);
+  static Future<bool?> getBool(String key) async{
+    SharedPreferences sp = await getSharedPreferences();
+    return sp.getBool(key);
   }
 
-  setBool(String key, bool value) {
-    return sp!.setBool(key, value);
+  static setBool(String key, bool value) async{
+    SharedPreferences sp = await getSharedPreferences();
+    return sp.setBool(key, value);
   }
 
-  remove(String key) {
-    return sp!.remove(key);
+ static remove(String key) async{
+    SharedPreferences sp = await getSharedPreferences();
+    return sp.remove(key);
+  }
+  static Future<SharedPreferences> getSharedPreferences() async{
+    return await SharedPreferences.getInstance();
   }
 }

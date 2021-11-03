@@ -22,7 +22,7 @@ void main() {
 }
 
 toRunMyapp() async {
-  await SharedPrefUtils.instance.init();
+
   HealyWatchSDKImplementation healyWatchSDKImplementation =
       HealyWatchSDKImplementation.instance;
   BluetoothConnectionUtil bluetoothConnectionUtil =
@@ -73,17 +73,12 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
   @override
   void initState() {
     super.initState();
-    print("init");
-    deviceId = SharedPrefUtils.instance.getConnectedDeviceID();
-    Future.delayed(Duration(milliseconds: 200)).then((e) {
       toDetailPage();
-    });
-
   }
 
   toDetailPage() async {
-
-    String? deviceName = SharedPrefUtils.instance.getConnectedDeviceName();
+    deviceId = await SharedPrefUtils.getConnectedDeviceID();
+    String? deviceName = await SharedPrefUtils.getConnectedDeviceName();
     if (deviceId != null) {
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
         builder: (_) => DeviceDetail(deviceName, deviceId),), (route) => false);
@@ -250,8 +245,8 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
  //   HealyWatchSDKImplementation.instance.cancelScanningDevices();
     HealyWatchSDKImplementation.instance.connectDevice(device);
 
-    SharedPrefUtils.instance.setConnectedDeviceID(device.id);
-    SharedPrefUtils.instance.setConnectedDeviceName( device.name);
+    await SharedPrefUtils.setConnectedDeviceID(device.id);
+    await SharedPrefUtils.setConnectedDeviceName( device.name);
 
 
     // isResume = false;

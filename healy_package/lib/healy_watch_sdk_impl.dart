@@ -54,7 +54,6 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   Stream<List<DiscoveredDevice>> scanResults(
       {String filterForName = HealyWatchSDKImplementation.filterName,
       List<String>? ids}) {
-    print(filterForName);
     return bluetoothUtil.startScan(filterForName, List.empty());
   }
 
@@ -106,7 +105,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     log('Error: $error');
   }
 
-   StreamController<HealyBaseModel>? allDataStreamController;
+  StreamController<HealyBaseModel>? allDataStreamController;
 
   Future _getWatchData(int cmd, StreamController streamController) async {
     final completer = Completer();
@@ -136,8 +135,8 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
             DeviceCmd.getDynamicHeartData, allDataStreamController!))
         .then((_) => _getWatchData(
             DeviceCmd.getStaticHeartData, allDataStreamController!))
-        .then((_) =>
-            _getWatchData(DeviceCmd.getHrvHistoryData, allDataStreamController!))
+        .then((_) => _getWatchData(
+            DeviceCmd.getHrvHistoryData, allDataStreamController!))
         .then((_) =>
             _getWatchData(DeviceCmd.getWorkOutData, allDataStreamController!))
         .whenComplete(() => allDataStreamController!.close());
@@ -1198,7 +1197,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
       String id, String path, StreamController<double> progressStream) async {
     int dfuPercent = 0;
     bool isDfuMode = false;
-    SharedPrefUtils.instance.setIsFirmware(true);
+    SharedPrefUtils.setIsFirmware(true);
     await FlutterNordicDfu.startDfu(
       id,
       path,
@@ -1220,12 +1219,12 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
       }, onDeviceConnectedHandle: (address) {
         isDfuMode = true;
         log("startOta: onDeviceConnectedHandle");
-      }, onDfuCompletedHandle: (address) {
+      }, onDfuCompletedHandle: (address) async {
         log("startOta: onComplete");
-        SharedPrefUtils.instance.setIsFirmware(false);
+        SharedPrefUtils.setIsFirmware(false);
         bluetoothUtil.isFirmwareUpdating = false;
-        bluetoothUtil
-            .reconnectDevice(SharedPrefUtils.instance.getConnectedDeviceID());
+        String? id = await SharedPrefUtils.getConnectedDeviceID();
+        bluetoothUtil.reconnectDevice(id);
         progressStream.close();
       }, onErrorHandle:
               (String deviceAddress, int error, int errorType, String message) {
@@ -1367,27 +1366,31 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     // TODO: implement getAllCombinedSleepData
     Stream<List<HealySleepData>> sleepList = getAllSleepData();
     List<HealySleepData> list = [];
-    StreamController<List<HealyCombinedSleepData>>streamController=StreamController();
+    StreamController<List<HealyCombinedSleepData>> streamController =
+        StreamController();
     sleepList.listen((event) {
       list.addAll(event);
-    }, onDone: () => combineData(list,streamController));
+    }, onDone: () => combineData(list, streamController));
     return streamController.stream;
   }
 
-  combineData(List<HealySleepData> listSleep,StreamController<List<HealyCombinedSleepData>>streamController) {
+  combineData(List<HealySleepData> listSleep,
+      StreamController<List<HealyCombinedSleepData>> streamController) {
     Stream<List<HealyStaticHeartRate>> heartRateList = getAllStaticHeartRates();
     List<HealyStaticHeartRate> list = [];
     heartRateList.listen((event) {
       list.addAll(event);
-    }, onDone: () => {combineDataSleep(streamController,listSleep, list)});
+    }, onDone: () => {combineDataSleep(streamController, listSleep, list)});
   }
 
   Duration getDifference(DateTime dateTime, DateTime nextTime) {
     return dateTime.difference(nextTime);
   }
 
-  combineDataSleep(StreamController<List<HealyCombinedSleepData>>streamController,
-      List<HealySleepData> sleeps, List<HealyStaticHeartRate> hrs) {
+  combineDataSleep(
+      StreamController<List<HealyCombinedSleepData>> streamController,
+      List<HealySleepData> sleeps,
+      List<HealyStaticHeartRate> hrs) {
     int length = sleeps.length;
     List<HealyCombinedSleepData> listDatas = [];
     HealyCombinedSleepData? healyCombinedSleepData;
@@ -1407,13 +1410,15 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
               .startDateTime
               .add(Duration(minutes: totalSleepTime));
           listDatas.add(healyCombinedSleepData);
-          healyCombinedSleepData = HealyCombinedSleepData(startDateTime: healyCombinedSleepData.startDateTime );
+          healyCombinedSleepData = HealyCombinedSleepData(
+              startDateTime: healyCombinedSleepData.startDateTime);
           healyCombinedSleepData.sleepQuality.addAll(list);
         } else {
           healyCombinedSleepData.sleepQuality.addAll(list);
         }
       } else {
-        healyCombinedSleepData = HealyCombinedSleepData(startDateTime: healySleepData.startDateTime);
+        healyCombinedSleepData =
+            HealyCombinedSleepData(startDateTime: healySleepData.startDateTime);
         healyCombinedSleepData.sleepQuality.addAll(list);
       }
       lastHealySleepData = healySleepData;
@@ -1427,11 +1432,11 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     }
 
     listDatas.forEach((healyCombinedSleepData) {
-      DateTime startTime=healyCombinedSleepData.startDateTime;
-      DateTime? endTime=healyCombinedSleepData.endDateTime;
+      DateTime startTime = healyCombinedSleepData.startDateTime;
+      DateTime? endTime = healyCombinedSleepData.endDateTime;
       hrs.forEach((element) {
-        DateTime dateTime=element.dateTime;
-        if(dateTime.isAfter(startTime)&&dateTime.isBefore(endTime!)){
+        DateTime dateTime = element.dateTime;
+        if (dateTime.isAfter(startTime) && dateTime.isBefore(endTime!)) {
           healyCombinedSleepData.heartRate.add(element.heartRate);
         }
       });

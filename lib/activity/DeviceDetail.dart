@@ -34,12 +34,13 @@ class DeviceDetailState extends State<DeviceDetail> {
   @override
   void dispose() {
     super.dispose();
+    print("dispose");
     HealyWatchSDKImplementation.instance.disconnectDevice();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(child: Scaffold(
       appBar: AppBar(
         title: ListTile(
           title: Text(
@@ -60,15 +61,15 @@ class DeviceDetailState extends State<DeviceDetail> {
                     child: ElevatedButton(
                       style: ButtonStyle(
                           foregroundColor:
-                              MaterialStateProperty.all(Color(0xFFffffff)),
+                          MaterialStateProperty.all(Color(0xFFffffff)),
                           backgroundColor:
-                              MaterialStateProperty.resolveWith<Color>(
+                          MaterialStateProperty.resolveWith<Color>(
                                   (states) {
-                            if (states.contains(MaterialState.disabled)) {
-                              return Colors.grey; // Disabled color
-                            }
-                            return Colors.blue; // Regular color
-                          })),
+                                if (states.contains(MaterialState.disabled)) {
+                                  return Colors.grey; // Disabled color
+                                }
+                                return Colors.blue; // Regular color
+                              })),
                       child: Text("UnPair"),
                       onPressed: () => unPair(),
                     ),
@@ -89,26 +90,26 @@ class DeviceDetailState extends State<DeviceDetail> {
                   children: [
                     Expanded(
                         child: Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                            foregroundColor:
+                          padding: const EdgeInsets.all(2.0),
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                                foregroundColor:
                                 MaterialStateProperty.all(Color(0xFFffffff)),
-                            backgroundColor:
+                                backgroundColor:
                                 MaterialStateProperty.resolveWith<Color>(
-                                    (states) {
-                              if (states.contains(MaterialState.disabled)) {
-                                return Colors.grey; // Disabled color
-                              }
-                              return Colors.blue; // Regular color
-                            })),
-                        child: Text("Connect"),
-                        onPressed: (status.data?.connectionState ==
+                                        (states) {
+                                      if (states.contains(MaterialState.disabled)) {
+                                        return Colors.grey; // Disabled color
+                                      }
+                                      return Colors.blue; // Regular color
+                                    })),
+                            child: Text("Connect"),
+                            onPressed: (status.data?.connectionState ==
                                 DeviceConnectionState.connected)
-                            ? null
-                            : () => connected(),
-                      ),
-                    )),
+                                ? null
+                                : () => connected(),
+                          ),
+                        )),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.all(2.0),
@@ -118,8 +119,8 @@ class DeviceDetailState extends State<DeviceDetail> {
                               Color(0xFFffffff),
                             ),
                             backgroundColor:
-                                MaterialStateProperty.resolveWith<Color>(
-                              (states) {
+                            MaterialStateProperty.resolveWith<Color>(
+                                  (states) {
                                 if (states.contains(MaterialState.disabled)) {
                                   return Colors.grey; // Disabled color
                                 }
@@ -129,9 +130,9 @@ class DeviceDetailState extends State<DeviceDetail> {
                           ),
                           child: Text("Disconnect"),
                           onPressed: (status.data?.connectionState ==
-                                  DeviceConnectionState.connected)
+                              DeviceConnectionState.connected)
                               ? () => HealyWatchSDKImplementation.instance
-                                  .disconnectDevice()
+                              .disconnectDevice()
                               : null,
                         ),
                       ),
@@ -153,6 +154,42 @@ class DeviceDetailState extends State<DeviceDetail> {
           ],
         ),
       ),
+    ), onWillPop: () async {
+      bool ?isExists=await onBackPressed();
+     return isExists==null?false:isExists;
+    });
+  }
+  Future<bool?> onBackPressed() {
+   return  showDialog(
+       context: context,
+       barrierDismissible: true,
+       builder: (BuildContext context) {
+         return getDialog();
+       },
+     );
+  }
+  Widget getDialog() {
+    return new AlertDialog(
+      title: Container(
+        width: MediaQuery.of(context).size.width,
+        child: Text("Exists"),
+      ),
+      content: Text("Are you sure exists?"),
+      actions: <Widget>[
+        FlatButton(
+          onPressed: () {
+            HealyWatchSDKImplementation.instance.disconnectDevice();
+            Navigator.pop(context,true);
+          },
+          child: Text("Confirm"),
+        ),
+        FlatButton(
+          onPressed: () {
+            Navigator.pop(context,false);
+          },
+          child: Text("Cancel"),
+        ),
+      ],
     );
   }
 
@@ -255,9 +292,9 @@ class DeviceDetailState extends State<DeviceDetail> {
     }
   }
 
-  unPair() {
-    SharedPrefUtils.instance.clearConnectedDeviceID();
-    SharedPrefUtils.instance.clearConnectedDeviceName();
+  unPair() async{
+   await SharedPrefUtils.clearConnectedDeviceID();
+   await SharedPrefUtils.clearConnectedDeviceName();
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (_) => ScanDeviceWidget(),

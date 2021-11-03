@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,11 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
 import 'package:healy_watch_sdk/model/models.dart';
 
-
-
-
 import '../button_view.dart';
-
 
 class WeatherPage extends StatefulWidget {
   @override
@@ -21,26 +15,22 @@ class WeatherPage extends StatefulWidget {
 }
 
 class WeatherPageState extends State<WeatherPage> {
-
   TextEditingController _userAgeController = TextEditingController();
   TextEditingController _weatherIdController = TextEditingController();
   TextEditingController _tempHighController = TextEditingController();
   TextEditingController _tempLowController = TextEditingController();
   TextEditingController _cityNameController = TextEditingController();
   late HealyWatchSDKImplementation healyWatchSDK;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    healyWatchSDK= HealyWatchSDKImplementation.instance;
-
+    healyWatchSDK = HealyWatchSDKImplementation.instance;
   }
-
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -166,8 +156,7 @@ class WeatherPageState extends State<WeatherPage> {
     );
   }
 
-
-  setWeather() async{
+  setWeather() async {
     String tempNow = _userAgeController.text;
     String tempHigh = _tempHighController.text;
     String tempLow = _tempLowController.text;
@@ -178,13 +167,14 @@ class WeatherPageState extends State<WeatherPage> {
         isEmpty(tempHigh) ||
         isEmpty(tempLow) ||
         isEmpty(cityName)) return;
-    WeatherData weatherData = WeatherData();
-    weatherData.cityName = cityName;
-    weatherData.tempLow = int.parse(tempLow);
-    weatherData.tempHigh = int.parse(tempHigh);
-    weatherData.tempNow = int.parse(tempLow);
-    weatherData.weatherId = int.parse(weatherId);
-   bool isSet=await healyWatchSDK.setWeatherData(weatherData);
+    WeatherData weatherData = WeatherData(
+        cityName: cityName,
+        weatherId: int.parse(weatherId),
+        tempNow: int.parse(tempLow),
+        tempHigh: int.parse(tempHigh),
+        tempLow: int.parse(tempLow));
+
+    bool isSet = await healyWatchSDK.setWeatherData(weatherData);
     showMsgDialog(context, "SetWeather", "$isSet");
   }
 
