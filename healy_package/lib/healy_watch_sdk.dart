@@ -303,7 +303,7 @@ abstract class HealyWatchSDK {
   Stream<double> downloadLatestFirmwareUpdate(String downloadUrl);
 
   /// Returns all collected and combined sleep data
-//  Stream<List<HealyCombinedSleepData>> getAllCombinedSleepData();
+ Stream<List<HealyCombinedSleepData>> getAllCombinedSleepData();
 
   /// Returns if an workout is currently running
   Future<bool> isWorkoutRunning();

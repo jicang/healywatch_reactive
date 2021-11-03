@@ -791,3 +791,15 @@ class HealyResUpdateData {
 
   HealyResUpdateData({required this.needUpdate, required this.updateIndex});
 }
+
+
+/// In this model the sleep data is cobined. This means
+/// that this model represent an whole sleep, with all included
+/// data of sleep quality and heart rate.
+class HealyCombinedSleepData {
+  late DateTime startDateTime;
+  late DateTime endDateTime;
+   List<int> sleepQuality=[];
+   List<int> heartRate=[];
+
+  HealyCombinedSleepData();}

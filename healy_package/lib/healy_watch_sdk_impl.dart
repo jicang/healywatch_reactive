@@ -9,6 +9,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_nordic_dfu/flutter_nordic_dfu.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:healy_watch_sdk/util/shared_pref.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'bleconst/device_cmd.dart';
@@ -65,10 +66,8 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   @override
   Future<void> connectDevice(DiscoveredDevice device,
       {bool autoReconnect = true}) async {
-    await bluetoothUtil.connectWithDevice(device,autoReconnect: autoReconnect);
+    await bluetoothUtil.connectWithDevice(device, autoReconnect: autoReconnect);
   }
-
-
 
   @override
   Future<void> disconnectDevice() {
@@ -91,10 +90,8 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   // // will return null if the device has not been reinitialized properly even if there is a connected device
   @override
   DiscoveredDevice? getConnectedDevice() {
-   return bluetoothUtil.connectedDevice;
+    return bluetoothUtil.connectedDevice;
   }
-
-
 
   @override
   Future<ConnectionStateUpdate> getConnectionState() {
@@ -1049,7 +1046,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     final Map<String, dynamic> queryParameters = {};
 
     queryParameters["version"] = currentVersionConverted;
-   // queryParameters["version"] = "000";
+    // queryParameters["version"] = "000";
     queryParameters["type"] = "1929";
 
     final Response response = await Dio().get(
@@ -1166,8 +1163,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     final File binFile = File("$rootPath/color565.bin");
     if (!binFile.existsSync()) return;
 
-    final resUpdateUtils =
-        ResourceUpdateUtil(rootPath);
+    final resUpdateUtils = ResourceUpdateUtil(rootPath);
     final List<int> checkBytes =
         resUpdateUtils.checkAllFile(ResCmdMode.startCheck);
     final HealyResUpdateData healyResUpdateData =
@@ -1177,7 +1173,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     if (needUpdate) {
       final healySetDeviceTime = await HealyWatchSDKImplementation.instance
           .setDeviceTime(DateTime.now());
-      resUpdateUtils.maxLength=healySetDeviceTime.maxLength;
+      resUpdateUtils.maxLength = healySetDeviceTime.maxLength;
       startResUpdate(
           resUpdateUtils, healyResUpdateData.updateIndex, progressStream);
     }
@@ -1228,7 +1224,8 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
         log("startOta: onComplete");
         SharedPrefUtils.instance.setIsFirmware(false);
         bluetoothUtil.isFirmwareUpdating = false;
-        bluetoothUtil.reconnectDevice(SharedPrefUtils.instance.getConnectedDeviceID());
+        bluetoothUtil
+            .reconnectDevice(SharedPrefUtils.instance.getConnectedDeviceID());
         progressStream.close();
       }, onErrorHandle:
               (String deviceAddress, int error, int errorType, String message) {
@@ -1333,13 +1330,11 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
 
   @override
   BleStatus getBluetoothState() {
-
     return bluetoothUtil.getBluetoothState();
   }
 
   @override
   Stream<ConnectionStateUpdate> connectionStateStream() {
-
     return bluetoothUtil.connectionStateStream();
   }
 
@@ -1351,12 +1346,99 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   @override
   Stream<HealyBaseExerciseData> currentWorkoutData() {
     // TODO: implement currentWorkoutData
-    throw UnimplementedError();
+    StreamController<HealyBaseExerciseData> controller =
+        StreamController<HealyBaseExerciseData>();
+    _filterValueStream(DeviceCmd.exerciseData).listen((value) {
+      if (!controller.isClosed) {
+        controller.add(ResolveUtil.getActivityExerciseData(value));
+      }
+    });
+    return controller.stream;
   }
 
   @override
   Future<bool> isWorkoutRunning() {
     // TODO: implement isWorkoutRunning
     throw UnimplementedError();
+  }
+
+  @override
+  Stream<List<HealyCombinedSleepData>> getAllCombinedSleepData() {
+    // TODO: implement getAllCombinedSleepData
+    Stream<List<HealySleepData>> sleepList = getAllSleepData();
+    List<HealySleepData> list = [];
+    StreamController<List<HealyCombinedSleepData>>streamController=StreamController();
+    sleepList.listen((event) {
+      list.addAll(event);
+    }, onDone: () => combineData(list,streamController));
+    return streamController.stream;
+  }
+
+  combineData(List<HealySleepData> listSleep,StreamController<List<HealyCombinedSleepData>>streamController) {
+    Stream<List<HealyStaticHeartRate>> heartRateList = getAllStaticHeartRates();
+    List<HealyStaticHeartRate> list = [];
+    heartRateList.listen((event) {
+      list.addAll(event);
+    }, onDone: () => {combineDataSleep(streamController,listSleep, list)});
+  }
+
+  Duration getDifference(DateTime dateTime, DateTime nextTime) {
+    return dateTime.difference(nextTime);
+  }
+
+  combineDataSleep(StreamController<List<HealyCombinedSleepData>>streamController,
+      List<HealySleepData> sleeps, List<HealyStaticHeartRate> hrs) {
+    int length = sleeps.length;
+
+    List<HealyCombinedSleepData> listDatas = [];
+    HealyCombinedSleepData? healyCombinedSleepData;
+    HealySleepData? lastHealySleepData;
+    for (int i = length - 1; i >= 0; i--) {
+      HealySleepData healySleepData = sleeps[i];
+      DateTime dateTime = healySleepData.startDateTime;
+      List<int> list = healySleepData.sleepQuality;
+      if (healyCombinedSleepData != null) {
+        Duration duration =
+            getDifference(dateTime, lastHealySleepData!.startDateTime);
+        int durationMinutes =
+            duration.inMinutes - lastHealySleepData.sleepQuality.length * 5;
+        if (durationMinutes > 30) {
+          int totalSleepTime = healyCombinedSleepData.sleepQuality.length * 5;
+          healyCombinedSleepData.endDateTime = healyCombinedSleepData
+              .startDateTime
+              .add(Duration(minutes: totalSleepTime));
+          listDatas.add(healyCombinedSleepData);
+          healyCombinedSleepData = HealyCombinedSleepData();
+          healyCombinedSleepData.startDateTime = healySleepData.startDateTime;
+          healyCombinedSleepData.sleepQuality.addAll(list);
+        } else {
+          healyCombinedSleepData.sleepQuality.addAll(list);
+        }
+      } else {
+        healyCombinedSleepData = HealyCombinedSleepData();
+        healyCombinedSleepData.startDateTime = healySleepData.startDateTime;
+        healyCombinedSleepData.sleepQuality.addAll(list);
+      }
+      lastHealySleepData = healySleepData;
+      if (i == 0) {
+        int totalSleepTime = healyCombinedSleepData.sleepQuality.length * 5;
+        healyCombinedSleepData.endDateTime = healyCombinedSleepData
+            .startDateTime
+            .add(Duration(minutes: totalSleepTime));
+        listDatas.add(healyCombinedSleepData);
+      }
+    }
+
+    listDatas.forEach((healyCombinedSleepData) {
+      DateTime startTime=healyCombinedSleepData.startDateTime;
+      DateTime endTime=healyCombinedSleepData.endDateTime;
+      hrs.forEach((element) {
+        DateTime dateTime=element.dateTime;
+        if(dateTime.isAfter(startTime)&&dateTime.isBefore(endTime)){
+          healyCombinedSleepData.heartRate.add(element.heartRate);
+        }
+      });
+    });
+    streamController.add(listDatas);
   }
 }
