@@ -63,9 +63,11 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   }
 
   @override
-  Future<void> connectDevice(DiscoveredDevice device,
-      {bool autoReconnect = true}) async {
-    await bluetoothUtil.connectWithDevice(device, autoReconnect: autoReconnect);
+  Future<void> connectDevice(
+    String deviceId, {
+    bool autoReconnect = true,
+  }) async {
+    await bluetoothUtil.connect(deviceId);
   }
 
   @override
@@ -74,7 +76,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   }
 
   @override
-  Future<DiscoveredDevice?> reconnectDevice({bool autoReconnect = true}) async {
+  Future<String?> reconnectDevice({bool autoReconnect = true}) async {
     return bluetoothUtil.reconnect(autoReconnect: autoReconnect);
   }
 
@@ -88,8 +90,8 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   // // returns the connected device synchronously
   // // will return null if the device has not been reinitialized properly even if there is a connected device
   @override
-  DiscoveredDevice? getConnectedDevice() {
-    return bluetoothUtil.connectedDevice;
+  String? getConnectedDevice() {
+    return bluetoothUtil.deviceId;
   }
 
   @override
@@ -105,7 +107,8 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     log('Error: $error');
   }
 
-  StreamController<HealyBaseModel>? allDataStreamController;
+  StreamController<HealyBaseModel>? allDataStreamController =
+      StreamController<HealyBaseModel>();
 
   Future _getWatchData(int cmd, StreamController streamController) async {
     final completer = Completer();

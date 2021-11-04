@@ -24,17 +24,17 @@ abstract class HealyWatchSDK {
   bool isConnected();
 
   /// Connect to a healy watch device [BluetoothDevice]
-  Future<void> connectDevice(DiscoveredDevice device);
+  Future<void> connectDevice(String deviceId);
 
   /// Disconnects connected healy watch device [BluetoothDevice]
   void disconnectDevice();
 
   /// reconnect a already connected device from a device identifier
-  Future<DiscoveredDevice?> reconnectDevice({bool autoReconnect = true});
+  Future<String?> reconnectDevice({bool autoReconnect = true});
 
   /// Get connected healy watch as [BluetoothDevice]
   /// returns [Future<BluetoothDevice>] || [null] (if no device connected)
-  DiscoveredDevice? getConnectedDevice();
+  String? getConnectedDevice();
 
   /// SYNCING
   Stream<HealyBaseModel> getAllDataFromWatch();
