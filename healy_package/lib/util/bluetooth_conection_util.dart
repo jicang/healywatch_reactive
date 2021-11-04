@@ -90,7 +90,9 @@ class BluetoothConnectionUtil {
     );
     // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String? deviceId = await SharedPrefUtils.getConnectedDeviceID();
-    reconnectDevice(deviceId);
+    if (deviceId != null) {
+      reconnectDevice(deviceId);
+    }
   }
 
   Future<void> init() async {
@@ -521,6 +523,7 @@ class BluetoothConnectionUtil {
       // _deviceConnectionController.add(update);
       if (update.connectionState == DeviceConnectionState.connected) {
         this.deviceId = deviceId;
+        SharedPrefUtils.setConnectedDeviceID(deviceId);
         await enableNotification(deviceId);
         if (Platform.isAndroid) {
           await HealyWatchSDKImplementation.instance.disableANCS();
@@ -644,8 +647,9 @@ class BluetoothConnectionUtil {
       name: loggerName,
       time: DateTime.now(),
     );
+    String? deviceId = await SharedPrefUtils.getConnectedDeviceID();
     return reconnectDevice(
-      this.deviceId,
+      deviceId,
       autoReconnect: autoReconnect,
     );
   }
