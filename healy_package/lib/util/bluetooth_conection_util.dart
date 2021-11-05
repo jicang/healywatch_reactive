@@ -47,6 +47,8 @@ class BluetoothConnectionUtil {
   bool isNeedReconnect = true;
   bool isFirmwareUpdating = false;
 
+  bool _isConnecting = false;
+
   static BluetoothConnectionUtil? _singleton;
 
   get isSetup => null;
@@ -75,7 +77,7 @@ class BluetoothConnectionUtil {
               rootPath, StreamController<double>());
         } else {
           if (isNeedReconnect) {
-            toConnectExistId();
+            await toConnectExistId();
           }
         }
       }
@@ -91,7 +93,7 @@ class BluetoothConnectionUtil {
     // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String? deviceId = await SharedPrefUtils.getConnectedDeviceID();
     if (deviceId != null) {
-      reconnectDevice(deviceId);
+      await reconnectDevice(deviceId);
     }
   }
 
@@ -505,16 +507,39 @@ class BluetoothConnectionUtil {
 
   Future<void> connect(String? deviceId) async {
     log(
-      'connect $deviceId',
+      'connect to device: $deviceId',
       name: loggerName,
       time: DateTime.now(),
     );
-    stopScan();
-    if (deviceId == null) return;
-    _connection = bleManager
-        .connectToDevice(
-            id: deviceId, connectionTimeout: const Duration(seconds: 30))
-        .listen((update) async {
+
+    if (deviceId == null) {
+      return;
+    }
+
+    await Future.delayed(Duration(seconds: 1));
+
+    if (_connection != null) {
+      log(
+        'already connecting to device: $deviceId',
+        name: loggerName,
+        time: DateTime.now(),
+      );
+      return;
+    }
+
+    final stream = bleManager.connectToDevice(
+      id: deviceId,
+      connectionTimeout: const Duration(
+        seconds: 30,
+      ),
+    );
+    log(
+      'connect set connection subscription',
+      name: loggerName,
+      time: DateTime.now(),
+    );
+
+    _connection = stream.listen((update) async {
       log(
         'connect connection state for device $deviceId : ${update.connectionState}',
         name: loggerName,
@@ -533,10 +558,13 @@ class BluetoothConnectionUtil {
       } else if (update.connectionState == DeviceConnectionState.disconnected) {
         isConnect = false;
         this.deviceId = null;
+
+        await streamSubscription?.cancel();
+        streamSubscription = null;
+
         if (isNeedReconnect) {
-          reconnectDevice(deviceId);
+          await reconnectDevice(deviceId);
         }
-        streamSubscription?.cancel();
       }
     }, onError: (Object e) {
       log(
@@ -572,9 +600,9 @@ class BluetoothConnectionUtil {
     );
 
     await streamSubscription?.cancel();
-    streamSubscription = bleManager
-        .subscribeToCharacteristic(_characteristicNotify)
-        .listen((event) {
+    final stream = bleManager.subscribeToCharacteristic(_characteristicNotify);
+
+    streamSubscription = stream.listen((event) {
       print("notifyData ${BleSdk.hex2String(event)}");
       streamController.add(event);
     }, onError: (Object error) {
@@ -596,12 +624,18 @@ class BluetoothConnectionUtil {
         time: DateTime.now(),
       );
 
-      //await streamSubscriptionNotify.cancel();
       isConnect = false;
       isNeedReconnect = false;
-      streamSubscription?.cancel();
       this.deviceId = null;
+
+      await streamSubscription?.cancel();
+      streamSubscription = null;
+
+      await Future.delayed(Duration(seconds: 1));
       await _connection?.cancel();
+      _connection = null;
+
+      await SharedPrefUtils.clearConnectedDeviceID();
     } on Exception catch (e, _) {
       log(
         'disconnect error while disconnect from device $deviceId  error $e',
@@ -663,6 +697,8 @@ class BluetoothConnectionUtil {
       name: loggerName,
       time: DateTime.now(),
     );
+    await _connection?.cancel();
+    _connection = null;
     await Future.delayed(Duration(seconds: 1));
     if (bleManager.status == BleStatus.poweredOff ||
         isFirmwareUpdating ||
