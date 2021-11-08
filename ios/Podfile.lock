@@ -1,74 +1,15 @@
 PODS:
-  - connectivity (0.0.1):
-    - Flutter
-    - Reachability
   - Flutter (1.0.0)
-  - flutter_nordic_dfu (0.0.1):
-    - Flutter
-    - iOSDFULibrary (~> 4.10.3)
-  - iOSDFULibrary (4.10.4):
-    - ZIPFoundation (= 0.9.11)
-  - path_provider (0.0.1):
-    - Flutter
-  - "permission_handler (5.1.0+2)":
-    - Flutter
-  - Protobuf (3.18.1)
-  - Reachability (3.2)
-  - reactive_ble_mobile (0.0.1):
-    - Flutter
-    - Protobuf (~> 3.5)
-    - SwiftProtobuf (~> 1.0)
-  - shared_preferences (0.0.1):
-    - Flutter
-  - SwiftProtobuf (1.18.0)
-  - ZIPFoundation (0.9.11)
 
 DEPENDENCIES:
-  - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - Flutter (from `Flutter`)
-  - flutter_nordic_dfu (from `.symlinks/plugins/flutter_nordic_dfu/ios`)
-  - path_provider (from `.symlinks/plugins/path_provider/ios`)
-  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
-  - reactive_ble_mobile (from `.symlinks/plugins/reactive_ble_mobile/ios`)
-  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
-
-SPEC REPOS:
-  trunk:
-    - iOSDFULibrary
-    - Protobuf
-    - Reachability
-    - SwiftProtobuf
-    - ZIPFoundation
 
 EXTERNAL SOURCES:
-  connectivity:
-    :path: ".symlinks/plugins/connectivity/ios"
   Flutter:
     :path: Flutter
-  flutter_nordic_dfu:
-    :path: ".symlinks/plugins/flutter_nordic_dfu/ios"
-  path_provider:
-    :path: ".symlinks/plugins/path_provider/ios"
-  permission_handler:
-    :path: ".symlinks/plugins/permission_handler/ios"
-  reactive_ble_mobile:
-    :path: ".symlinks/plugins/reactive_ble_mobile/ios"
-  shared_preferences:
-    :path: ".symlinks/plugins/shared_preferences/ios"
 
 SPEC CHECKSUMS:
-  connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  flutter_nordic_dfu: e23ff86a4ad749a8c49b6247bde25525853e2a68
-  iOSDFULibrary: 5d41d0ac69418d63755195db5f46e99588ae7d48
-  path_provider: d1e9807085df1f9cc9318206cd649dc0b76be3de
-  permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
-  Protobuf: 0ac2cdc92fb5c33dab66dd1c4e9f9cc4c34d00ba
-  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
-  reactive_ble_mobile: 9ce6723d37ccf701dbffd202d487f23f5de03b4c
-  shared_preferences: 5033afbb22d372e15aff8ff766df9021b845f273
-  SwiftProtobuf: c3c12645230d9b09c72267e0de89468c5543bd86
-  ZIPFoundation: b1f0de4eed33e74a676f76e12559ab6b75990197
 
 PODFILE CHECKSUM: cc1f88378b4bfcf93a6ce00d2c587857c6008d3b
 
