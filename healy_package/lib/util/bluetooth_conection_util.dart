@@ -3,15 +3,11 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
-import 'package:healy_watch_sdk/util/resolve_util.dart';
+import 'package:healy_watch_sdk/model/models.dart';
 import 'package:healy_watch_sdk/util/shared_pref.dart';
-import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'ble_sdk.dart';
 
 class BluetoothConnectionUtil {
@@ -46,8 +42,6 @@ class BluetoothConnectionUtil {
   // late StreamSubscription _deviceConnectionSubscription;
   bool isNeedReconnect = true;
   bool isFirmwareUpdating = false;
-
-  bool _isConnecting = false;
 
   static BluetoothConnectionUtil? _singleton;
 
@@ -91,9 +85,9 @@ class BluetoothConnectionUtil {
       time: DateTime.now(),
     );
     // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String? deviceId = await SharedPrefUtils.getConnectedDeviceID();
-    if (deviceId != null) {
-      await reconnectDevice(deviceId);
+    HealyDevice? device = await SharedPrefUtils.getConnectedDevice();
+    if (device != null) {
+      await reconnectDevice(device);
     }
   }
 
@@ -487,7 +481,7 @@ class BluetoothConnectionUtil {
     return streamController.stream;
   }
 
-  String? deviceId;
+  HealyDevice? device;
 
   Future<void> connectWithDevice(
     DiscoveredDevice device, {
@@ -500,19 +494,24 @@ class BluetoothConnectionUtil {
     );
     isNeedReconnect = autoReconnect;
     reconnectDevice(
-      device.id,
+      HealyDevice(
+        id: device.id,
+        name: device.name,
+      ),
       autoReconnect: autoReconnect,
     );
   }
 
-  Future<void> connect(String? deviceId) async {
+  Future<void> connect(
+    HealyDevice? device,
+  ) async {
     log(
-      'connect to device: $deviceId',
+      'connect to device: $device',
       name: loggerName,
       time: DateTime.now(),
     );
 
-    if (deviceId == null) {
+    if (device == null) {
       return;
     }
 
@@ -520,19 +519,21 @@ class BluetoothConnectionUtil {
 
     if (_connection != null) {
       log(
-        'already connecting to device: $deviceId',
+        'already connecting to device: $device',
         name: loggerName,
         time: DateTime.now(),
       );
       return;
     }
 
-    final stream = bleManager.connectToDevice(
-      id: deviceId,
-      connectionTimeout: const Duration(
-        seconds: 30,
-      ),
+    final timeout = const Duration(
+      seconds: 30,
     );
+    final stream = bleManager.connectToDevice(
+      id: device.id,
+      connectionTimeout: timeout,
+    );
+
     log(
       'connect set connection subscription',
       name: loggerName,
@@ -541,15 +542,15 @@ class BluetoothConnectionUtil {
 
     _connection = stream.listen((update) async {
       log(
-        'connect connection state for device $deviceId : ${update.connectionState}',
+        'connect connection state for device $device : ${update.connectionState}',
         name: loggerName,
         time: DateTime.now(),
       );
       // _deviceConnectionController.add(update);
       if (update.connectionState == DeviceConnectionState.connected) {
-        this.deviceId = deviceId;
-        SharedPrefUtils.setConnectedDeviceID(deviceId);
-        await enableNotification(deviceId);
+        this.device = device;
+        SharedPrefUtils.setConnectedDevice(device);
+        await enableNotification(device.id);
         if (Platform.isAndroid) {
           await HealyWatchSDKImplementation.instance.disableANCS();
         }
@@ -557,18 +558,18 @@ class BluetoothConnectionUtil {
             .startCheckResUpdate(StreamController());
       } else if (update.connectionState == DeviceConnectionState.disconnected) {
         isConnect = false;
-        this.deviceId = null;
+        this.device = null;
 
         await streamSubscription?.cancel();
         streamSubscription = null;
 
         if (isNeedReconnect) {
-          await reconnectDevice(deviceId);
+          await reconnectDevice(device);
         }
       }
     }, onError: (Object e) {
       log(
-        'connect connecting to device $deviceId resulted in error $e',
+        'connect connecting to device $device resulted in error $e',
         name: loggerName,
         time: DateTime.now(),
       );
@@ -619,14 +620,14 @@ class BluetoothConnectionUtil {
   Future<void> disconnect() async {
     try {
       log(
-        'disconnect from device $deviceId',
+        'disconnect from device $device',
         name: loggerName,
         time: DateTime.now(),
       );
 
       isConnect = false;
       isNeedReconnect = false;
-      this.deviceId = null;
+      this.device = null;
 
       await streamSubscription?.cancel();
       streamSubscription = null;
@@ -635,10 +636,10 @@ class BluetoothConnectionUtil {
       await _connection?.cancel();
       _connection = null;
 
-      await SharedPrefUtils.clearConnectedDeviceID();
+      await SharedPrefUtils.clearConnectedDevice();
     } on Exception catch (e, _) {
       log(
-        'disconnect error while disconnect from device $deviceId  error $e',
+        'disconnect error while disconnect from device $device  error $e',
         name: loggerName,
         time: DateTime.now(),
       );
@@ -675,25 +676,25 @@ class BluetoothConnectionUtil {
     yield* isSetup.stream;
   }
 
-  Future<String?> reconnect({bool autoReconnect = true}) async {
+  Future<HealyDevice?> reconnect({bool autoReconnect = true}) async {
     log(
       'reconnect with autoReconnect $autoReconnect',
       name: loggerName,
       time: DateTime.now(),
     );
-    String? deviceId = await SharedPrefUtils.getConnectedDeviceID();
+    HealyDevice? device = await SharedPrefUtils.getConnectedDevice();
     return reconnectDevice(
-      deviceId,
+      device,
       autoReconnect: autoReconnect,
     );
   }
 
-  Future<String?> reconnectDevice(
-    String? deviceId, {
+  Future<HealyDevice?> reconnectDevice(
+    HealyDevice? device, {
     bool autoReconnect = true,
   }) async {
     log(
-      'reconnectDevice to device $deviceId with autoReconnect $autoReconnect',
+      'reconnectDevice to device $device with autoReconnect $autoReconnect',
       name: loggerName,
       time: DateTime.now(),
     );
@@ -702,11 +703,13 @@ class BluetoothConnectionUtil {
     await Future.delayed(Duration(seconds: 1));
     if (bleManager.status == BleStatus.poweredOff ||
         isFirmwareUpdating ||
-        deviceId == null) {
+        device == null) {
       return null;
     }
-    await connect(deviceId);
-    return deviceId;
+    await connect(
+      device,
+    );
+    return device;
     // this.connectedDevice=value;connect(value.id);
     // return value;
   }
