@@ -49,24 +49,15 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
 
   static HealyWatchSDKImplementation get instance => _instance;
 
-  StreamController<List<DiscoveredDevice>> devicesController =
-      StreamController.broadcast();
-
   @override
   Stream<List<DiscoveredDevice>> scanResults({
     String filterForName = HealyWatchSDKImplementation.filterName,
     List<String>? ids,
   }) {
-    bluetoothUtil.startScan(
+    return bluetoothUtil.startScan(
       filterForName,
       [],
-    ).listen((deviceList) {
-      for (var device in deviceList) {
-        devices[device.id] = device;
-      }
-      devicesController.add(deviceList);
-    });
-    return devicesController.stream;
+    );
   }
 
   @override
@@ -79,7 +70,10 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     HealyDevice device, {
     bool autoReconnect = true,
   }) async {
-    await bluetoothUtil.connect(device);
+    await bluetoothUtil.connectWithDevice(
+      device,
+      autoReconnect: autoReconnect,
+    );
   }
 
   @override

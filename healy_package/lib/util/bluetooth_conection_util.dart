@@ -13,7 +13,7 @@ import 'ble_sdk.dart';
 class BluetoothConnectionUtil {
   static const loggerName = 'HealyWatchSDK - BluetoothConnectionUtil';
   final _stateStreamController =
-      StreamController<List<DiscoveredDevice>>.broadcast();
+  StreamController<List<DiscoveredDevice>>.broadcast();
 
   final _devices = <DiscoveredDevice>[];
   StreamSubscription? _subscription;
@@ -34,7 +34,7 @@ class BluetoothConnectionUtil {
 
   /// device connection state stream
   final connectionStateController =
-      StreamController<BluetoothConnectionState>.broadcast();
+  StreamController<BluetoothConnectionState>.broadcast();
 
   /// Stream that returns devices while scanning for watch
 
@@ -150,12 +150,11 @@ class BluetoothConnectionUtil {
   /// scans for nearby bluetooth devices [Peripheral] containing the [filterForName] default is "healy watch"
   /// emits a [List<Peripheral>] of all devices that are found so far on each event
   /// stream has to be canceled by calling [stopScan]
-  Stream<List<DiscoveredDevice>> startScan(
-    String? filterForName,
-    List<Uuid> serviceIds,
-  ) {
+  Stream<List<DiscoveredDevice>> startScan(String? filterForName,
+      List<Uuid> serviceIds,) {
     log(
-      'startScan with filter: $filterForName and serviceIds: ${serviceIds.toString()}',
+      'startScan with filter: $filterForName and serviceIds: ${serviceIds
+          .toString()}',
       name: loggerName,
       time: DateTime.now(),
     );
@@ -163,9 +162,10 @@ class BluetoothConnectionUtil {
     _subscription?.cancel();
     _subscription = bleManager
         .scanForDevices(withServices: serviceIds)
-        .where((event) => filterForName == null
-            ? true
-            : event.name.toLowerCase().contains(filterForName))
+        .where((event) =>
+    filterForName == null
+        ? true
+        : event.name.toLowerCase().contains(filterForName))
         .listen((device) {
       log(
         'startScan found device: ${device.id}',
@@ -463,8 +463,7 @@ class BluetoothConnectionUtil {
   // }
 
   /// write [data] to the _characteristicData of the currently paired device
-  Future<void> writeData(
-    Uint8List data, {
+  Future<void> writeData(Uint8List data, {
     String? transactionId,
   }) async {
     //await reconnectPairedDevice();
@@ -483,8 +482,7 @@ class BluetoothConnectionUtil {
 
   HealyDevice? device;
 
-  Future<void> connectWithDevice(
-    DiscoveredDevice device, {
+  Future<void> connectWithDevice(HealyDevice device, {
     bool autoReconnect = true,
   }) async {
     log(
@@ -502,9 +500,7 @@ class BluetoothConnectionUtil {
     );
   }
 
-  Future<void> connect(
-    HealyDevice? device,
-  ) async {
+  Future<void> connect(HealyDevice? device) async {
     log(
       'connect to device: $device',
       name: loggerName,
@@ -529,6 +525,7 @@ class BluetoothConnectionUtil {
     final timeout = const Duration(
       seconds: 30,
     );
+
     final stream = bleManager.connectToDevice(
       id: device.id,
       connectionTimeout: timeout,
@@ -542,7 +539,8 @@ class BluetoothConnectionUtil {
 
     _connection = stream.listen((update) async {
       log(
-        'connect connection state for device $device : ${update.connectionState}',
+        'connect connection state for device $device : ${update
+            .connectionState}',
         name: loggerName,
         time: DateTime.now(),
       );
@@ -577,7 +575,7 @@ class BluetoothConnectionUtil {
   }
 
   final StreamController<List<int>> streamController =
-      StreamController.broadcast();
+  StreamController.broadcast();
   StreamSubscription? streamSubscription;
   bool isConnect = false;
 
@@ -689,8 +687,7 @@ class BluetoothConnectionUtil {
     );
   }
 
-  Future<HealyDevice?> reconnectDevice(
-    HealyDevice? device, {
+  Future<HealyDevice?> reconnectDevice(HealyDevice? device, {
     bool autoReconnect = true,
   }) async {
     log(
@@ -700,7 +697,7 @@ class BluetoothConnectionUtil {
     );
     await _connection?.cancel();
     _connection = null;
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(seconds: 2));
     if (bleManager.status == BleStatus.poweredOff ||
         isFirmwareUpdating ||
         device == null) {
