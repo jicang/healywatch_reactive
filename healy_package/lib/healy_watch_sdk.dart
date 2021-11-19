@@ -1,11 +1,7 @@
 import 'dart:async';
 
-
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-import 'package:healy_watch_sdk/util/ble_sdk.dart';
-
 import 'model/models.dart';
-import 'util/bluetooth_conection_util.dart';
 
 abstract class HealyWatchSDK {
   ///
@@ -14,8 +10,10 @@ abstract class HealyWatchSDK {
 
   /// Starts scanning for healy watch devices and
   /// return an stream of devices as [BluetoothDevice]
-  Stream<List<DiscoveredDevice>> scanResults(
-      {String filterForName, List<String> ids});
+  Stream<List<DiscoveredDevice>> scanResults({
+    String filterForName,
+    List<String> ids,
+  });
 
   /// Cancels scanning for healy watch devices
   void cancelScanningDevices();
@@ -24,33 +22,35 @@ abstract class HealyWatchSDK {
   bool isConnected();
 
   /// Connect to a healy watch device [BluetoothDevice]
-  Future<void> connectDevice(String deviceId);
+  Future<void> connectDevice(
+    HealyDevice device,
+  );
 
   /// Disconnects connected healy watch device [BluetoothDevice]
   void disconnectDevice();
 
   /// reconnect a already connected device from a device identifier
-  Future<String?> reconnectDevice({bool autoReconnect = true});
+  Future<HealyDevice?> reconnectDevice({bool autoReconnect = true});
 
   /// Get connected healy watch as [BluetoothDevice]
   /// returns [Future<BluetoothDevice>] || [null] (if no device connected)
-  String? getConnectedDevice();
+  HealyDevice? getConnectedDevice();
 
   /// SYNCING
   Stream<HealyBaseModel> getAllDataFromWatch();
 
   ///Listen for connection state to healy watch
-   Stream<ConnectionStateUpdate> connectionStateStream();
+  Stream<ConnectionStateUpdate> connectionStateStream();
   //
   // ///asynchronously check and get current connection state to healy watch
-   Future<ConnectionStateUpdate> getConnectionState();
+  Future<ConnectionStateUpdate> getConnectionState();
   //
   // /// get the BLE [BluetoothState] currently
   // /// needs to be handled in watch sdk since there can only be one bluetooth client
   BleStatus getBluetoothState();
   //
   // ///listen the BLE [BluetoothState]
-   Stream<BleStatus> listenBluetoothState({bool emitCurrentValue = true});
+  Stream<BleStatus> listenBluetoothState({bool emitCurrentValue = true});
 
   ///
   /// BASIC INFORMATION FROM DEVICE
@@ -197,7 +197,8 @@ abstract class HealyWatchSDK {
 
   /// Returns a stream of [HealyBaseMeasuremenetData] by given [duration]
   Stream<HealyBaseMeasuremenetData> startEcgMessuringWithDuration(int duration);
-  Stream<HealyBaseMeasuremenetData> startOnlyPPGMessuringWithDuration(int duration);
+  Stream<HealyBaseMeasuremenetData> startOnlyPPGMessuringWithDuration(
+      int duration);
 
   /// Should stop collecting ecg data
   /// returns true if success and false if failure
@@ -305,7 +306,6 @@ abstract class HealyWatchSDK {
   /// Returns all collected and combined sleep data
 
   Stream<List<HealyCombinedSleepData>> getAllCombinedSleepData();
-
 
   /// Returns if an workout is currently running
   Future<bool> isWorkoutRunning();
