@@ -40,10 +40,10 @@ abstract class HealyWatchSDK {
   Stream<HealyBaseModel> getAllDataFromWatch();
 
   ///Listen for connection state to healy watch
-  Stream<ConnectionStateUpdate> connectionStateStream();
+  Stream<DeviceConnectionState> connectionStateStream();
   //
   // ///asynchronously check and get current connection state to healy watch
-  Future<ConnectionStateUpdate> getConnectionState();
+  Future<DeviceConnectionState> getConnectionState();
   //
   // /// get the BLE [BluetoothState] currently
   // /// needs to be handled in watch sdk since there can only be one bluetooth client

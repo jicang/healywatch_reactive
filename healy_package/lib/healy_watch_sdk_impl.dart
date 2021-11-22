@@ -101,7 +101,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   }
 
   @override
-  Future<ConnectionStateUpdate> getConnectionState() {
+  Future<DeviceConnectionState> getConnectionState() {
     return bluetoothUtil.connectionState();
   }
 
@@ -1342,7 +1342,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   }
 
   @override
-  Stream<ConnectionStateUpdate> connectionStateStream() {
+  Stream<DeviceConnectionState> connectionStateStream() {
     return bluetoothUtil.connectionStateStream();
   }
 

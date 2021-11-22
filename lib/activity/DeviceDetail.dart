@@ -80,13 +80,10 @@ class DeviceDetailState extends State<DeviceDetail> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 2.0),
-                  child: StreamBuilder<ConnectionStateUpdate>(
+                  child: StreamBuilder<DeviceConnectionState>(
                     stream: HealyWatchSDKImplementation.instance
                         .connectionStateStream(),
-                    initialData: ConnectionStateUpdate(
-                        deviceId: "",
-                        connectionState: DeviceConnectionState.connecting,
-                        failure: null),
+                    initialData: DeviceConnectionState.connecting,
                     builder: (c, status) => Row(
                       children: [
                         Expanded(
@@ -105,10 +102,10 @@ class DeviceDetailState extends State<DeviceDetail> {
                                   return Colors.blue; // Regular color
                                 })),
                             child: Text("Connect"),
-                            onPressed: (status.data?.connectionState ==
-                                    DeviceConnectionState.connected)
-                                ? null
-                                : () => connected(),
+                            onPressed:
+                                (status.data == DeviceConnectionState.connected)
+                                    ? null
+                                    : () => connected(),
                           ),
                         )),
                         Expanded(
@@ -131,7 +128,7 @@ class DeviceDetailState extends State<DeviceDetail> {
                                 ),
                               ),
                               child: Text("Disconnect"),
-                              onPressed: (status.data?.connectionState ==
+                              onPressed: (status.data ==
                                       DeviceConnectionState.connected)
                                   ? () => HealyWatchSDKImplementation.instance
                                       .disconnectDevice()
@@ -222,7 +219,7 @@ class DeviceDetailState extends State<DeviceDetail> {
   Widget getItemChild(String value) {
     int index = listOp.indexOf(value);
 
-    return StreamBuilder<ConnectionStateUpdate>(
+    return StreamBuilder<DeviceConnectionState>(
       stream: HealyWatchSDKImplementation.instance.connectionStateStream(),
       initialData: null,
       builder: (c, snapshot) => ElevatedButton(
@@ -235,8 +232,7 @@ class DeviceDetailState extends State<DeviceDetail> {
               return Colors.blue; // Regular color
             })),
         child: Text(value.toString()),
-        onPressed: (snapshot.data?.connectionState ==
-                DeviceConnectionState.connected)
+        onPressed: (snapshot.data == DeviceConnectionState.connected)
             ? () =>
                 index < 3 ? itemClick(listRoute[index]) : itemClickName(value)
             : null,
@@ -268,10 +264,10 @@ class DeviceDetailState extends State<DeviceDetail> {
     streamSubscription?.cancel();
     streamSubscription = HealyWatchSDKImplementation.instance
         .connectionStateStream()
-        .listen((event) {
-      if (event.connectionState == DeviceConnectionState.connected) {
+        .listen((connectionState) {
+      if (connectionState == DeviceConnectionState.connected) {
         disMiss();
-      } else if (event.connectionState == DeviceConnectionState.disconnected) {
+      } else if (connectionState == DeviceConnectionState.disconnected) {
         disMiss();
       }
     });
