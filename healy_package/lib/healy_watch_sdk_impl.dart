@@ -39,6 +39,9 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
 
   BluetoothConnectionUtil get bluetoothUtil => _bluetoothUtil;
 
+  final scanDevicesController =
+      StreamController<List<DiscoveredDevice>>.broadcast();
+
   // static Future<BluetoothConnectionUtil>  bluetoothUtil;
 
   static final HealyWatchSDKImplementation _instance =
@@ -54,10 +57,18 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     String filterForName = HealyWatchSDKImplementation.filterName,
     List<String>? ids,
   }) {
-    return bluetoothUtil.startScan(
+    final minDateTime = DateTime.now().add(const Duration(
+      seconds: 2,
+    ));
+    bluetoothUtil.startScan(
       filterForName,
       [],
-    );
+    ).listen((event) {
+      if (DateTime.now().isAfter(minDateTime)) {
+        scanDevicesController.add(event);
+      }
+    });
+    return scanDevicesController.stream;
   }
 
   @override
