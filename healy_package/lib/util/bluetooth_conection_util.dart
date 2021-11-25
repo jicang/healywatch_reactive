@@ -498,7 +498,7 @@ class BluetoothConnectionUtil {
       time: DateTime.now(),
     );
     isNeedReconnect = autoReconnect;
-    reconnectDevice(
+    await reconnectDevice(
       HealyDevice(
         id: device.id,
         name: device.name,
