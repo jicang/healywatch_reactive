@@ -51,7 +51,7 @@ class FirmwareUpdatePageState extends State<FirmwareUpdatePage> {
                     }
                     final String? downloadUrl =
                         await HealyWatchSDKImplementation.instance
-                            .checkIfFirmwareUpdateAvailable(currentVersion);
+                            .checkIfFirmwareUpdateAvailable('0.0.0');
 
                     if (downloadUrl != null) {
                       setState(() {
@@ -74,8 +74,7 @@ class FirmwareUpdatePageState extends State<FirmwareUpdatePage> {
                       ));
                       return;
                     }
-                    StreamSubscription? stream;
-                    stream = HealyWatchSDKImplementation.instance
+                    HealyWatchSDKImplementation.instance
                         .downloadLatestFirmwareUpdate(_downloadUrl)
                         .listen((event) {
                       isDfuMode = true;
