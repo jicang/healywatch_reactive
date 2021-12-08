@@ -97,13 +97,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_nordic_dfu:
-    dependency: "direct main"
-    description:
-      name: flutter_nordic_dfu
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.0"
   flutter_reactive_ble:
     dependency: "direct main"
     description:
@@ -163,6 +156,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
+  nordic_dfu:
+    dependency: "direct main"
+    description:
+      name: nordic_dfu
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.2.0"
   path:
     dependency: transitive
     description:

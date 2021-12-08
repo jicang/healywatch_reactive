@@ -6,9 +6,9 @@ import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_nordic_dfu/flutter_nordic_dfu.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:healy_watch_sdk/util/shared_pref.dart';
+import 'package:nordic_dfu/nordic_dfu.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'bleconst/device_cmd.dart';
@@ -1218,11 +1218,11 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     int dfuPercent = 0;
     bool isDfuMode = false;
     SharedPrefUtils.setIsFirmware(true);
-    await FlutterNordicDfu.startDfu(
+    await NordicDfu.startDfu(
       id,
       path,
-      progressListener: DefaultDfuProgressListenerAdapter(
-          onProgressChangedHandle: (
+      progressListener:
+          DefaultDfuProgressListenerAdapter(onProgressChangedHandle: (
         deviceAddress,
         percent,
         speed,
@@ -1231,7 +1231,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
         partsTotal,
       ) {
         isDfuMode = percent != 100;
-        dfuPercent = percent;
+        dfuPercent = percent ?? 0;
         log('startOta: progressValue: $dfuPercent');
         addProgress(progressStream, 2 / 3 + (dfuPercent / 100) / 3);
       }, onDfuProcessStartedHandle: (address) {
@@ -1246,8 +1246,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
         HealyDevice? device = await SharedPrefUtils.getConnectedDevice();
         bluetoothUtil.reconnectDevice(device);
         progressStream.close();
-      }, onErrorHandle:
-              (String deviceAddress, int error, int errorType, String message) {
+      }, onErrorHandle: (deviceAddress, error, errorType, message) {
         progressStream.addError(Exception(message));
       }),
     );
