@@ -569,6 +569,8 @@ class ResolveUtil {
 
   /// Device battery level
   static int getDeviceBattery(List<int> value) {
+    if (value.isEmpty) return 0;
+
     final int battery = _hexByte2Int(value[1], 0);
     return battery;
   }
@@ -576,6 +578,8 @@ class ResolveUtil {
   /// Get device MAC address
   static String getDeviceAddress(List<int> value) {
     final StringBuffer address = StringBuffer();
+    if (value.isEmpty) return address.toString();
+
     for (int i = 1; i < 7; i++) {
       final String mac = value[i].toRadixString(16);
       address.write("$mac:");
@@ -587,6 +591,8 @@ class ResolveUtil {
   /// Get device version
   static String getDeviceVersion(List<int> value) {
     final StringBuffer stringBuffer = StringBuffer();
+    if (value.isEmpty) return stringBuffer.toString();
+
     for (int i = 1; i < 5; i++) {
       stringBuffer.write(value[i].toRadixString(16) + (i == 4 ? "" : "."));
     }
@@ -736,13 +742,20 @@ class ResolveUtil {
   }
 
   static HealyWatchFaceStyle getWatchFaceStyle(List<int> value) {
+    if (value.isEmpty) {
+      return HealyWatchFaceStyle(
+          HealyDeviceBaseParameter.defaultWatchFaceStyle);
+    }
+
     final int style = _hexByte2Int(value[1], 0);
     return HealyWatchFaceStyle(style);
   }
 
   static String getSerialNumber(List<int> value) {
-    final int mode = _hexByte2Int(value[1], 0);
     final StringBuffer serialNumber = StringBuffer();
+    if (value.isEmpty) return serialNumber.toString();
+
+    final int mode = _hexByte2Int(value[1], 0);
     if (mode == 0) {
       // early shipments (1.7K) didn't go through the serial number setting procedure in production, so there is no valid serial number AA, fixed at 0, BB~FF is the MAC address
       for (int i = 2; i < 8; i++) {
