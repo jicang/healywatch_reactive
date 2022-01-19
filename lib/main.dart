@@ -187,7 +187,14 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
     }
     print("scan");
     if (Platform.isAndroid) {
-      final bool isGranted = await Permission.location.request().isGranted;
+      bool isGranted = await Permission.location.request().isGranted;
+      isGranted = isGranted
+          ? await Permission.bluetoothScan.request().isGranted
+          : isGranted;
+      isGranted = isGranted
+          ? await Permission.bluetoothConnect.request().isGranted
+          : isGranted;
+
       if (isGranted) {
         startScan();
       } else {
@@ -241,7 +248,7 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
   }
 
   _connected(DiscoveredDevice device) async {
-    //   HealyWatchSDKImplementation.instance.cancelScanningDevices();
+    // HealyWatchSDKImplementation.instance.cancelScanningDevices();
     final healyDevice = HealyDevice(id: device.id, name: device.name);
     HealyWatchSDKImplementation.instance.connectDevice(healyDevice);
 
@@ -249,10 +256,11 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
 
     // isResume = false;
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (_) => DeviceDetail(device.name, device.id),
-        ),
-        (route) => false,);
+      MaterialPageRoute(
+        builder: (_) => DeviceDetail(device.name, device.id),
+      ),
+      (route) => false,
+    );
     // await Navigator.push<void>(
     //     context,
     //     MaterialPageRoute(

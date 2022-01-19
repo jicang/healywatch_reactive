@@ -571,9 +571,9 @@ class BluetoothConnectionUtil {
         this.device = device;
         SharedPrefUtils.setConnectedDevice(device);
         await enableNotification(device.id);
-        if (Platform.isAndroid) {
-          await HealyWatchSDKImplementation.instance.disableANCS();
-        }
+        // if (Platform.isAndroid) {
+        //   await HealyWatchSDKImplementation.instance.disableANCS();
+        // }
         HealyWatchSDKImplementation.instance
             .startCheckResUpdate(StreamController());
       } else if (update.connectionState == DeviceConnectionState.disconnected) {
