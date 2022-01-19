@@ -574,7 +574,7 @@ class BluetoothConnectionUtil {
             .startCheckResUpdate(StreamController());
 
         Future.delayed(
-          Duration(seconds: 1),
+          Duration(milliseconds: 1500),
           () => enableNotification(device.id),
         );
       } else if (update.connectionState == DeviceConnectionState.disconnected) {
