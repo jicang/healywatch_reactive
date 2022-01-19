@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
@@ -188,12 +189,18 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
     print("scan");
     if (Platform.isAndroid) {
       bool isGranted = await Permission.location.request().isGranted;
-      isGranted = isGranted
-          ? await Permission.bluetoothScan.request().isGranted
-          : isGranted;
-      isGranted = isGranted
-          ? await Permission.bluetoothConnect.request().isGranted
-          : isGranted;
+
+      final deviceInfo = DeviceInfoPlugin();
+      final androidInfo = await deviceInfo.androidInfo;
+
+      if (androidInfo.version.sdkInt! > 30) {
+        isGranted = isGranted
+            ? await Permission.bluetoothScan.request().isGranted
+            : isGranted;
+        isGranted = isGranted
+            ? await Permission.bluetoothConnect.request().isGranted
+            : isGranted;
+      }
 
       if (isGranted) {
         startScan();
