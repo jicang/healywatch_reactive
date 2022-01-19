@@ -570,12 +570,13 @@ class BluetoothConnectionUtil {
         );
         this.device = device;
         SharedPrefUtils.setConnectedDevice(device);
-        await enableNotification(device.id);
-        if (Platform.isAndroid) {
-          await HealyWatchSDKImplementation.instance.disableANCS();
-        }
         HealyWatchSDKImplementation.instance
             .startCheckResUpdate(StreamController());
+
+        Future.delayed(
+          Duration(milliseconds: 1500),
+          () => enableNotification(device.id),
+        );
       } else if (update.connectionState == DeviceConnectionState.disconnected) {
         log(
           'connect connected device $device failure',
