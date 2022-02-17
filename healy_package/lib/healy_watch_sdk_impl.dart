@@ -673,6 +673,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   }
 
   StreamSubscription<List<int>> _getStreamSubscription(int cmd) {
+
     return bluetoothUtil
         .monitorNotify()
         .where((values) => values.isNotEmpty && values[0] == cmd)

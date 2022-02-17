@@ -220,6 +220,7 @@ class EcgPageState extends State<EcgPage> {
             print(listFlSpot.length);
           });
         } else if (event is HealyPPGData) {
+          print("HealyPPGData");
         } else if (event is HealyEnterEcgData) {
           EnterEcgResultCode ecgResultCode = event.ecgResultCode;
           print("${ecgResultCode.index}");

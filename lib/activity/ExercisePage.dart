@@ -166,7 +166,7 @@ class ExercisePageState extends State<ExercisePage> {
             HealyWatchSDKImplementation.instance.startBreathingSession(
                 HealyBreathingSession(
                     level: breathLevel.toInt(),
-                    durationInSeconds: breathCount.toInt()));
+                    breathCount: breathCount.toInt()));
         showExerciseData(healyExerciseDataStream);
       } else {
         bool isSuccess =

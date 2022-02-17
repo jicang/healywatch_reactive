@@ -498,7 +498,7 @@ class HealyWorkoutReminderSettings extends HealyBaseModel {
 /// [name] name of workout type
 /// [isSelected] value if workout type is selected
 class HealyWorkoutType extends HealyBaseModel {
-  List<int> selectedList;
+  List<HealyWorkoutMode> selectedList;
 
   HealyWorkoutType(
     this.selectedList,
@@ -691,11 +691,11 @@ class HealyHeartPackageData extends HealyBaseModel {
 
 class HealyBreathingSession extends HealyBaseExerciseData {
   final int level;
-  final int durationInSeconds;
+  final int breathCount;
 
   HealyBreathingSession({
     required this.level,
-    required this.durationInSeconds,
+    required this.breathCount,
   });
 }
 

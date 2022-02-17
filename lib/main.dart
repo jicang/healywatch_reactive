@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
@@ -22,9 +23,9 @@ void main() {
 }
 
 toRunMyapp() async {
-
   HealyWatchSDKImplementation healyWatchSDKImplementation =
       HealyWatchSDKImplementation.instance;
+
   BluetoothConnectionUtil bluetoothConnectionUtil =
       healyWatchSDKImplementation.bluetoothUtil;
   final ble = bluetoothConnectionUtil.bleManager;
@@ -66,22 +67,24 @@ class ScanDeviceWidget extends StatefulWidget {
 }
 
 class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
-
   bool isResume = true;
   String? deviceId;
 
   @override
   void initState() {
     super.initState();
-      toDetailPage();
+    toDetailPage();
   }
 
   toDetailPage() async {
     deviceId = await SharedPrefUtils.getConnectedDeviceID();
     String? deviceName = await SharedPrefUtils.getConnectedDeviceName();
     if (deviceId != null) {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-        builder: (_) => DeviceDetail(deviceName, deviceId),), (route) => false);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (_) => DeviceDetail(deviceName, deviceId),
+          ),
+              (route) => false);
     }
   }
 
@@ -100,7 +103,8 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
   @override
   Widget build(BuildContext context) {
     print("build deviceId $deviceId");
-    final results = deviceId == null ? StreamBuilder<List<DiscoveredDevice>>(
+    final results = deviceId == null
+        ? StreamBuilder<List<DiscoveredDevice>>(
       stream: HealyWatchSDKImplementation.instance
           .scanResults(filterForName: "healy"),
       initialData: [],
@@ -121,7 +125,8 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
                 color: Colors.red)
                 .toList(),
           ),
-    ) : SizedBox();
+    )
+        : SizedBox();
     // final connectedDevice = StreamBuilder<List<Peripheral>>(
     //   stream: Stream.periodic(Duration(seconds: 1))
     //       .where((event) => isResume)
@@ -174,7 +179,6 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
     );
   }
 
-
   Future<void> toStartScan() async {
     BleStatus bluetoothState =
     await HealyWatchSDKImplementation.instance.getBluetoothState();
@@ -190,8 +194,17 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
           .request()
           .isGranted;
       if (isGranted) {
-        startScan();
+        DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+        AndroidDeviceInfo deviceInfo = await deviceInfoPlugin.androidInfo;
+        if (deviceInfo.version.sdkInt == 31) {
+          await Permission.bluetoothScan.request();
+          await Permission.bluetoothConnect.request();
+          startScan();
+        } else {
+          startScan();
+        }
       } else {
+
         final bool isPermanentlyDenied =
         await Permission.location.isPermanentlyDenied;
         if (isPermanentlyDenied) {
@@ -242,16 +255,18 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
   }
 
   _connected(DiscoveredDevice device) async {
- //   HealyWatchSDKImplementation.instance.cancelScanningDevices();
+    //   HealyWatchSDKImplementation.instance.cancelScanningDevices();
     HealyWatchSDKImplementation.instance.connectDevice(device);
 
     await SharedPrefUtils.setConnectedDeviceID(device.id);
-    await SharedPrefUtils.setConnectedDeviceName( device.name);
-
+    await SharedPrefUtils.setConnectedDeviceName(device.name);
 
     // isResume = false;
-    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-      builder: (_) => DeviceDetail(device.name, device.id),), (route) => false);
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => DeviceDetail(device.name, device.id),
+        ),
+            (route) => false);
     // await Navigator.push<void>(
     //     context,
     //     MaterialPageRoute(

@@ -40,6 +40,7 @@ class DeviceDetailState extends State<DeviceDetail> {
 
   @override
   Widget build(BuildContext context) {
+
     return WillPopScope(child: Scaffold(
       appBar: AppBar(
         title: ListTile(
@@ -169,6 +170,7 @@ class DeviceDetailState extends State<DeviceDetail> {
      );
   }
   Widget getDialog() {
+
     return new AlertDialog(
       title: Container(
         width: MediaQuery.of(context).size.width,
