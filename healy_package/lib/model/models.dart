@@ -236,12 +236,14 @@ abstract class HealyBaseExerciseData {}
 /// [heartRate] current heart rate
 /// [timeInSeconds] elapsed time in seconds
 class HealyExerciseData extends HealyBaseExerciseData {
+  final bool isFinish;
   final int steps;
   final int burnedCalories;
   final int heartRate;
   final int timeInSeconds;
 
   HealyExerciseData({
+    required this.isFinish,
     required this.steps,
     required this.burnedCalories,
     required this.heartRate,
@@ -691,11 +693,11 @@ class HealyHeartPackageData extends HealyBaseModel {
 
 class HealyBreathingSession extends HealyBaseExerciseData {
   final int level;
-  final int breathCount;
+  final int trainRounds;
 
   HealyBreathingSession({
     required this.level,
-    required this.breathCount,
+    required this.trainRounds,
   });
 }
 

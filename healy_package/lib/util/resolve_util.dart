@@ -554,6 +554,7 @@ class ResolveUtil {
     burnedCalories = _intBitToDouble(valueCal);
 
     return HealyExerciseData(
+      isFinish: value[1]==255,
       steps: steps,
       burnedCalories: burnedCalories.floor(),
       heartRate: heartRate,

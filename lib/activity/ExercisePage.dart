@@ -69,6 +69,7 @@ class ExercisePageState extends State<ExercisePage> {
             ),
           ),
           Visibility(
+            maintainSize: false,
             visible: notifyType==HealyWorkoutMode.breathing,
             child:  Column(
             children: <Widget>[
@@ -166,7 +167,7 @@ class ExercisePageState extends State<ExercisePage> {
             HealyWatchSDKImplementation.instance.startBreathingSession(
                 HealyBreathingSession(
                     level: breathLevel.toInt(),
-                    breathCount: breathCount.toInt()));
+                    trainRounds: breathCount.toInt()));
         showExerciseData(healyExerciseDataStream);
       } else {
         bool isSuccess =
@@ -199,6 +200,12 @@ class ExercisePageState extends State<ExercisePage> {
         var step = event.steps;
         var cal = event.burnedCalories;
         var time = event.timeInSeconds;
+        var isFinish=event.isFinish;
+        print("isFinish $isFinish");
+        if(isFinish){
+          cancelTimer();
+          showMsgDialog(context, "isFinish", "");
+        }
         info = "Step: $step\n"
             "Calories: $cal KCAL\n"
             "HeartRate: $heartRate bpm\n"

@@ -847,7 +847,7 @@ class BleSdk {
     value[1] = 1;
     value[2] = 6;
     value[3] = healyBreathingSession.level;
-    value[4] = healyBreathingSession.breathCount;
+    value[4] = healyBreathingSession.trainRounds;
     crcValue(value);
     return value;
   }
