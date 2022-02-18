@@ -1,18 +1,11 @@
-
-
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
 import 'package:healy_watch_sdk/model/models.dart';
 
-
-
-
 import '../button_view.dart';
-
 
 class WorkOutTypePage extends StatefulWidget {
   @override
@@ -35,23 +28,35 @@ class WorkOutTypePageState extends State<WorkOutTypePage> {
     "Gym",
   ];
 
+  List<HealyWorkoutMode> listWorkMode = [
+    HealyWorkoutMode.running,
+    HealyWorkoutMode.cycling,
+    HealyWorkoutMode.badminton,
+    HealyWorkoutMode.soccer,
+    HealyWorkoutMode.tennis,
+    HealyWorkoutMode.yoga,
+    HealyWorkoutMode.dancing,
+    HealyWorkoutMode.basketball,
+    HealyWorkoutMode.hiking,
+    HealyWorkoutMode.fitness
+  ];
 
   @override
   void dispose() {
     super.dispose();
-
   }
+
   late HealyWatchSDKImplementation healyWatchSDK;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    healyWatchSDK= HealyWatchSDKImplementation.instance;
-
+    healyWatchSDK = HealyWatchSDKImplementation.instance;
   }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text("WorkOutType"),
@@ -83,7 +88,8 @@ class WorkOutTypePageState extends State<WorkOutTypePage> {
     );
   }
 
-  List<int> selected = [];
+  List<HealyWorkoutMode> selected = [];
+
   List<Widget> getItemList() {
     return listWorkType.map((workOutType) {
       return getItem(workOutType);
@@ -92,39 +98,43 @@ class WorkOutTypePageState extends State<WorkOutTypePage> {
 
   Widget getItem(String workOutType) {
     int index = listWorkType.indexOf(workOutType);
+    //   String workOutType = listWorkType[index];
+    HealyWorkoutMode mode = listWorkMode[index];
     return CheckboxListTile(
       title: Text(workOutType),
-      value: selected.contains(index),
-      onChanged: (bool) => changeChecked(bool!, index),
+
+      value: selected.contains(mode),
+      onChanged: (bool) =>
+         changeChecked(bool!, listWorkMode[index]),
     );
   }
 
-  changeChecked(bool isChecked, int index) {
+  changeChecked(bool isChecked, HealyWorkoutMode healyWorkoutMode) {
     if (isChecked) {
       if (selected.length == 5) return;
-      if (!selected.contains(index)) {
-        selected.add(index);
+      if (!selected.contains(healyWorkoutMode)) {
+        selected.add(healyWorkoutMode);
       }
     } else {
-      if (selected.contains(index)) {
-        selected.remove(index);
+      if (selected.contains(healyWorkoutMode)) {
+        selected.remove(healyWorkoutMode);
       }
     }
     setState(() {});
   }
 
-  getWorkOutType() async{
-    HealyWorkoutType healyWorkoutType=await healyWatchSDK.getAllWorkoutTypes();
+  getWorkOutType() async {
+    HealyWorkoutType healyWorkoutType =
+        await healyWatchSDK.getAllWorkoutTypes();
     this.selected = healyWorkoutType.selectedList;
     setState(() {});
   }
 
-  setWorkOutType() async{
-    bool isSetSuccess=await healyWatchSDK.setSelectedWorkoutTypes(HealyWorkoutType(selected));
+  setWorkOutType() async {
+    bool isSetSuccess =
+        await healyWatchSDK.setSelectedWorkoutTypes(HealyWorkoutType(selected));
     showMsgDialog(context, "SetWorkOutTypeResponse $isSetSuccess");
   }
-
-
 
   Widget getDialog(String dataType) {
     return new AlertDialog(

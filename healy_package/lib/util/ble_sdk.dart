@@ -801,15 +801,17 @@ class BleSdk {
   /// set the workout types displayed on the watch (up to 5)
   ///
   /// Response [SetWorkOutTypeResponse]
-  static List<int> setWorkOutType(List<int> list) {
+  static List<int> setWorkOutType(List<HealyWorkoutMode> list) {
     final List<int> value = _generateInitValue();
     value[0] = DeviceCmd.setWorkoutType;
     for (int i = 0; i < 5; i++) {
       value[i + 1] = 0xff;
     }
+
     int startIndex = 1;
-    for (final int i in list) {
-      value[startIndex] = (i < 6 ? i : i + 1);;
+    for (final HealyWorkoutMode mode in list) {
+      int index=mode.index;
+      value[startIndex] = index;
       startIndex++;
     }
     crcValue(value);
@@ -845,7 +847,7 @@ class BleSdk {
     value[1] = 1;
     value[2] = 6;
     value[3] = healyBreathingSession.level;
-    value[4] = healyBreathingSession.durationInSeconds;
+    value[4] = healyBreathingSession.trainRounds;
     crcValue(value);
     return value;
   }
