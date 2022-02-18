@@ -47,6 +47,9 @@ class BluetoothConnectionUtil {
 
   get isSetup => null;
 
+  DeviceConnectionState _deviceConnectionState =
+      DeviceConnectionState.disconnected;
+
   static BluetoothConnectionUtil? instance() {
     if (_singleton == null) {
       _singleton = BluetoothConnectionUtil();
@@ -76,6 +79,8 @@ class BluetoothConnectionUtil {
         }
       }
     });
+    bleManager.connectedDeviceStream.listen((conectionState) =>
+        _deviceConnectionState = conectionState.connectionState);
   }
 
   toConnectExistId() async {
@@ -484,7 +489,7 @@ class BluetoothConnectionUtil {
   HealyDevice? device;
 
   Future<void> connectWithDevice(
-    DiscoveredDevice device, {
+    HealyDevice device, {
     bool autoReconnect = true,
   }) async {
     log(
@@ -493,7 +498,7 @@ class BluetoothConnectionUtil {
       time: DateTime.now(),
     );
     isNeedReconnect = autoReconnect;
-    reconnectDevice(
+    await reconnectDevice(
       HealyDevice(
         id: device.id,
         name: device.name,
@@ -502,9 +507,7 @@ class BluetoothConnectionUtil {
     );
   }
 
-  Future<void> connect(
-    HealyDevice? device,
-  ) async {
+  Future<void> connect(HealyDevice? device) async {
     log(
       'connect to device: $device',
       name: loggerName,
@@ -512,6 +515,16 @@ class BluetoothConnectionUtil {
     );
 
     if (device == null) {
+      return;
+    }
+
+    if (_deviceConnectionState == DeviceConnectionState.connecting ||
+        _deviceConnectionState == DeviceConnectionState.connected) {
+      log(
+        'already try to connect to device: $device',
+        name: loggerName,
+        time: DateTime.now(),
+      );
       return;
     }
 
@@ -529,6 +542,7 @@ class BluetoothConnectionUtil {
     final timeout = const Duration(
       seconds: 30,
     );
+
     final stream = bleManager.connectToDevice(
       id: device.id,
       connectionTimeout: timeout,
@@ -541,6 +555,7 @@ class BluetoothConnectionUtil {
     );
 
     _connection = stream.listen((update) async {
+      _deviceConnectionState = update.connectionState;
       log(
         'connect connection state for device $device : ${update.connectionState}',
         name: loggerName,
@@ -548,15 +563,27 @@ class BluetoothConnectionUtil {
       );
       // _deviceConnectionController.add(update);
       if (update.connectionState == DeviceConnectionState.connected) {
+        log(
+          'connect connected device $device successfully',
+          name: loggerName,
+          time: DateTime.now(),
+        );
         this.device = device;
         SharedPrefUtils.setConnectedDevice(device);
-        await enableNotification(device.id);
-        if (Platform.isAndroid) {
-          await HealyWatchSDKImplementation.instance.disableANCS();
-        }
         HealyWatchSDKImplementation.instance
             .startCheckResUpdate(StreamController());
+
+        Future.delayed(
+          Duration(milliseconds: 1500),
+          () => enableNotification(device.id),
+        );
       } else if (update.connectionState == DeviceConnectionState.disconnected) {
+        log(
+          'connect connected device $device failure',
+          name: loggerName,
+          time: DateTime.now(),
+        );
+
         isConnect = false;
         this.device = null;
 
@@ -662,13 +689,13 @@ class BluetoothConnectionUtil {
     return bleManager.status;
   }
 
-  Stream<ConnectionStateUpdate> connectionStateStream() {
-    return bleManager.connectedDeviceStream;
+  Stream<DeviceConnectionState> connectionStateStream() {
+    return bleManager.connectedDeviceStream
+        .map((event) => event.connectionState);
   }
 
-  Future<ConnectionStateUpdate> connectionState() {
-    Stream<ConnectionStateUpdate> stream = connectionStateStream();
-    return stream.first;
+  Future<DeviceConnectionState> connectionState() {
+    return Future.value(_deviceConnectionState);
   }
 
   /// returns [Stream<bool>] of the current setup state of the connection
@@ -700,7 +727,7 @@ class BluetoothConnectionUtil {
     );
     await _connection?.cancel();
     _connection = null;
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(seconds: 2));
     if (bleManager.status == BleStatus.poweredOff ||
         isFirmwareUpdating ||
         device == null) {

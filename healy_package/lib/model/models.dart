@@ -1,4 +1,4 @@
-import 'package:meta/meta.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 /// Abstract class which all models need to inherit from
 abstract class HealyBaseModel {}
@@ -832,5 +832,12 @@ class HealyDevice {
   @override
   String toString() {
     return 'id: $id name: $name';
+  }
+
+  factory HealyDevice.fromDiscorveredDevice(DiscoveredDevice device) {
+    return HealyDevice(
+      id: device.id,
+      name: device.name,
+    );
   }
 }
