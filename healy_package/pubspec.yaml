@@ -1,8 +1,7 @@
 name: healy_watch_sdk
 description: A new Flutter package.
 version: 0.0.1
-author:
-homepage:
+homepage: www.healy.com
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -15,14 +14,16 @@ dependencies:
   shared_preferences: any
   flutter_reactive_ble: 5.0.1
   dio: ^4.0.0
-  flutter_nordic_dfu: ^3.0.0
+  nordic_dfu: ^3.2.0
   archive: ^3.1.6
   path_provider: ^2.0.0
 dependency_overrides:
-  reactive_ble_mobile: '5.0.1'
+   reactive_ble_mobile: '5.0.1'
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

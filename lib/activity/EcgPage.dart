@@ -44,9 +44,7 @@ class EcgPageState extends State<EcgPage> {
                     textAlign: TextAlign.center,
                     controller: _userAgeController,
                     keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   ),
                 ),
               ],
@@ -190,9 +188,10 @@ class EcgPageState extends State<EcgPage> {
     int durationInt = 0;
     if (!isEmpty(duration)) durationInt = int.parse(duration);
     if (enable) {
-      Stream<HealyBaseMeasuremenetData> healyBaseMeasuremenetData =onlyPPG?HealyWatchSDKImplementation.instance
-          .startOnlyPPGMessuringWithDuration(durationInt):
-          HealyWatchSDKImplementation.instance
+      Stream<HealyBaseMeasuremenetData> healyBaseMeasuremenetData = onlyPPG
+          ? HealyWatchSDKImplementation.instance
+              .startOnlyPPGMessuringWithDuration(durationInt)
+          : HealyWatchSDKImplementation.instance
               .startEcgMessuringWithDuration(durationInt);
       healyBaseMeasuremenetData.listen((event) {
         if (event is HealyECGQualityData) {
@@ -230,7 +229,7 @@ class EcgPageState extends State<EcgPage> {
           showPPGList.clear();
         } else if (event is HealyEcgFailureData) {
           print(getReasonInfo(event.errorCode));
-        }else if(event is HealyOnlyPPGFinish){
+        } else if (event is HealyOnlyPPGFinish) {
           print("HealyOnlyPPGFinish");
         }
       });
@@ -269,12 +268,9 @@ class EcgPageState extends State<EcgPage> {
   bool isEmpty(String value) {
     return null == value || value.length == 0;
   }
-  _enableOnlyPPg(bool onlyPPG) {
-    this.onlyPPG=onlyPPG;
-    setState(() {
 
-    });
+  _enableOnlyPPg(bool onlyPPG) {
+    this.onlyPPG = onlyPPG;
+    setState(() {});
   }
 }
-
-

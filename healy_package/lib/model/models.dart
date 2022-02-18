@@ -1,4 +1,4 @@
-import 'package:meta/meta.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 /// Abstract class which all models need to inherit from
 abstract class HealyBaseModel {}
@@ -618,8 +618,12 @@ class WeatherData extends HealyBaseModel {
   /// reference [https://docs.seniverse.com/api/start/code.html]
   int weatherId;
 
-  WeatherData( {required this.cityName,required this.weatherId,
-    required this.tempNow, required this.tempHigh, required this.tempLow}  );
+  WeatherData(
+      {required this.cityName,
+      required this.weatherId,
+      required this.tempNow,
+      required this.tempHigh,
+      required this.tempLow});
 }
 
 /// real-time step count
@@ -807,4 +811,35 @@ class HealyCombinedSleepData {
   List<int> heartRate = [];
 
   HealyCombinedSleepData({required this.startDateTime});
+}
+
+class HealyDevice {
+  final String id;
+  final String name;
+
+  HealyDevice({
+    required this.id,
+    required this.name,
+  });
+
+  HealyDevice.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as String,
+        name = json['name'] as String;
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+      };
+
+  @override
+  String toString() {
+    return 'id: $id name: $name';
+  }
+
+  factory HealyDevice.fromDiscorveredDevice(DiscoveredDevice device) {
+    return HealyDevice(
+      id: device.id,
+      name: device.name,
+    );
+  }
 }

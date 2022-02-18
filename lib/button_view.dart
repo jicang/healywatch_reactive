@@ -4,17 +4,16 @@ import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
 
 class ButtonView extends StatelessWidget {
   final String _text;
-   Function()? action;
+  Function()? action;
 
   ButtonView(this._text, {required this.action});
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ConnectionStateUpdate>(
+    return StreamBuilder<DeviceConnectionState>(
         stream: HealyWatchSDKImplementation.instance.connectionStateStream(),
-        initialData: ConnectionStateUpdate(deviceId: "",connectionState:DeviceConnectionState.connected,failure: null ),
+        initialData: DeviceConnectionState.connected,
         builder: (c, snapshot) {
-
           return Expanded(
             child: Padding(
               padding: const EdgeInsets.all(2.0),
@@ -30,9 +29,8 @@ class ButtonView extends StatelessWidget {
                       return Colors.blue; // Regular color
                     })),
                 child: Text(_text),
-                onPressed: (snapshot.data?.connectionState ==
-                        DeviceConnectionState.connected)
-                    ?  action
+                onPressed: (snapshot.data == DeviceConnectionState.connected)
+                    ? action
                     : null,
               ),
             ),

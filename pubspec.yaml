@@ -23,7 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_reactive_ble: ^5.0.1
+  flutter_reactive_ble: '5.0.1'
   provider: ^5.0.0
   dio: ^4.0.0
   intl: null
@@ -31,6 +31,7 @@ dependencies:
   permission_handler: ^8.2.5
   connectivity: ^3.0.6
   shared_preferences: any
+  device_info_plus: ^3.2.1
   healy_watch_sdk:
     path: healy_package
   # The following adds the Cupertino Icons font to your application.

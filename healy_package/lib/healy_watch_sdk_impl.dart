@@ -6,10 +6,9 @@ import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_nordic_dfu/flutter_nordic_dfu.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:healy_watch_sdk/util/shared_pref.dart';
-import 'package:intl/intl.dart';
+import 'package:nordic_dfu/nordic_dfu.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'bleconst/device_cmd.dart';
@@ -34,16 +33,19 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   List<HealyPPGData> healyPPGDataList = [];
   List<HealyECGData> healyEcgDataList = [];
   List<HealyECGQualityData> qualityPoints = [];
+  Map<String, DiscoveredDevice> devices = {};
 
   late BluetoothConnectionUtil _bluetoothUtil;
 
   BluetoothConnectionUtil get bluetoothUtil => _bluetoothUtil;
 
+  final scanDevicesController =
+      StreamController<List<DiscoveredDevice>>.broadcast();
+
   // static Future<BluetoothConnectionUtil>  bluetoothUtil;
 
   static final HealyWatchSDKImplementation _instance =
       HealyWatchSDKImplementation._();
-
   HealyWatchSDKImplementation._() {
     _bluetoothUtil = BluetoothConnectionUtil.instance()!;
   }
@@ -51,10 +53,22 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   static HealyWatchSDKImplementation get instance => _instance;
 
   @override
-  Stream<List<DiscoveredDevice>> scanResults(
-      {String filterForName = HealyWatchSDKImplementation.filterName,
-      List<String>? ids}) {
-    return bluetoothUtil.startScan(filterForName, List.empty());
+  Stream<List<DiscoveredDevice>> scanResults({
+    String filterForName = HealyWatchSDKImplementation.filterName,
+    List<String>? ids,
+  }) {
+    final minDateTime = DateTime.now().add(const Duration(
+      seconds: 2,
+    ));
+    bluetoothUtil.startScan(
+      filterForName,
+      [],
+    ).listen((event) {
+      if (DateTime.now().isAfter(minDateTime)) {
+        scanDevicesController.add(event);
+      }
+    });
+    return scanDevicesController.stream;
   }
 
   @override
@@ -63,9 +77,14 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   }
 
   @override
-  Future<void> connectDevice(DiscoveredDevice device,
-      {bool autoReconnect = true}) async {
-    await bluetoothUtil.connectWithDevice(device, autoReconnect: autoReconnect);
+  Future<void> connectDevice(
+    HealyDevice device, {
+    bool autoReconnect = true,
+  }) async {
+    await bluetoothUtil.connectWithDevice(
+      device,
+      autoReconnect: autoReconnect,
+    );
   }
 
   @override
@@ -74,7 +93,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   }
 
   @override
-  Future<DiscoveredDevice?> reconnectDevice({bool autoReconnect = true}) async {
+  Future<HealyDevice?> reconnectDevice({bool autoReconnect = true}) async {
     return bluetoothUtil.reconnect(autoReconnect: autoReconnect);
   }
 
@@ -88,12 +107,12 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   // // returns the connected device synchronously
   // // will return null if the device has not been reinitialized properly even if there is a connected device
   @override
-  DiscoveredDevice? getConnectedDevice() {
-    return bluetoothUtil.connectedDevice;
+  HealyDevice? getConnectedDevice() {
+    return bluetoothUtil.device;
   }
 
   @override
-  Future<ConnectionStateUpdate> getConnectionState() {
+  Future<DeviceConnectionState> getConnectionState() {
     return bluetoothUtil.connectionState();
   }
 
@@ -105,7 +124,8 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     log('Error: $error');
   }
 
-  StreamController<HealyBaseModel>? allDataStreamController;
+  StreamController<HealyBaseModel>? allDataStreamController =
+      StreamController<HealyBaseModel>();
 
   Future _getWatchData(int cmd, StreamController streamController) async {
     final completer = Completer();
@@ -1197,11 +1217,11 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     int dfuPercent = 0;
     bool isDfuMode = false;
     SharedPrefUtils.setIsFirmware(true);
-    await FlutterNordicDfu.startDfu(
+    await NordicDfu.startDfu(
       id,
       path,
-      progressListener: DefaultDfuProgressListenerAdapter(
-          onProgressChangedHandle: (
+      progressListener:
+          DefaultDfuProgressListenerAdapter(onProgressChangedHandle: (
         deviceAddress,
         percent,
         speed,
@@ -1210,7 +1230,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
         partsTotal,
       ) {
         isDfuMode = percent != 100;
-        dfuPercent = percent;
+        dfuPercent = percent ?? 0;
         log('startOta: progressValue: $dfuPercent');
         addProgress(progressStream, 2 / 3 + (dfuPercent / 100) / 3);
       }, onDfuProcessStartedHandle: (address) {
@@ -1222,11 +1242,10 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
         log("startOta: onComplete");
         SharedPrefUtils.setIsFirmware(false);
         bluetoothUtil.isFirmwareUpdating = false;
-        String? id = await SharedPrefUtils.getConnectedDeviceID();
-        bluetoothUtil.reconnectDevice(id);
+        HealyDevice? device = await SharedPrefUtils.getConnectedDevice();
+        bluetoothUtil.reconnectDevice(device);
         progressStream.close();
-      }, onErrorHandle:
-              (String deviceAddress, int error, int errorType, String message) {
+      }, onErrorHandle: (deviceAddress, error, errorType, message) {
         progressStream.addError(Exception(message));
       }),
     );
@@ -1332,7 +1351,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   }
 
   @override
-  Stream<ConnectionStateUpdate> connectionStateStream() {
+  Stream<DeviceConnectionState> connectionStateStream() {
     return bluetoothUtil.connectionStateStream();
   }
 

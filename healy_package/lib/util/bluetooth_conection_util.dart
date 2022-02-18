@@ -3,20 +3,17 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
-import 'package:healy_watch_sdk/util/resolve_util.dart';
+import 'package:healy_watch_sdk/model/models.dart';
 import 'package:healy_watch_sdk/util/shared_pref.dart';
-import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'ble_sdk.dart';
 
 class BluetoothConnectionUtil {
-  StreamController<List<DiscoveredDevice>>? _stateStreamController =
-      StreamController();
+  static const loggerName = 'HealyWatchSDK - BluetoothConnectionUtil';
+  final _stateStreamController =
+      StreamController<List<DiscoveredDevice>>.broadcast();
 
   final _devices = <DiscoveredDevice>[];
   StreamSubscription? _subscription;
@@ -36,12 +33,8 @@ class BluetoothConnectionUtil {
   BluetoothConnectionState lastState = BluetoothConnectionState.bluetoothOff;
 
   /// device connection state stream
-  StreamController<BluetoothConnectionState>? _connectionStateController;
-
-  StreamSubscription<CharacteristicValue>? streamSubscriptionNotify;
-
-  StreamController<BluetoothConnectionState>? get connectionStateController =>
-      _connectionStateController;
+  final connectionStateController =
+      StreamController<BluetoothConnectionState>.broadcast();
 
   /// Stream that returns devices while scanning for watch
 
@@ -50,11 +43,12 @@ class BluetoothConnectionUtil {
   bool isNeedReconnect = true;
   bool isFirmwareUpdating = false;
 
-  bool _isPairing = false;
-
   static BluetoothConnectionUtil? _singleton;
 
   get isSetup => null;
+
+  DeviceConnectionState _deviceConnectionState =
+      DeviceConnectionState.disconnected;
 
   static BluetoothConnectionUtil? instance() {
     if (_singleton == null) {
@@ -80,20 +74,34 @@ class BluetoothConnectionUtil {
               rootPath, StreamController<double>());
         } else {
           if (isNeedReconnect) {
-            toConnectExistId();
+            await toConnectExistId();
           }
         }
       }
     });
+    bleManager.connectedDeviceStream.listen((conectionState) =>
+        _deviceConnectionState = conectionState.connectionState);
   }
 
   toConnectExistId() async {
+    log(
+      'toConnectExistId',
+      name: loggerName,
+      time: DateTime.now(),
+    );
     // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String? deviceId = await SharedPrefUtils.getConnectedDeviceID();
-    reconnectDevice(deviceId);
+    HealyDevice? device = await SharedPrefUtils.getConnectedDevice();
+    if (device != null) {
+      await reconnectDevice(device);
+    }
   }
 
   Future<void> init() async {
+    log(
+      'init',
+      name: loggerName,
+      time: DateTime.now(),
+    );
     return;
   }
 
@@ -107,10 +115,14 @@ class BluetoothConnectionUtil {
 
   /// change the current [state] of the paired device
   void setConnectionState(BluetoothConnectionState state) {
-    log("setConnectionState ${state.toString()}");
+    log(
+      'setConnectionState $state',
+      name: loggerName,
+      time: DateTime.now(),
+    );
     if (state != lastState) {
       lastState = state;
-      connectionStateController!.add(state);
+      connectionStateController.add(state);
     }
   }
 
@@ -144,18 +156,27 @@ class BluetoothConnectionUtil {
   /// emits a [List<Peripheral>] of all devices that are found so far on each event
   /// stream has to be canceled by calling [stopScan]
   Stream<List<DiscoveredDevice>> startScan(
-      String? filterForName, List<Uuid> serviceIds) {
-    print('Start ble discovery');
+    String? filterForName,
+    List<Uuid> serviceIds,
+  ) {
+    log(
+      'startScan with filter: $filterForName and serviceIds: ${serviceIds.toString()}',
+      name: loggerName,
+      time: DateTime.now(),
+    );
     _devices.clear();
     _subscription?.cancel();
-    _stateStreamController?.close();
-    _stateStreamController = StreamController();
     _subscription = bleManager
         .scanForDevices(withServices: serviceIds)
         .where((event) => filterForName == null
             ? true
             : event.name.toLowerCase().contains(filterForName))
         .listen((device) {
+      log(
+        'startScan found device: ${device.id}',
+        name: loggerName,
+        time: DateTime.now(),
+      );
       final knownDeviceIndex = _devices.indexWhere((d) => d.id == device.id);
       if (knownDeviceIndex >= 0) {
         _devices[knownDeviceIndex] = device;
@@ -163,18 +184,27 @@ class BluetoothConnectionUtil {
         _devices.add(device);
       }
       _pushState();
-    }, onError: (Object e) => print('Device scan fails with error: $e'));
+    }, onError: (Object e) {
+      log(
+        'startScan fails with error: $e',
+        name: loggerName,
+        time: DateTime.now(),
+      );
+    });
     _pushState();
-    return _stateStreamController!.stream;
+    return _stateStreamController.stream;
   }
 
   void _pushState() {
-    _stateStreamController!.add(_devices);
+    _stateStreamController.add(_devices);
   }
 
   Future<void> stopScan() async {
-    // _logMessage('Stop ble discovery');
-    print("StopScan");
+    log(
+      'stopScan',
+      name: loggerName,
+      time: DateTime.now(),
+    );
     await _subscription?.cancel();
     _subscription = null;
     _pushState();
@@ -439,95 +469,176 @@ class BluetoothConnectionUtil {
 
   /// write [data] to the _characteristicData of the currently paired device
   Future<void> writeData(
-    Uint8List data,
-    // ignore: avoid_positional_boolean_parameters
-    {
+    Uint8List data, {
     String? transactionId,
   }) async {
     //await reconnectPairedDevice();
     //if (await isConnected()) {
-    return bleManager.writeCharacteristicWithoutResponse(_characteristicData!,
-        value: data);
+    return bleManager.writeCharacteristicWithoutResponse(
+      _characteristicData!,
+      value: data,
+    );
 
     // }
   }
 
   Stream<List<int>> monitorNotify() {
-    return streamController!.stream;
+    return streamController.stream;
   }
 
-  String? deviceId;
-  DiscoveredDevice? connectedDevice;
+  HealyDevice? device;
 
-  Future<void> connectWithDevice(DiscoveredDevice device,
-      {bool autoReconnect = true}) async {
+  Future<void> connectWithDevice(
+    HealyDevice device, {
+    bool autoReconnect = true,
+  }) async {
+    log(
+      'connectWithDevice ${device.id}',
+      name: loggerName,
+      time: DateTime.now(),
+    );
     isNeedReconnect = autoReconnect;
-    reconnectDevice(device.id, autoReconnect: autoReconnect);
-  }
-
-  Future<void> connect(String? deviceId) async {
-    print('Start connecting to $deviceId');
-    stopScan();
-    if (deviceId == null) return;
-    _connection = bleManager
-        .connectToDevice(
-            id: deviceId, connectionTimeout: const Duration(seconds: 30))
-        .listen(
-      (update) async {
-        print(
-            'ConnectionState for device $deviceId : ${update.connectionState}');
-        // _deviceConnectionController.add(update);
-        print("enableNotification ${update.connectionState}");
-        if (update.connectionState == DeviceConnectionState.connected) {
-          this.deviceId = deviceId;
-          await enableNotification(deviceId);
-          if (Platform.isAndroid) {
-            await HealyWatchSDKImplementation.instance.disableANCS();
-          }
-          HealyWatchSDKImplementation.instance
-              .startCheckResUpdate(StreamController());
-        } else if (update.connectionState ==
-            DeviceConnectionState.disconnected) {
-          isConnect = false;
-          this.connectedDevice = null;
-          if (isNeedReconnect) {
-            reconnectDevice(deviceId);
-          }
-          streamController?.close();
-          streamSubscription?.cancel();
-        }
-      },
-      onError: (Object e) =>
-          print('Connecting to device $deviceId resulted in error $e'),
+    await reconnectDevice(
+      HealyDevice(
+        id: device.id,
+        name: device.name,
+      ),
+      autoReconnect: autoReconnect,
     );
   }
 
-  StreamController<List<int>>? streamController;
+  Future<void> connect(HealyDevice? device) async {
+    log(
+      'connect to device: $device',
+      name: loggerName,
+      time: DateTime.now(),
+    );
+
+    if (device == null) {
+      return;
+    }
+
+    if (_deviceConnectionState == DeviceConnectionState.connecting ||
+        _deviceConnectionState == DeviceConnectionState.connected) {
+      log(
+        'already try to connect to device: $device',
+        name: loggerName,
+        time: DateTime.now(),
+      );
+      return;
+    }
+
+    await Future.delayed(Duration(seconds: 1));
+
+    if (_connection != null) {
+      log(
+        'already connecting to device: $device',
+        name: loggerName,
+        time: DateTime.now(),
+      );
+      return;
+    }
+
+    final timeout = const Duration(
+      seconds: 30,
+    );
+
+    final stream = bleManager.connectToDevice(
+      id: device.id,
+      connectionTimeout: timeout,
+    );
+
+    log(
+      'connect set connection subscription',
+      name: loggerName,
+      time: DateTime.now(),
+    );
+
+    _connection = stream.listen((update) async {
+      _deviceConnectionState = update.connectionState;
+      log(
+        'connect connection state for device $device : ${update.connectionState}',
+        name: loggerName,
+        time: DateTime.now(),
+      );
+      // _deviceConnectionController.add(update);
+      if (update.connectionState == DeviceConnectionState.connected) {
+        log(
+          'connect connected device $device successfully',
+          name: loggerName,
+          time: DateTime.now(),
+        );
+        this.device = device;
+        SharedPrefUtils.setConnectedDevice(device);
+        HealyWatchSDKImplementation.instance
+            .startCheckResUpdate(StreamController());
+
+        Future.delayed(
+          Duration(milliseconds: 1500),
+          () => enableNotification(device.id),
+        );
+      } else if (update.connectionState == DeviceConnectionState.disconnected) {
+        log(
+          'connect connected device $device failure',
+          name: loggerName,
+          time: DateTime.now(),
+        );
+
+        isConnect = false;
+        this.device = null;
+
+        await streamSubscription?.cancel();
+        streamSubscription = null;
+
+        if (isNeedReconnect) {
+          await reconnectDevice(device);
+        }
+      }
+    }, onError: (Object e) {
+      log(
+        'connect connecting to device $device resulted in error $e',
+        name: loggerName,
+        time: DateTime.now(),
+      );
+    });
+  }
+
+  final StreamController<List<int>> streamController =
+      StreamController.broadcast();
   StreamSubscription? streamSubscription;
   bool isConnect = false;
 
   Future<void> enableNotification(String deviceId) async {
+    log(
+      'enableNotification for device $deviceId',
+      name: loggerName,
+      time: DateTime.now(),
+    );
     //ios端的是短uuid。android端可以是长uuid
     QualifiedCharacteristic _characteristicNotify = QualifiedCharacteristic(
-        characteristicId: Uuid.parse("fff7"),
-        serviceId: Uuid.parse("fff0"),
-        deviceId: deviceId);
+      characteristicId: Uuid.parse("fff7"),
+      serviceId: Uuid.parse("fff0"),
+      deviceId: deviceId,
+    );
 
     _characteristicData = QualifiedCharacteristic(
-        characteristicId: Uuid.parse("fff6"),
-        serviceId: Uuid.parse("fff0"),
-        deviceId: deviceId);
+      characteristicId: Uuid.parse("fff6"),
+      serviceId: Uuid.parse("fff0"),
+      deviceId: deviceId,
+    );
 
-    await streamController?.close();
-    streamController = StreamController.broadcast();
     await streamSubscription?.cancel();
-    streamSubscription = bleManager
-        .subscribeToCharacteristic(_characteristicNotify)
-        .listen((event) {
+    final stream = bleManager.subscribeToCharacteristic(_characteristicNotify);
+
+    streamSubscription = stream.listen((event) {
       print("notifyData ${BleSdk.hex2String(event)}");
-      if (!streamController!.isClosed) streamController!.add(event);
-    }, onError: (msg) {
-      print("connectError $msg");
+      streamController.add(event);
+    }, onError: (Object error) {
+      log(
+        'enableNotification for device $deviceId error occours $error',
+        name: loggerName,
+        time: DateTime.now(),
+      );
     });
     isConnect = true;
     isNeedReconnect = true;
@@ -535,16 +646,30 @@ class BluetoothConnectionUtil {
 
   Future<void> disconnect() async {
     try {
-       print('disconnecting to device: $deviceId');
-      //await streamSubscriptionNotify.cancel();
+      log(
+        'disconnect from device $device',
+        name: loggerName,
+        time: DateTime.now(),
+      );
+
       isConnect = false;
       isNeedReconnect = false;
-      streamController?.close();
-      streamSubscription?.cancel();
-      connectedDevice = null;
+      this.device = null;
+
+      await streamSubscription?.cancel();
+      streamSubscription = null;
+
+      await Future.delayed(Duration(seconds: 1));
       await _connection?.cancel();
+      _connection = null;
+
+      await SharedPrefUtils.clearConnectedDevice();
     } on Exception catch (e, _) {
-      print("Error disconnecting from a device: $e");
+      log(
+        'disconnect error while disconnect from device $device  error $e',
+        name: loggerName,
+        time: DateTime.now(),
+      );
     } finally {
       // Since [_connection] subscription is terminated, the "disconnected" state cannot be received and propagated
 
@@ -564,13 +689,13 @@ class BluetoothConnectionUtil {
     return bleManager.status;
   }
 
-  Stream<ConnectionStateUpdate> connectionStateStream() {
-    return bleManager.connectedDeviceStream;
+  Stream<DeviceConnectionState> connectionStateStream() {
+    return bleManager.connectedDeviceStream
+        .map((event) => event.connectionState);
   }
 
-  Future<ConnectionStateUpdate> connectionState() {
-    Stream<ConnectionStateUpdate> stream = connectionStateStream();
-    return stream.first;
+  Future<DeviceConnectionState> connectionState() {
+    return Future.value(_deviceConnectionState);
   }
 
   /// returns [Stream<bool>] of the current setup state of the connection
@@ -578,28 +703,40 @@ class BluetoothConnectionUtil {
     yield* isSetup.stream;
   }
 
-  Future<DiscoveredDevice?> reconnect({bool autoReconnect = true}) async {
-    return reconnectDevice(this.deviceId, autoReconnect: autoReconnect);
+  Future<HealyDevice?> reconnect({bool autoReconnect = true}) async {
+    log(
+      'reconnect with autoReconnect $autoReconnect',
+      name: loggerName,
+      time: DateTime.now(),
+    );
+    HealyDevice? device = await SharedPrefUtils.getConnectedDevice();
+    return reconnectDevice(
+      device,
+      autoReconnect: autoReconnect,
+    );
   }
 
-  Future<DiscoveredDevice?> reconnectDevice(String? deviceId,
-      {bool autoReconnect = true}) async {
-    await Future.delayed(Duration(seconds: 1));
+  Future<HealyDevice?> reconnectDevice(
+    HealyDevice? device, {
+    bool autoReconnect = true,
+  }) async {
+    log(
+      'reconnectDevice to device $device with autoReconnect $autoReconnect',
+      name: loggerName,
+      time: DateTime.now(),
+    );
+    await _connection?.cancel();
+    _connection = null;
+    await Future.delayed(Duration(seconds: 2));
     if (bleManager.status == BleStatus.poweredOff ||
         isFirmwareUpdating ||
-        deviceId == null) {
+        device == null) {
       return null;
     }
-    print("reconnect $deviceId");
-    bleManager
-        .scanForDevices(withServices: List.empty())
-        .where((event) => event.id == deviceId)
-        .first
-        .then((value) {
-      this.connectedDevice = value;
-      connect(value.id);
-      return value;
-    });
+    await connect(
+      device,
+    );
+    return device;
     // this.connectedDevice=value;connect(value.id);
     // return value;
   }
