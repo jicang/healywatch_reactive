@@ -554,6 +554,7 @@ class ResolveUtil {
     burnedCalories = _intBitToDouble(valueCal);
 
     return HealyExerciseData(
+      isFinish: value[1]==255,
       steps: steps,
       burnedCalories: burnedCalories.floor(),
       heartRate: heartRate,
@@ -732,10 +733,14 @@ class ResolveUtil {
 
   static HealyWorkoutType getWorkOutType(List<int> value) {
     final int length = _hexByte2Int(value[1], 0);
-    final List<int> selectedList = BleSdk.generateValue(length);
+    final List<HealyWorkoutMode> selectedList = List.generate(length, (index) => HealyWorkoutMode.running);
+    List<HealyWorkoutMode> modeList=HealyWorkoutMode.values;;
     for (int i = 0; i < length; i++) {
-      final int selected = _hexByte2Int(value[i + 2], 0);
-      selectedList[i] = selected < 6 ? selected : selected - 1;
+       int selected = _hexByte2Int(value[i + 2], 0);
+
+       print(selected);
+      selectedList[i] = modeList[selected];
+
     }
 
     return HealyWorkoutType(selectedList);

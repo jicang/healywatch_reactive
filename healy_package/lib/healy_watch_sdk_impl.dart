@@ -989,7 +989,6 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
         .listen((value) {});
     streamSubscription.onData((data) {
       HealyBaseExerciseData? healyBaseExerciseData;
-      print("ex ${data}");
       switch (data[0]) {
         case DeviceCmd.startExercise:
           healyBaseExerciseData = ResolveUtil.enterWorkOutModeData(data);
@@ -999,14 +998,14 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
           break;
       }
 
+      if (!controller.isClosed) {
+        controller.add(healyBaseExerciseData!);
+      }
       if (healyBaseExerciseData is HealyExerciseData) {
         if (healyBaseExerciseData.heartRate == 255) {
           controller.close();
           streamSubscription.cancel();
         }
-      }
-      if (!controller.isClosed) {
-        controller.add(healyBaseExerciseData!);
       }
     });
     return controller.stream;
