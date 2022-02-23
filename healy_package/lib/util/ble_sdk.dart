@@ -228,9 +228,15 @@ class BleSdk {
       value[4] =
           deviceBaseParameter.wearingWrist == WearingWrist.left ? 0x81 : 0x80;
     }
-
     value[5] = _getDeviceInfoValue(deviceBaseParameter.vibrationLevel);
     value[6] = _getDeviceInfoValue(deviceBaseParameter.ancsState);
+    List<int> ancsStates=deviceBaseParameter.ancsList;
+    if(ancsStates.isNotEmpty){
+      int ancsState = _getWeekEnable(ancsStates);
+      print("ancs $ancsStates $ancsState");
+      value[7] = (ancsState) & 0xff;
+      value[8] = (ancsState>> 8&0xff)+0x80;
+    }
     value[9] = _getDeviceInfoValue(deviceBaseParameter.baseHeart);
     value[10] = _getDeviceInfoValue(deviceBaseParameter.connectVibration);
     value[11] = _getDeviceInfoValue(deviceBaseParameter.brightnessLevel);
@@ -241,6 +247,12 @@ class BleSdk {
     return value;
   }
 
+  static List<int> setAncsState(List<int> enableList) {
+    final HealyDeviceBaseParameter deviceBaseParameter =
+    HealyDeviceBaseParameter();
+    deviceBaseParameter.ancsList = enableList;
+    return setDeviceInfo(deviceBaseParameter);
+  }
   /// set distance unit
   static List<int> setDistanceUnit(DistanceUnit distanceUnit) {
     final HealyDeviceBaseParameter deviceBaseParameter =

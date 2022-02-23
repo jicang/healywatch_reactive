@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:healywatch_reactive/activity/AncsPage.dart';
 
 import '../button_view.dart';
 import 'AutomicHeartPage.dart';
@@ -36,6 +37,7 @@ class DeviceSettingPageState extends State<DeviceSettingPage> {
       ),
       body: Column(
         children: <Widget>[
+
           Row(
             children: <Widget>[
               ButtonView(
@@ -106,6 +108,15 @@ class DeviceSettingPageState extends State<DeviceSettingPage> {
                 "FirmwareUpdate",
                 action: () => toFirmwareUpdate(),
               ),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              ButtonView(
+                "AncsState",
+                action: () => toAncsStatePage(),
+              ),
+
             ],
           ),
         ],
@@ -194,6 +205,11 @@ class DeviceSettingPageState extends State<DeviceSettingPage> {
   toFirmwareUpdate() {
     Navigator.of(context).push(new MaterialPageRoute(builder: (context) {
       return FirmwareUpdatePage();
+    }));
+  }
+  toAncsStatePage() {
+    Navigator.of(context).push(new MaterialPageRoute(builder: (context) {
+      return AncsPage();
     }));
   }
 }

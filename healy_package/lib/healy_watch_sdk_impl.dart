@@ -1374,7 +1374,11 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     });
     return controller.stream;
   }
-
+  @override
+  Future<bool> setAncsState(List<int> ancsList) async {
+    await _writeData(BleSdk.setAncsState(ancsList));
+    return _filterValue(DeviceCmd.setDeviceInfo).then((value) => true);
+  }
   @override
   Future<bool> isWorkoutRunning() {
     // TODO: implement isWorkoutRunning

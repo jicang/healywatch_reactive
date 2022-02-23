@@ -199,7 +199,7 @@ abstract class HealyWatchSDK {
   Stream<HealyBaseMeasuremenetData> startEcgMessuringWithDuration(int duration);
   Stream<HealyBaseMeasuremenetData> startOnlyPPGMessuringWithDuration(
       int duration);
-
+  Future<bool> setAncsState(List<int> ancsList);
   /// Should stop collecting ecg data
   /// returns true if success and false if failure
   Future<bool> stopEcgMessuring();

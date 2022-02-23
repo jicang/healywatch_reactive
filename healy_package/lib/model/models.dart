@@ -575,7 +575,7 @@ class HealyDeviceBaseParameter extends HealyBaseModel {
   ///
   /// can be called and set individually [BleSdk.enableAncs()],[BleSdk.disableAncs()] 设置
   bool ancsState = false;
-
+  List<int>ancsList=[];
   /// wrist-on sensitivity
   ///
   /// can be called and set individually [BleSdk.setWristOnSensitivity(sensitivity)]设置
