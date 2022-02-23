@@ -1375,8 +1375,8 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     return controller.stream;
   }
   @override
-  Future<bool> setAncsState(List<int> ancsList) async {
-    await _writeData(BleSdk.setAncsState(ancsList));
+  Future<bool> setAncsState(List<HealyNotifierMode> enableList) async {
+    await _writeData(BleSdk.setAncsState(enableList));
     return _filterValue(DeviceCmd.setDeviceInfo).then((value) => true);
   }
   @override

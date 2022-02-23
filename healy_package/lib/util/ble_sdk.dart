@@ -230,13 +230,13 @@ class BleSdk {
     }
     value[5] = _getDeviceInfoValue(deviceBaseParameter.vibrationLevel);
     value[6] = _getDeviceInfoValue(deviceBaseParameter.ancsState);
-    List<int> ancsStates=deviceBaseParameter.ancsList;
-    if(ancsStates.isNotEmpty){
-      int ancsState = _getWeekEnable(ancsStates);
-      print("ancs $ancsStates $ancsState");
-      value[7] = (ancsState) & 0xff;
-      value[8] = (ancsState>> 8&0xff)+0x80;
-    }
+    // List<int> ancsStates=deviceBaseParameter.ancsList;
+    // if(ancsStates.isNotEmpty){
+    //   int ancsState = _getWeekEnable(ancsStates);
+    //   print("ancs $ancsStates $ancsState");
+    //   value[7] = (ancsState) & 0xff;
+    //   value[8] = (ancsState>> 8&0xff)+0x80;
+    // }
     value[9] = _getDeviceInfoValue(deviceBaseParameter.baseHeart);
     value[10] = _getDeviceInfoValue(deviceBaseParameter.connectVibration);
     value[11] = _getDeviceInfoValue(deviceBaseParameter.brightnessLevel);
@@ -247,11 +247,26 @@ class BleSdk {
     return value;
   }
 
-  static List<int> setAncsState(List<int> enableList) {
+  /*static List<int> setAncsState(List<int> enableList) {
     final HealyDeviceBaseParameter deviceBaseParameter =
     HealyDeviceBaseParameter();
     deviceBaseParameter.ancsList = enableList;
     return setDeviceInfo(deviceBaseParameter);
+  }*/
+
+  static List<int> setAncsState(List<HealyNotifierMode> enableList) {
+    final List<int> value = _generateInitValue();
+    value[0] = DeviceCmd.setDeviceInfo;
+    List<int>dataList=generateValue(12);
+    enableList.where((element) => element!=HealyNotifierMode.dataStopTel).forEach((element) {
+      dataList[element.index]=1;
+    });
+    int ancsState = _getWeekEnable(dataList);
+    print("$ancsState");
+    value[7] = ((ancsState) & 0xff);
+    value[8] = (ancsState>> 8&0xff)+0x80;
+    crcValue(value);
+    return value;
   }
   /// set distance unit
   static List<int> setDistanceUnit(DistanceUnit distanceUnit) {

@@ -45,10 +45,10 @@ class AncsPageState extends State<AncsPage> {
     // TODO: implement initState
     super.initState();
     healyWatchSDK = HealyWatchSDKImplementation.instance;
-    selected = BleSdk.generateValue(list.length);
+    //selected = BleSdk.generateValue(list.length);
   }
 
-  List<int> selected = [];
+  List<HealyNotifierMode> selected = [];
 
   @override
   Widget build(BuildContext context) {
@@ -82,23 +82,23 @@ class AncsPageState extends State<AncsPage> {
   List<Widget> getWeekItem() {
     return list.map((value) {
       int index = list.indexOf(value);
+      HealyNotifierMode notifierMode=HealyNotifierMode.values[index];
       return CheckboxListTile(
         title: Text(value),
-        value: selected.length == 0 ? false : selected[index] == 1,
-        onChanged: (bool) => changeChecked(bool!, index),
+        value: selected.contains(notifierMode),
+        onChanged: (bool) => changeChecked(bool!,notifierMode),
       );
     }).toList();
   }
 
-  changeChecked(bool isChecked, int index) {
-    if (selected.length == 0) return;
+  changeChecked(bool isChecked, HealyNotifierMode healyNotifierMode) {
     if (isChecked) {
-      if (selected[index] == 0) {
-        selected[index] = 1;
+      if (!selected.contains(healyNotifierMode)) {
+        selected.add(healyNotifierMode);
       }
     } else {
-      if (selected[index] == 1) {
-        selected[index] = 0;
+      if (selected.contains(healyNotifierMode)) {
+        selected.remove(healyNotifierMode);
       }
     }
     setState(() {});
