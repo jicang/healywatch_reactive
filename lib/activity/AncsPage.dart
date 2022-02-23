@@ -5,7 +5,6 @@ import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
 import 'package:healy_watch_sdk/model/models.dart';
 import 'package:healy_watch_sdk/util/ble_sdk.dart';
 
-
 import '../button_view.dart';
 
 //ios需要设置，android通知在notifyPage
@@ -48,6 +47,8 @@ class AncsPageState extends State<AncsPage> {
     //selected = BleSdk.generateValue(list.length);
   }
 
+  bool enableAncs = false;
+
   List<HealyNotifierMode> selected = [];
 
   @override
@@ -56,37 +57,64 @@ class AncsPageState extends State<AncsPage> {
         appBar: AppBar(
           title: Text("AncsState"),
         ),
-        body: SingleChildScrollView(
+        body: Container(
           child: Column(
             children: [
-              Column(
+              SwitchListTile(
+                title: Text("AncsEnable"),
+                onChanged: (bool) => _enableAncs(bool),
+                value: enableAncs,
+              ),
+              Divider(
+                height: 1.0,
+                color: Colors.amber,
+              ),
+              Expanded(
+                  child: ListView(
                 children: getWeekItem(),
-              ),
-              Row(
-                children: <Widget>[
-                  ButtonView(
-                    "Set",
-                    action: () => setAncsState(),
-                  ),
-                  ButtonView(
-                    "Get",
-                    action: () => getAncsState(),
-                  ),
-                ],
-              ),
+                shrinkWrap: true,
+              )),
+              Container(
+                height: 60,
+                child: Row(
+                  children: <Widget>[
+                    ButtonView(
+                      "Set",
+                      action: () => setAncsState(),
+                    ),
+                    ButtonView(
+                      "Get",
+                      action: () => getAncsState(),
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         ));
   }
 
+  _enableAncs(bool enable) async {
+    this.enableAncs = enable;
+    if (enable) {
+      bool success = await HealyWatchSDKImplementation.instance.enableANCS();
+      showMsgDialog(context, "enableANCS", "$success");
+    } else {
+      bool success = await HealyWatchSDKImplementation.instance.disableANCS();
+      showMsgDialog(context, "disableANCS", "$success");
+    }
+
+    setState(() {});
+  }
+
   List<Widget> getWeekItem() {
     return list.map((value) {
       int index = list.indexOf(value);
-      HealyNotifierMode notifierMode=HealyNotifierMode.values[index];
+      HealyNotifierMode notifierMode = HealyNotifierMode.values[index];
       return CheckboxListTile(
         title: Text(value),
         value: selected.contains(notifierMode),
-        onChanged: (bool) => changeChecked(bool!,notifierMode),
+        onChanged: (bool) => changeChecked(bool!, notifierMode),
       );
     }).toList();
   }
@@ -110,13 +138,13 @@ class AncsPageState extends State<AncsPage> {
     showMsgDialog(context, "setAncsState", "$success");
   }
 
-  getAncsState() async{
-    HealyDeviceBaseParameter healyDeviceBaseParameter= await HealyWatchSDKImplementation.instance.getDeviceBaseParameter();
-    selected=healyDeviceBaseParameter.ancsList;
-    setState(() {
-
-    });
+  getAncsState() async {
+    HealyDeviceBaseParameter healyDeviceBaseParameter =
+        await HealyWatchSDKImplementation.instance.getDeviceBaseParameter();
+    selected = healyDeviceBaseParameter.ancsList;
+    setState(() {});
   }
+
   Widget getDialog(String dataType, String msg) {
     return new AlertDialog(
       title: Container(
