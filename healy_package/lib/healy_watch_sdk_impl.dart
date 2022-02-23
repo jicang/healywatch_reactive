@@ -431,6 +431,8 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
             healyBaseMeasuremenetData.qualityPoints = qualityPoints;
             healyBaseMeasuremenetData.ecgData = healyEcgDataList;
             healyBaseMeasuremenetData.ppgData = healyPPGDataList;
+          }else if(healyBaseMeasuremenetData is HealyOnlyPPGFinish){
+            healyBaseMeasuremenetData.ppgData = healyPPGDataList;
           }
           break;
       }

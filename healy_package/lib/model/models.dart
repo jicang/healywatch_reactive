@@ -89,7 +89,9 @@ class HealyEnterEcgData extends HealyBaseMeasuremenetData {
   });
 }
 
-class HealyOnlyPPGFinish extends HealyBaseMeasuremenetData {}
+class HealyOnlyPPGFinish extends HealyBaseMeasuremenetData {
+  List<HealyPPGData> ppgData = [];
+}
 
 enum EnterEcgResultCode {
   //success 成功

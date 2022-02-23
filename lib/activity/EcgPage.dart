@@ -230,7 +230,7 @@ class EcgPageState extends State<EcgPage> {
         } else if (event is HealyEcgFailureData) {
           print(getReasonInfo(event.errorCode));
         } else if (event is HealyOnlyPPGFinish) {
-          print("HealyOnlyPPGFinish");
+          print("HealyOnlyPPGFinish ${event.ppgData.length}");
         }
       });
     } else {
