@@ -215,8 +215,9 @@ class BleSdk {
     final List<int> value = _generateInitValue();
     value[0] = DeviceCmd.setDeviceInfo;
     if (deviceBaseParameter.distanceUnit != null) {
-      value[1] =
-          deviceBaseParameter.distanceUnit == DistanceUnit.imperial ? 0x81 : 0x80;
+      value[1] = deviceBaseParameter.distanceUnit == DistanceUnit.imperial
+          ? 0x81
+          : 0x80;
     }
     if (deviceBaseParameter.hourMode != null) {
       value[2] =
@@ -228,9 +229,14 @@ class BleSdk {
       value[4] =
           deviceBaseParameter.wearingWrist == WearingWrist.left ? 0x81 : 0x80;
     }
-
     value[5] = _getDeviceInfoValue(deviceBaseParameter.vibrationLevel);
     value[6] = _getDeviceInfoValue(deviceBaseParameter.ancsState);
+    List<HealyNotifierMode> enableList = deviceBaseParameter.ancsList;
+    if (enableList.isNotEmpty) {
+      int ancsState = getAncsStateValue(enableList);
+      value[7] = ((ancsState) & 0xff);
+      value[8] = (ancsState >> 8 & 0xff) + 0x80;
+    }
     value[9] = _getDeviceInfoValue(deviceBaseParameter.baseHeart);
     value[10] = _getDeviceInfoValue(deviceBaseParameter.connectVibration);
     value[11] = _getDeviceInfoValue(deviceBaseParameter.brightnessLevel);
@@ -239,6 +245,26 @@ class BleSdk {
     value[14] = _getDeviceInfoValue(deviceBaseParameter.screenOnTime);
     crcValue(value);
     return value;
+  }
+
+  static int getAncsStateValue(List<HealyNotifierMode> enableList) {
+    final List<int> value = _generateInitValue();
+    value[0] = DeviceCmd.setDeviceInfo;
+    List<int> dataList = generateValue(12);
+    enableList
+        .where((element) => element != HealyNotifierMode.dataStopTel)
+        .forEach((element) {
+      dataList[element.index] = 1;
+    });
+    int ancsState = _getWeekEnable(dataList);
+    return ancsState;
+  }
+
+  static List<int> setAncsState(List<HealyNotifierMode> enableList) {
+    final HealyDeviceBaseParameter deviceBaseParameter =
+        HealyDeviceBaseParameter();
+    deviceBaseParameter.ancsList = enableList;
+    return setDeviceInfo(deviceBaseParameter);
   }
 
   /// set distance unit
@@ -407,7 +433,7 @@ class BleSdk {
   /// (firmware is not complete yet)；format（2020/05/06）
   ///
   ///  Response [TotalDataResponse]
-  static List<int> getTotalData(DataRead dataRead, {DateTime ?date}) {
+  static List<int> getTotalData(DataRead dataRead, {DateTime? date}) {
     final List<int> value = _generateInitValue();
     value[0] = DeviceCmd.getTotalData;
     _getReadData(value, dataRead);
@@ -589,7 +615,7 @@ class BleSdk {
   }
 
   /// get hrv measurement result history data
-  static List<int> getHealyEcgSuccessData(DataRead dataRead, {DateTime ?date}) {
+  static List<int> getHealyEcgSuccessData(DataRead dataRead, {DateTime? date}) {
     final List<int> value = _generateInitValue();
     value[0] = DeviceCmd.getHrvHistoryData;
     _getReadData(value, dataRead);
@@ -640,7 +666,8 @@ class BleSdk {
   /// format（2020/05/06 08:50:55）
   ///
   /// Response [DynamicHeartRateDataResponse]
-  static List<int> getDynamicHeartRateData(DataRead dataRead, {DateTime ?date}) {
+  static List<int> getDynamicHeartRateData(DataRead dataRead,
+      {DateTime? date}) {
     final List<int> value = _generateInitValue();
     value[0] = DeviceCmd.getDynamicHeartData;
     _getReadData(value, dataRead);
@@ -661,7 +688,7 @@ class BleSdk {
   /// format（2020/05/06 08:50:55）
   ///
   /// Response [ExerciseDataResponse]
-  static List<int> getWorkOutData(DataRead dataRead, {DateTime ?date}) {
+  static List<int> getWorkOutData(DataRead dataRead, {DateTime? date}) {
     final List<int> value = _generateInitValue();
     value[0] = DeviceCmd.getWorkOutData;
     _getReadData(value, dataRead);
@@ -682,7 +709,7 @@ class BleSdk {
   /// format（2020/05/06 08:50:55）
   ///
   /// Response [StaticHeartRateDataResponse]
-  static List<int> getStaticHeartRateData(DataRead dataRead, {DateTime ?date}) {
+  static List<int> getStaticHeartRateData(DataRead dataRead, {DateTime? date}) {
     final List<int> value = _generateInitValue();
     value[0] = DeviceCmd.getStaticHeartData;
     _getReadData(value, dataRead);
@@ -723,7 +750,7 @@ class BleSdk {
   static List<int> setDeviceId(String deviceID) {
     final List<int> value = _generateInitValue();
     value[0] = DeviceCmd.setDeviceId;
-    int length=deviceID.length;
+    int length = deviceID.length;
     for (int i = 0; i < length; i++) {
       value[i + 1] = deviceID.codeUnitAt(i);
     }
@@ -810,7 +837,7 @@ class BleSdk {
 
     int startIndex = 1;
     for (final HealyWorkoutMode mode in list) {
-      int index=mode.index;
+      int index = mode.index;
       value[startIndex] = index;
       startIndex++;
     }
@@ -956,7 +983,7 @@ class BleSdk {
   ///
   /// date is the most recent date in the last data sync
   ///  Response [SleepDataResponse]
-  static List<int> getSleepData(DataRead dataRead, {DateTime ?date}) {
+  static List<int> getSleepData(DataRead dataRead, {DateTime? date}) {
     final List<int> value = _generateInitValue();
     value[0] = DeviceCmd.getSleepData;
     _getReadData(value, dataRead);
@@ -985,7 +1012,7 @@ class BleSdk {
     value[9] = _getBcdValue(second);
   }
 
-  static void _insertDateValueNoH(List<int> value, DateTime ?dateTime) {
+  static void _insertDateValueNoH(List<int> value, DateTime? dateTime) {
     if (dateTime == null) return;
     final int year = dateTime.year;
     final int month = dateTime.month;

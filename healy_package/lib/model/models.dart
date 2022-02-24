@@ -89,7 +89,9 @@ class HealyEnterEcgData extends HealyBaseMeasuremenetData {
   });
 }
 
-class HealyOnlyPPGFinish extends HealyBaseMeasuremenetData {}
+class HealyOnlyPPGFinish extends HealyBaseMeasuremenetData {
+  List<HealyPPGData> ppgData = [];
+}
 
 enum EnterEcgResultCode {
   //success 成功
@@ -573,6 +575,7 @@ class HealyDeviceBaseParameter extends HealyBaseModel {
   ///
   /// can be called and set individually [BleSdk.enableAncs()],[BleSdk.disableAncs()] 设置
   bool ancsState = false;
+  List<HealyNotifierMode>ancsList=[];
 
   /// wrist-on sensitivity
   ///

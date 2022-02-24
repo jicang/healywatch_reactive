@@ -68,6 +68,22 @@ class ResolveUtil {
         _hexByte2Int(value[4], 0) == 1 ? WearingWrist.left : WearingWrist.right;
     deviceBaseParameter.vibrationLevel = _hexByte2Int(value[5], 0);
     deviceBaseParameter.ancsState = _hexByte2Int(value[6], 0) == 1;
+    List<int>low=_getAncsEnableList(value[7]);
+    print(low);
+
+    List<int>high=_getAncsEnableList(value[8]);
+    print(high);
+    List<HealyNotifierMode>ancsList=[];
+    List<int>selectedList=BleSdk.generateValue(12);
+    BleSdk.arrayCopy(low, 0, selectedList, 0, low.length);
+    BleSdk.arrayCopy(high, 0, selectedList, low.length, 4);
+    print(selectedList);
+    for(int i=0;i<selectedList.length;i++){
+      if(selectedList[i]==1){
+        ancsList.add(HealyNotifierMode.values[i]);
+      }
+    }
+    deviceBaseParameter.ancsList=ancsList;
     deviceBaseParameter.baseHeart = _hexByte2Int(value[9], 0);
     deviceBaseParameter.connectVibration = _hexByte2Int(value[10], 0) == 1;
     deviceBaseParameter.brightnessLevel = _hexByte2Int(value[11], 0);
@@ -845,5 +861,15 @@ class ResolveUtil {
     int updateIndex=_hexByte2Int(value[3], 0);
     bool needUpdate=value[1] == 1 && value[2] == 1;
     return HealyResUpdateData(needUpdate: needUpdate, updateIndex: updateIndex);
+  }
+
+  static List<int> _getAncsEnableList(int b) {
+    final List<int> array = BleSdk.generateValue(8);
+    for (int i = 0; i < 8; i++) {
+      array[i] = b>>i & 1;
+      // ignore: parameter_assignments
+
+    }
+    return array;
   }
 }

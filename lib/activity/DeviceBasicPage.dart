@@ -19,6 +19,7 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
   HourMode? timeMode;
   WearingWrist? wearingWrist;
   bool enableWristOn = false;
+  bool enableAncs = false;
   bool enableSos = false;
   bool enableConnectVibration = false;
   double wristOnSensitivity = 1;
@@ -153,6 +154,15 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
               color: Colors.amber,
             ),
             SwitchListTile(
+              title: Text("AncsEnable"),
+              onChanged: (bool) => _enableAncs(bool),
+              value: enableAncs,
+            ),
+            Divider(
+              height: 1.0,
+              color: Colors.amber,
+            ),
+            SwitchListTile(
               title: Text("Sos Function"),
               onChanged: (bool) => _enableSos(bool),
               value: enableSos,
@@ -243,9 +253,7 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
                     textAlign: TextAlign.center,
                     controller: _userAgeController,
                     keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   ),
                 ),
                 ButtonView(
@@ -295,6 +303,7 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
       screenLight = HealyDeviceBaseParameter.defaultBrightnessLevel.toDouble();
 
     enableSos = deviceBaseParameter.sosEnable!;
+    enableAncs=deviceBaseParameter.ancsState;
     _userAgeController.text = deviceBaseParameter.baseHeart.toString();
     enableConnectVibration = deviceBaseParameter.connectVibration!;
     setState(() {});
@@ -315,6 +324,7 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
     deviceBaseParameter.wristOnEnable = enableWristOn;
     deviceBaseParameter.distanceUnit = distanceUnit;
     deviceBaseParameter.hourMode = timeMode;
+    deviceBaseParameter.ancsState=enableAncs;
     deviceBaseParameter.wearingWrist = wearingWrist;
     bool isSuccess = await HealyWatchSDKImplementation.instance
         .setDeviceBaseParameter(deviceBaseParameter);
@@ -375,6 +385,17 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
     setState(() {});
   }
 
+  _enableAncs(bool enable) {
+    this.enableAncs = enable;
+    if (enable) {
+      HealyWatchSDKImplementation.instance.enableANCS();
+    } else {
+      HealyWatchSDKImplementation.instance.disableANCS();
+    }
+
+    setState(() {});
+  }
+
   _enableSos(bool enable) {
     this.enableSos = enable;
     HealyWatchSDKImplementation.instance.setSosEnable(enableSos);
@@ -426,7 +447,7 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
 
   setBaseHr() {
     String hr = _userAgeController.text;
-    if ( hr.length == 0) return;
+    if (hr.length == 0) return;
     HealyWatchSDKImplementation.instance.setBaseHeartRate(int.parse(hr));
   }
 }

@@ -431,6 +431,8 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
             healyBaseMeasuremenetData.qualityPoints = qualityPoints;
             healyBaseMeasuremenetData.ecgData = healyEcgDataList;
             healyBaseMeasuremenetData.ppgData = healyPPGDataList;
+          }else if(healyBaseMeasuremenetData is HealyOnlyPPGFinish){
+            healyBaseMeasuremenetData.ppgData = healyPPGDataList;
           }
           break;
       }
@@ -1372,7 +1374,11 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     });
     return controller.stream;
   }
-
+  @override
+  Future<bool> setAncsState(List<HealyNotifierMode> enableList) async {
+    await _writeData(BleSdk.setAncsState(enableList));
+    return _filterValue(DeviceCmd.setDeviceInfo).then((value) => true);
+  }
   @override
   Future<bool> isWorkoutRunning() {
     // TODO: implement isWorkoutRunning
