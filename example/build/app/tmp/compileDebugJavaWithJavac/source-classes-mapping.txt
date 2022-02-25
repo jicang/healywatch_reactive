@@ -1,4 +1,0 @@
-io/flutter/plugins/GeneratedPluginRegistrant.java
- io.flutter.plugins.GeneratedPluginRegistrant
-com/healy/healywatch_reactive/BuildConfig.java
- com.healy.healywatch_reactive.BuildConfig

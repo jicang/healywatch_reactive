@@ -1,2 +1,0 @@
-dev/steenbakker/nordicdfu/BuildConfig.java
- dev.steenbakker.nordicdfu.BuildConfig
