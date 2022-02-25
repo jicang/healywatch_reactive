@@ -1,0 +1,42 @@
+<component name="libraryTable">
+  <library name="Flutter Plugins" type="FlutterPluginsLibraryType">
+    <CLASSES>
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_macos-2.0.3" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_web-2.0.3" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-2.0.9" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.11" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_macos-2.0.5" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_linux-2.1.0" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-2.0.5" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_windows-2.1.0" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-2.0.13" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_linux-2.1.5" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_reactive_ble-5.0.1" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/pub.dartlang.org/reactive_ble_mobile-5.0.1" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/pub.dartlang.org/nordic_dfu-3.3.0" />
+      <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus_web-2.1.0" />
+      <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_macos-2.0.5" />
+      <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus_windows-2.1.1" />
+      <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.11" />
+      <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_macos-2.0.3" />
+      <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity_for_web-0.4.0+1" />
+      <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_web-2.0.3" />
+      <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus_macos-2.2.1" />
+      <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-2.0.13" />
+      <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/nordic_dfu-3.2.0" />
+      <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity-3.0.6" />
+      <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus-3.2.1" />
+      <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_linux-2.1.5" />
+      <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/reactive_ble_mobile-5.0.1" />
+      <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-2.0.9" />
+      <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_linux-2.1.0" />
+      <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus_linux-2.1.1" />
+      <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-8.3.0" />
+      <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_reactive_ble-5.0.1" />
+      <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-2.0.5" />
+      <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_windows-2.1.0" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
