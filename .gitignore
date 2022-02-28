@@ -10,7 +10,7 @@
 .svn/
 
 # IntelliJ related
-*.iml
+
 *.ipr
 *.iws
 
@@ -30,6 +30,7 @@
 .pub-cache/
 .pub/
 .example/build/
+
 
 # Web related
 lib/generated_plugin_registrant.dart
