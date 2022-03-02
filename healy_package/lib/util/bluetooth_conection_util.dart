@@ -568,15 +568,13 @@ class BluetoothConnectionUtil {
           name: loggerName,
           time: DateTime.now(),
         );
-        this.device = device;
-        SharedPrefUtils.setConnectedDevice(device);
+
         HealyWatchSDKImplementation.instance
             .startCheckResUpdate(StreamController());
 
-        Future.delayed(
-          Duration(milliseconds: 1500),
-          () => enableNotification(device.id),
-        );
+
+         enableNotification(device);
+
       } else if (update.connectionState == DeviceConnectionState.disconnected) {
         log(
           'connect connected device $device failure',
@@ -608,9 +606,9 @@ class BluetoothConnectionUtil {
   StreamSubscription? streamSubscription;
   bool isConnect = false;
 
-  Future<void> enableNotification(String deviceId) async {
+  Future<void> enableNotification(HealyDevice device) async {
     log(
-      'enableNotification for device $deviceId',
+      'enableNotification for device ${device.id}',
       name: loggerName,
       time: DateTime.now(),
     );
@@ -618,13 +616,13 @@ class BluetoothConnectionUtil {
     QualifiedCharacteristic _characteristicNotify = QualifiedCharacteristic(
       characteristicId: Uuid.parse("fff7"),
       serviceId: Uuid.parse("fff0"),
-      deviceId: deviceId,
+      deviceId: device.id,
     );
 
     _characteristicData = QualifiedCharacteristic(
       characteristicId: Uuid.parse("fff6"),
       serviceId: Uuid.parse("fff0"),
-      deviceId: deviceId,
+      deviceId: device.id,
     );
 
     await streamSubscription?.cancel();
@@ -635,13 +633,15 @@ class BluetoothConnectionUtil {
       streamController.add(event);
     }, onError: (Object error) {
       log(
-        'enableNotification for device $deviceId error occours $error',
+        'enableNotification for device ${device.id} error occours $error',
         name: loggerName,
         time: DateTime.now(),
       );
     });
     isConnect = true;
     isNeedReconnect = true;
+    this.device = device;
+    SharedPrefUtils.setConnectedDevice(device);
   }
 
   Future<void> disconnect() async {
