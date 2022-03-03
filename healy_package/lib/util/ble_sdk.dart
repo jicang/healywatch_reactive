@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -328,10 +329,14 @@ class BleSdk {
 
   /// enable ancs
   static List<int> enableANCS() {
-    final HealyDeviceBaseParameter deviceBaseParameter =
-        HealyDeviceBaseParameter();
-    deviceBaseParameter.ancsState = true;
-    return setDeviceInfo(deviceBaseParameter);
+    if (Platform.isIOS) {
+      final HealyDeviceBaseParameter deviceBaseParameter =
+          HealyDeviceBaseParameter();
+      deviceBaseParameter.ancsState = true;
+      return setDeviceInfo(deviceBaseParameter);
+    } else {
+      throw Exception("Only ios support ANCS");
+    }
   }
 
   /// set base heart rate (>40)
