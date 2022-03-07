@@ -638,6 +638,9 @@ class BluetoothConnectionUtil {
         time: DateTime.now(),
       );
     });
+    if(Platform.isAndroid){
+      writeData(Uint8List.fromList(BleSdk.disableANCS()));
+    }
     isConnect = true;
     isNeedReconnect = true;
     this.device = device;
@@ -733,10 +736,15 @@ class BluetoothConnectionUtil {
         device == null) {
       return null;
     }
-    await connect(
-      device,
-    );
-    return device;
+    bleManager
+        .scanForDevices(withServices: List.empty())
+        .where((event) => event.id == device.id)
+        .first
+        .then((value) {
+      connect(device);
+      return value;
+    });
+
     // this.connectedDevice=value;connect(value.id);
     // return value;
   }
