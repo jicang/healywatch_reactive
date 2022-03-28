@@ -79,6 +79,7 @@ class BluetoothConnectionUtil {
         }
       }
     });
+
     bleManager.connectedDeviceStream.listen((conectionState) =>
         _deviceConnectionState = conectionState.connectionState);
   }
@@ -666,7 +667,7 @@ class BluetoothConnectionUtil {
       await _connection?.cancel();
       _connection = null;
 
-      await SharedPrefUtils.clearConnectedDevice();
+    //  await SharedPrefUtils.clearConnectedDevice();
     } on Exception catch (e, _) {
       log(
         'disconnect error while disconnect from device $device  error $e',
@@ -736,6 +737,8 @@ class BluetoothConnectionUtil {
         device == null) {
       return null;
     }
+    print("startScan");
+
     bleManager
         .scanForDevices(withServices: List.empty())
         .where((event) => event.id == device.id)
