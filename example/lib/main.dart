@@ -257,6 +257,7 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
   _connected(DiscoveredDevice device) async {
     // HealyWatchSDKImplementation.instance.cancelScanningDevices();
     final healyDevice = HealyDevice(id: device.id, name: device.name);
+    stopScan();
     HealyWatchSDKImplementation.instance.connectDevice(healyDevice);
 
     await SharedPrefUtils.setConnectedDevice(healyDevice);

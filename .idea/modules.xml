@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/example.iml" filepath="$PROJECT_DIR$/.idea/example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/flutter_plugin/flutter_plugin.iml" filepath="$PROJECT_DIR$/flutter_plugin/flutter_plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/healy_package/healy_watch_sdk.iml" filepath="$PROJECT_DIR$/healy_package/healy_watch_sdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/example/healywatch_reactive.iml" filepath="$PROJECT_DIR$/example/healywatch_reactive.iml" />
     </modules>

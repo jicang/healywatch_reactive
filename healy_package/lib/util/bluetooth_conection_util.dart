@@ -499,13 +499,11 @@ class BluetoothConnectionUtil {
       time: DateTime.now(),
     );
     isNeedReconnect = autoReconnect;
-    await reconnectDevice(
-      HealyDevice(
-        id: device.id,
-        name: device.name,
-      ),
-      autoReconnect: autoReconnect,
-    );
+    connect( HealyDevice(
+      id: device.id,
+      name: device.name,
+    ),);
+
   }
 
   Future<void> connect(HealyDevice? device) async {
@@ -738,15 +736,17 @@ class BluetoothConnectionUtil {
       return null;
     }
     print("startScan");
-
-    bleManager
-        .scanForDevices(withServices: List.empty())
-        .where((event) => event.id == device.id)
-        .first
-        .then((value) {
-      connect(device);
-      return value;
+    StreamSubscription<DiscoveredDevice> streamSubscription=bleManager
+        .scanForDevices(withServices: List.empty()).listen((event) { });
+    streamSubscription.onData((data) async {
+      if(data.id==device.id) {
+        print("start connect");
+        streamSubscription.cancel();
+        await connect(device);
+      }
     });
+
+
 
     // this.connectedDevice=value;connect(value.id);
     // return value;

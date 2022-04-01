@@ -3,7 +3,7 @@
   "packages": [
     {
       "name": "archive",
-      "rootUri": "file:///G:/flutter/.pub-cache/hosted/pub.flutter-io.cn/archive-3.2.1",
+      "rootUri": "file:///G:/flutter/.pub-cache/hosted/pub.flutter-io.cn/archive-3.3.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -117,7 +117,7 @@
     },
     {
       "name": "dio",
-      "rootUri": "file:///G:/flutter/.pub-cache/hosted/pub.flutter-io.cn/dio-4.0.4",
+      "rootUri": "file:///G:/flutter/.pub-cache/hosted/pub.flutter-io.cn/dio-4.0.6",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -162,6 +162,12 @@
       "rootUri": "file:///G:/flutter/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_plugin",
+      "rootUri": "../../flutter_plugin",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
     },
     {
       "name": "flutter_reactive_ble",
@@ -447,7 +453,7 @@
     },
     {
       "name": "win32",
-      "rootUri": "file:///G:/flutter/.pub-cache/hosted/pub.flutter-io.cn/win32-2.4.1",
+      "rootUri": "file:///G:/flutter/.pub-cache/hosted/pub.flutter-io.cn/win32-2.5.1",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     },
@@ -464,7 +470,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2022-03-02T08:35:20.307326Z",
+  "generated": "2022-04-01T07:25:49.764975Z",
   "generator": "pub",
   "generatorVersion": "2.16.1"
 }

@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_plugin/flutter_plugin.dart';
 
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
@@ -295,12 +297,20 @@ class DeviceDetailState extends State<DeviceDetail> {
   }
 
   unPair() async {
-    await SharedPrefUtils.clearConnectedDevice();
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (_) => ScanDeviceWidget(),
-      ),
-      (route) => false,
-    );
+    getPairedDevice();
+     await SharedPrefUtils.clearConnectedDevice();
+    // Navigator.of(context).pushAndRemoveUntil(
+    //   MaterialPageRoute(
+    //     builder: (_) => ScanDeviceWidget(),
+    //   ),
+    //   (route) => false,
+    // );
+  }
+  MethodChannel methodChannel=new MethodChannel("pairedDevice");
+  getPairedDevice() async{
+    var device=await SharedPrefUtils.getConnectedDevice();
+    var version=await FlutterPlugin.isBind(device!.id);
+    print("${version}");
+   //   methodChannel.invokeMethod("paired");
   }
 }
