@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:isolate';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_notification_listener/flutter_notification_listener.dart';
 import 'package:flutter_plugin/flutter_plugin.dart';
 
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
@@ -171,7 +174,22 @@ class DeviceDetailState extends State<DeviceDetail> {
       },
     );
   }
-
+  static void _callback(NotificationEvent evt) {
+    print("send evt to ui: $evt");
+    final SendPort? send = IsolateNameServer.lookupPortByName("_listener_");
+    if (send == null) print("can't find the sender");
+    send?.send(evt);
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    init();
+    //selected = BleSdk.generateValue(list.length);
+  }
+  init(){
+    NotificationsListener.initialize(callbackHandle: _callback);
+  }
   Widget getDialog() {
     return new AlertDialog(
       title: Container(
@@ -182,8 +200,7 @@ class DeviceDetailState extends State<DeviceDetail> {
       actions: <Widget>[
         FlatButton(
           onPressed: () {
-            HealyWatchSDKImplementation.instance.disconnectDevice();
-            Navigator.pop(context, true);
+            exitApp();
           },
           child: Text("Confirm"),
         ),
@@ -313,5 +330,10 @@ class DeviceDetailState extends State<DeviceDetail> {
     var isBind=await FlutterPlugin.isBind(device!.id);
     print("${isBind}");
       //methodChannel.invokeMethod("paired");
+  }
+
+  void exitApp() async{
+    await HealyWatchSDKImplementation.instance.disconnectDevice();
+    Navigator.pop(context, true);
   }
 }

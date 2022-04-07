@@ -1,7 +1,10 @@
 
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:healywatch_reactive/activity/AncsPage.dart';
+import 'package:healywatch_reactive/activity/AndroidNotifycationPage.dart';
 
 import '../button_view.dart';
 import 'AutomicHeartPage.dart';
@@ -116,7 +119,10 @@ class DeviceSettingPageState extends State<DeviceSettingPage> {
                 "AncsState",
                 action: () => toAncsStatePage(),
               ),
-
+              Visibility(child:  ButtonView(
+                "NotificationListener",
+                action: () => toNotificationPage(),
+              ),visible: Platform.isAndroid,)
             ],
           ),
         ],
@@ -210,6 +216,11 @@ class DeviceSettingPageState extends State<DeviceSettingPage> {
   toAncsStatePage() {
     Navigator.of(context).push(new MaterialPageRoute(builder: (context) {
       return AncsPage();
+    }));
+  }
+  toNotificationPage() {
+    Navigator.of(context).push(new MaterialPageRoute(builder: (context) {
+      return AndroidNotifycationPage();
     }));
   }
 }

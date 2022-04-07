@@ -94,7 +94,6 @@ class BluetoothConnectionUtil {
     // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     HealyDevice? device = await SharedPrefUtils.getConnectedDevice();
     if (device != null) {
-
       await reconnectDevice(device);
     }
   }
@@ -501,11 +500,12 @@ class BluetoothConnectionUtil {
       time: DateTime.now(),
     );
     isNeedReconnect = autoReconnect;
-    connect( HealyDevice(
-      id: device.id,
-      name: device.name,
-    ),);
-
+    connect(
+      HealyDevice(
+        id: device.id,
+        name: device.name,
+      ),
+    );
   }
 
   Future<void> connect(HealyDevice? device) async {
@@ -573,9 +573,7 @@ class BluetoothConnectionUtil {
         HealyWatchSDKImplementation.instance
             .startCheckResUpdate(StreamController());
 
-
-         enableNotification(device);
-
+        enableNotification(device);
       } else if (update.connectionState == DeviceConnectionState.disconnected) {
         log(
           'connect connected device $device failure',
@@ -639,11 +637,10 @@ class BluetoothConnectionUtil {
         time: DateTime.now(),
       );
     });
-    if(Platform.isAndroid){
+    if (Platform.isAndroid) {
       writeData(Uint8List.fromList(BleSdk.disableANCS()));
-    }else{
+    } else {
       writeData(Uint8List.fromList(BleSdk.enableANCS()));
-
     }
     isConnect = true;
     isNeedReconnect = true;
@@ -670,7 +667,7 @@ class BluetoothConnectionUtil {
       await _connection?.cancel();
       _connection = null;
 
-    //  await SharedPrefUtils.clearConnectedDevice();
+      //  await SharedPrefUtils.clearConnectedDevice();
     } on Exception catch (e, _) {
       log(
         'disconnect error while disconnect from device $device  error $e',
@@ -740,29 +737,26 @@ class BluetoothConnectionUtil {
         device == null) {
       return null;
     }
-   // print("stopScan");
-   await stopScan();
-    bool isBind=await FlutterPlugin.isBind(device.id);
+    // print("stopScan");
+    await stopScan();
+    bool isBind = await FlutterPlugin.isBind(device.id);
     print(isBind);
-    if(isBind){
+    if (isBind) {
       await connect(device);
-
-    }else{
-      StreamSubscription<List<DiscoveredDevice>> streamSubscription=startScan("1963yh", List.empty()).listen((event) { });
+    } else {
+      StreamSubscription<List<DiscoveredDevice>> streamSubscription =
+          startScan(HealyWatchSDKImplementation.filterName, List.empty()).listen((event) {});
       streamSubscription.onData((data) async {
-        data.forEach((element) async{
-          if(element.id.toString()==device.id) {
+        data.forEach((element) async {
+          if (element.id.toString() == device.id) {
             print("start connect");
             streamSubscription.cancel();
+            stopScan();
             await connect(device);
           }
         });
-
       });
     }
-
-
-
 
     // this.connectedDevice=value;connect(value.id);
     // return value;

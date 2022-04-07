@@ -32,6 +32,7 @@ dependencies:
   connectivity: ^3.0.6
   shared_preferences: any
   device_info_plus: ^3.2.1
+  flutter_notification_listener: ^1.0.7
   flutter_plugin:
     path: ../flutter_plugin
   healy_watch_sdk:
