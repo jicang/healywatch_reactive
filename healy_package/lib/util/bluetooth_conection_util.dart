@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter_plugin/flutter_plugin.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
 import 'package:healy_watch_sdk/model/models.dart';
@@ -93,6 +94,7 @@ class BluetoothConnectionUtil {
     // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     HealyDevice? device = await SharedPrefUtils.getConnectedDevice();
     if (device != null) {
+
       await reconnectDevice(device);
     }
   }
@@ -639,6 +641,9 @@ class BluetoothConnectionUtil {
     });
     if(Platform.isAndroid){
       writeData(Uint8List.fromList(BleSdk.disableANCS()));
+    }else{
+      writeData(Uint8List.fromList(BleSdk.enableANCS()));
+
     }
     isConnect = true;
     isNeedReconnect = true;
@@ -729,22 +734,33 @@ class BluetoothConnectionUtil {
     );
     await _connection?.cancel();
     _connection = null;
-    await Future.delayed(Duration(seconds: 2));
+    //await Future.delayed(Duration(seconds: 2));
     if (bleManager.status == BleStatus.poweredOff ||
         isFirmwareUpdating ||
         device == null) {
       return null;
     }
-    print("startScan");
-    StreamSubscription<DiscoveredDevice> streamSubscription=bleManager
-        .scanForDevices(withServices: List.empty()).listen((event) { });
-    streamSubscription.onData((data) async {
-      if(data.id==device.id) {
-        print("start connect");
-        streamSubscription.cancel();
-        await connect(device);
-      }
-    });
+   // print("stopScan");
+   await stopScan();
+    bool isBind=await FlutterPlugin.isBind(device.id);
+    print(isBind);
+    if(isBind){
+      await connect(device);
+
+    }else{
+      StreamSubscription<List<DiscoveredDevice>> streamSubscription=startScan("1963yh", List.empty()).listen((event) { });
+      streamSubscription.onData((data) async {
+        data.forEach((element) async{
+          if(element.id.toString()==device.id) {
+            print("start connect");
+            streamSubscription.cancel();
+            await connect(device);
+          }
+        });
+
+      });
+    }
+
 
 
 

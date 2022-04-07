@@ -105,7 +105,7 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
     final results = deviceId == null
         ? StreamBuilder<List<DiscoveredDevice>>(
             stream: HealyWatchSDKImplementation.instance
-                .scanResults(filterForName: "healy"),
+                .scanResults(filterForName: "1963"),
             initialData: [],
             builder: (c, snapshot) => ListView(
               children: ListTile.divideTiles(

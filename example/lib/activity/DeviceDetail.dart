@@ -243,6 +243,8 @@ class DeviceDetailState extends State<DeviceDetail> {
   }
 
   void itemClick(String value) {
+    //getPairedDevice();
+
     Navigator.pushNamed(context, value);
   }
 
@@ -297,20 +299,19 @@ class DeviceDetailState extends State<DeviceDetail> {
   }
 
   unPair() async {
-    getPairedDevice();
      await SharedPrefUtils.clearConnectedDevice();
-    // Navigator.of(context).pushAndRemoveUntil(
-    //   MaterialPageRoute(
-    //     builder: (_) => ScanDeviceWidget(),
-    //   ),
-    //   (route) => false,
-    // );
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (_) => ScanDeviceWidget(),
+      ),
+      (route) => false,
+    );
   }
   MethodChannel methodChannel=new MethodChannel("pairedDevice");
   getPairedDevice() async{
     var device=await SharedPrefUtils.getConnectedDevice();
-    var version=await FlutterPlugin.isBind(device!.id);
-    print("${version}");
-   //   methodChannel.invokeMethod("paired");
+    var isBind=await FlutterPlugin.isBind(device!.id);
+    print("${isBind}");
+      //methodChannel.invokeMethod("paired");
   }
 }
