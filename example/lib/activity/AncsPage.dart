@@ -142,6 +142,7 @@ class AncsPageState extends State<AncsPage> {
     HealyDeviceBaseParameter healyDeviceBaseParameter =
         await HealyWatchSDKImplementation.instance.getDeviceBaseParameter();
     selected = healyDeviceBaseParameter.ancsList;
+    enableAncs=healyDeviceBaseParameter.ancsState;
     setState(() {});
   }
 

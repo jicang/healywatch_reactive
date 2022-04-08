@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter_plugin/flutter_plugin.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
 import 'package:healy_watch_sdk/model/models.dart';
@@ -79,6 +80,7 @@ class BluetoothConnectionUtil {
         }
       }
     });
+
     bleManager.connectedDeviceStream.listen((conectionState) =>
         _deviceConnectionState = conectionState.connectionState);
   }
@@ -498,12 +500,11 @@ class BluetoothConnectionUtil {
       time: DateTime.now(),
     );
     isNeedReconnect = autoReconnect;
-    await reconnectDevice(
+    connect(
       HealyDevice(
         id: device.id,
         name: device.name,
       ),
-      autoReconnect: autoReconnect,
     );
   }
 
@@ -572,9 +573,7 @@ class BluetoothConnectionUtil {
         HealyWatchSDKImplementation.instance
             .startCheckResUpdate(StreamController());
 
-
-         enableNotification(device);
-
+        enableNotification(device);
       } else if (update.connectionState == DeviceConnectionState.disconnected) {
         log(
           'connect connected device $device failure',
@@ -638,8 +637,10 @@ class BluetoothConnectionUtil {
         time: DateTime.now(),
       );
     });
-    if(Platform.isAndroid){
+    if (Platform.isAndroid) {
       writeData(Uint8List.fromList(BleSdk.disableANCS()));
+    } else {
+      writeData(Uint8List.fromList(BleSdk.enableANCS()));
     }
     isConnect = true;
     isNeedReconnect = true;
@@ -666,7 +667,7 @@ class BluetoothConnectionUtil {
       await _connection?.cancel();
       _connection = null;
 
-      await SharedPrefUtils.clearConnectedDevice();
+      //  await SharedPrefUtils.clearConnectedDevice();
     } on Exception catch (e, _) {
       log(
         'disconnect error while disconnect from device $device  error $e',
@@ -730,20 +731,32 @@ class BluetoothConnectionUtil {
     );
     await _connection?.cancel();
     _connection = null;
-    await Future.delayed(Duration(seconds: 2));
+    //await Future.delayed(Duration(seconds: 2));
     if (bleManager.status == BleStatus.poweredOff ||
         isFirmwareUpdating ||
         device == null) {
       return null;
     }
-    bleManager
-        .scanForDevices(withServices: List.empty())
-        .where((event) => event.id == device.id)
-        .first
-        .then((value) {
-      connect(device);
-      return value;
-    });
+    // print("stopScan");
+    await stopScan();
+    bool isBind = await FlutterPlugin.isBind(device.id);
+    print(isBind);
+    if (isBind) {
+      await connect(device);
+    } else {
+      StreamSubscription<List<DiscoveredDevice>> streamSubscription =
+          startScan(HealyWatchSDKImplementation.filterName, List.empty()).listen((event) {});
+      streamSubscription.onData((data) async {
+        data.forEach((element) async {
+          if (element.id.toString() == device.id) {
+            print("start connect");
+            streamSubscription.cancel();
+            stopScan();
+            await connect(device);
+          }
+        });
+      });
+    }
 
     // this.connectedDevice=value;connect(value.id);
     // return value;

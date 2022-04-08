@@ -105,7 +105,7 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
     final results = deviceId == null
         ? StreamBuilder<List<DiscoveredDevice>>(
             stream: HealyWatchSDKImplementation.instance
-                .scanResults(filterForName: "healy"),
+                .scanResults(),
             initialData: [],
             builder: (c, snapshot) => ListView(
               children: ListTile.divideTiles(
@@ -257,6 +257,7 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
   _connected(DiscoveredDevice device) async {
     // HealyWatchSDKImplementation.instance.cancelScanningDevices();
     final healyDevice = HealyDevice(id: device.id, name: device.name);
+    stopScan();
     HealyWatchSDKImplementation.instance.connectDevice(healyDevice);
 
     await SharedPrefUtils.setConnectedDevice(healyDevice);
