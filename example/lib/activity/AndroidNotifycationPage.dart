@@ -70,6 +70,7 @@ class AndroidNotifycationPageState extends State<AndroidNotifycationPage> {
 
   ReceivePort port = ReceivePort();
   Future<void> initPlatformState() async {
+    NotificationsListener.initialize(callbackHandle: _callback);
 
     // this can fix restart<debug> can't handle error
     IsolateNameServer.removePortNameMapping("_listener_");
@@ -124,7 +125,12 @@ class AndroidNotifycationPageState extends State<AndroidNotifycationPage> {
     healyWatchSDK.setNotifyData(HealyNotifier(healyNotifierMode: healyNotifierMode, info: event.text.toString(), title: event.title.toString()));
     print(event.toString());
   }
-
+  static void _callback(NotificationEvent evt) {
+    print("send evt to ui: $evt");
+    final SendPort? send = IsolateNameServer.lookupPortByName("_listener_");
+    if (send == null) print("can't find the sender");
+    send?.send(evt);
+  }
 
   void startListening() async {
     print("start listening");
