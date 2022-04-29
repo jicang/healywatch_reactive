@@ -655,7 +655,7 @@ class BluetoothConnectionUtil {
         name: loggerName,
         time: DateTime.now(),
       );
-      if(Platform.isIOS){ //ios需要关闭ancs
+      if(Platform.isIOS){ //ios需要关闭ancs   disableANCS()
         writeData(Uint8List.fromList(BleSdk.disableANCS()));
       }
 
