@@ -655,7 +655,9 @@ class BluetoothConnectionUtil {
         name: loggerName,
         time: DateTime.now(),
       );
-
+      if (Platform.isIOS) {
+        writeData(Uint8List.fromList(BleSdk.disableANCS()));
+      }
       isConnect = false;
       isNeedReconnect = false;
       this.device = null;
@@ -745,7 +747,8 @@ class BluetoothConnectionUtil {
       await connect(device);
     } else {
       StreamSubscription<List<DiscoveredDevice>> streamSubscription =
-          startScan(HealyWatchSDKImplementation.filterName, List.empty()).listen((event) {});
+          startScan(HealyWatchSDKImplementation.filterName, List.empty())
+              .listen((event) {});
       streamSubscription.onData((data) async {
         data.forEach((element) async {
           if (element.id.toString() == device.id) {
