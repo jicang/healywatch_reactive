@@ -328,7 +328,7 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
     deviceBaseParameter.wearingWrist = wearingWrist;
     bool isSuccess = await HealyWatchSDKImplementation.instance
         .setDeviceBaseParameter(deviceBaseParameter);
-    print("$isSuccess");
+    debugPrint("$isSuccess");
   }
 
   Widget getDialog(String dataType, String msg) {

@@ -136,7 +136,7 @@ class WorkFaceStylePageState extends State<WorkFaceStylePage> {
   setWatchStyle() async{
     isSet = true;
     bool isSuccess=await HealyWatchSDKImplementation.instance.setWatchFaceStyle(HealyWatchFaceStyle(selectedIndex));
-    print("$isSuccess");
+    debugPrint("$isSuccess");
 
   }
 

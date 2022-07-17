@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter_plugin/flutter_plugin.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
@@ -62,12 +62,12 @@ class BluetoothConnectionUtil {
   BluetoothConnectionUtil() {
     bleManager = FlutterReactiveBle();
     bleManager.statusStream.listen((event) async {
-      print(event);
+      debugPrint("$event");
       if (event == BleStatus.poweredOff) {
         //disconnect();
       } else if (event == BleStatus.ready) {
         bool? isFirmware = await SharedPrefUtils.isFirmware();
-        print("isFirmware $isFirmware");
+        debugPrint("isFirmware $isFirmware");
         if (isFirmware != null && isFirmware) {
           final Directory directory = await getApplicationDocumentsDirectory();
           final String rootPath = directory.path;
@@ -628,7 +628,7 @@ class BluetoothConnectionUtil {
     final stream = bleManager.subscribeToCharacteristic(_characteristicNotify);
 
     streamSubscription = stream.listen((event) {
-      print("notifyData ${BleSdk.hex2String(event)}");
+      debugPrint("notifyData ${BleSdk.hex2String(event)}");
       streamController.add(event);
     }, onError: (Object error) {
       log(
@@ -743,7 +743,7 @@ class BluetoothConnectionUtil {
     // print("stopScan");
     await stopScan();
     bool isBind = await FlutterPlugin.isBind(device.id);
-    print(isBind);
+    debugPrint("$isBind");
     if (isBind) {
       await connect(device);
     } else {
@@ -752,7 +752,7 @@ class BluetoothConnectionUtil {
       streamSubscription.onData((data) async {
         data.forEach((element) async {
           if (element.id.toString() == device.id) {
-            print("start connect");
+            debugPrint("start connect");
             streamSubscription.cancel();
             stopScan();
             await connect(device);

@@ -201,7 +201,7 @@ class ExercisePageState extends State<ExercisePage> {
         var cal = event.burnedCalories;
         var time = event.timeInSeconds;
         var isFinish=event.isFinish;
-        print("isFinish $isFinish");
+        debugPrint("isFinish $isFinish");
         if(isFinish){
           cancelTimer();
           showMsgDialog(context, "isFinish", "");
@@ -235,7 +235,7 @@ class ExercisePageState extends State<ExercisePage> {
               distanceInKm: 0.5,
               speedMinute: 5,
               speedSeconds: 30)); //心跳包。从app打开运动模式从app获取距离以及配速数据发送给手环
-      print("$success");
+      debugPrint("$success");
     });
   }
 

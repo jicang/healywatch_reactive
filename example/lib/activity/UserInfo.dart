@@ -176,7 +176,7 @@ class UserInfoState extends State<UserInfo> {
   }
 
   void itemClick(int value) {
-    print(value);
+    debugPrint("$value");
   }
 
   setGenderValue(HealyGender? value) {
@@ -185,7 +185,7 @@ class UserInfoState extends State<UserInfo> {
   }
 
   textSaved(String value) {
-    print(value);
+    debugPrint(value);
   }
 
   Widget getDialog(BuildContext context,String dataType, String msg) {

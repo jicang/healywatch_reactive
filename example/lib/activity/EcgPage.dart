@@ -216,27 +216,27 @@ class EcgPageState extends State<EcgPage> {
               FlSpot flSpot = FlSpot(i.toDouble(), filteredData[i]);
               listFlSpot.add(flSpot);
             }
-            print(listFlSpot.length);
+            debugPrint("${listFlSpot.length}");
           });
         } else if (event is HealyPPGData) {
         } else if (event is HealyEnterEcgData) {
           EnterEcgResultCode ecgResultCode = event.ecgResultCode;
-          print("${ecgResultCode.index}");
+          debugPrint("${ecgResultCode.index}");
         } else if (event is HealyEcgSuccessData) {
           String data = getHrvShowText(event);
           showMsgDialog(context, "EcgMeasureResult", data);
           listFlSpot.clear();
           showPPGList.clear();
         } else if (event is HealyEcgFailureData) {
-          print(getReasonInfo(event.errorCode));
+          debugPrint(getReasonInfo(event.errorCode));
         } else if (event is HealyOnlyPPGFinish) {
-          print("HealyOnlyPPGFinish ${event.ppgData.length}");
+          debugPrint("HealyOnlyPPGFinish ${event.ppgData.length}");
         }
       });
     } else {
       bool isSuccess =
           await HealyWatchSDKImplementation.instance.stopEcgMessuring();
-      print("$isSuccess");
+      debugPrint("$isSuccess");
     }
   }
 
@@ -250,7 +250,7 @@ class EcgPageState extends State<EcgPage> {
     int lowBloodPressure = healyEcgSuccessData.lowBloodPressureValue;
     int moodValue = healyEcgSuccessData.moodValue;
     int breathRate = healyEcgSuccessData.breathRate;
-    print("ppgLength${healyEcgSuccessData.ppgData.length}"
+    debugPrint("ppgLength${healyEcgSuccessData.ppgData.length}"
         " ecgLength${healyEcgSuccessData.ecgData.length}"
         " qualityPointsLength${healyEcgSuccessData.qualityPoints.length}");
     String showText = "Date:$date\n"
