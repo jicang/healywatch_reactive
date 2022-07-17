@@ -41,7 +41,7 @@ public class SwiftFlutterPlugin: NSObject, Flutter.FlutterPlugin {
         let arr2 = centralManager.retrievePeripherals(withIdentifiers: [uuid!]);
         
         if arr2.count == 0 {
-            return false
+            return true
         } else {
             for pripheralID in arr2 {
                 let uuidStr = pripheralID.identifier.uuidString
@@ -49,7 +49,7 @@ public class SwiftFlutterPlugin: NSObject, Flutter.FlutterPlugin {
                     return true
                 }
             }
-            return false
+            return true
         }
 //        let mybool = arr2.count != 0;
 //        return mybool

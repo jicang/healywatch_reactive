@@ -189,8 +189,9 @@ class DeviceDetailState extends State<DeviceDetail> {
     //selected = BleSdk.generateValue(list.length);
   }
   init() async {
-    NotificationsListener.initialize(callbackHandle: _callback);
-
+    if(Platform.isAndroid){
+      NotificationsListener.initialize(callbackHandle: _callback);
+    }
     var device=await SharedPrefUtils.getConnectedDevice();
     if(device!=null){
       connected();
