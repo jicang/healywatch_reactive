@@ -92,7 +92,7 @@ class NotifyPageState extends State<NotifyPage> {
       title: title,
     );
     bool success = await healyWatchSDK.setNotifyData(healyNotifier);
-    print("$success");
+    debugPrint("$success");
     setState(() {});
   }
 }

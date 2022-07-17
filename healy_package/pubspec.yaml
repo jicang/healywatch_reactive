@@ -17,11 +17,9 @@ dependencies:
   nordic_dfu: ^3.2.0
   archive: ^3.1.6
   path_provider: ^2.0.0
+
   flutter_plugin:
-    git:
-      url: https://github.com/jicang/healywatch_reactive.git
-      ref: master
-      path: flutter_plugin
+    path: ../flutter_plugin
 dependency_overrides:
   reactive_ble_mobile: '5.0.1'
 

@@ -32,28 +32,28 @@ class DeviceInfoPageState extends State<DeviceInfoPage> {
     stream.listen((function) {
       switch (function) {
         case HealyFunction.camera:
-          print("camera");
+          debugPrint("camera");
           break;
         case HealyFunction.rejectTel:
-          print("rejectTel");
+          debugPrint("rejectTel");
           break;
         case HealyFunction.tel:
-          print("tel");
+          debugPrint("tel");
           break;
         case HealyFunction.findPhone:
-          print("findPhone");
+          debugPrint("findPhone");
           break;
         case HealyFunction.musicControlPlay:
-          print("musicControlPlay");
+          debugPrint("musicControlPlay");
           break;
         case HealyFunction.musicControlNext:
-          print("musicControlNext");
+          debugPrint("musicControlNext");
           break;
         case HealyFunction.musicControlPre:
-          print("musicControlPre");
+          debugPrint("musicControlPre");
           break;
         case HealyFunction.musicControlPause:
-          print("musicControlPause");
+          debugPrint("musicControlPause");
           break;
       }
     });

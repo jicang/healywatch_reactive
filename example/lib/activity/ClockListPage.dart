@@ -227,7 +227,7 @@ class ClockState extends State<ClockListPage> {
 
 
   syncFinish() {
-    print("end s");
+    debugPrint("end s");
     //Navigator.of(context).pop(loadingDialog);
     setState(() {});
   }

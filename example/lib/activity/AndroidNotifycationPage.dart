@@ -81,7 +81,7 @@ class AndroidNotifycationPageState extends State<AndroidNotifycationPage> {
     // NotificationsListener.receivePort.listen((evt) => onData(evt));
 
     var isR = await NotificationsListener.isRunning;
-    print("""Service is ${isR}aleary running""");
+    debugPrint("""Service is ${isR}aleary running""");
 
 
   }
@@ -123,20 +123,20 @@ class AndroidNotifycationPageState extends State<AndroidNotifycationPage> {
         break;
     }
     healyWatchSDK.setNotifyData(HealyNotifier(healyNotifierMode: healyNotifierMode, info: event.text.toString(), title: event.title.toString()));
-    print(event.toString());
+    debugPrint(event.toString());
   }
   static void _callback(NotificationEvent evt) {
-    print("send evt to ui: $evt");
+    debugPrint("send evt to ui: $evt");
     final SendPort? send = IsolateNameServer.lookupPortByName("_listener_");
-    if (send == null) print("can't find the sender");
+    if (send == null) debugPrint("can't find the sender");
     send?.send(evt);
   }
 
   void startListening() async {
-    print("start listening");
+    debugPrint("start listening");
     var hasPermission = await NotificationsListener.hasPermission;
     if (!hasPermission!) {
-      print("no permission, so open settings");
+      debugPrint("no permission, so open settings");
       NotificationsListener.openPermissionSettings();
       return;
     }
@@ -151,7 +151,7 @@ class AndroidNotifycationPageState extends State<AndroidNotifycationPage> {
   }
 
   void stopListening() async {
-    print("stop listening");
+    debugPrint("stop listening");
 
 
 

@@ -313,7 +313,7 @@ class EditClockPageState extends State<EditClockPage> {
   void setClock() async {
     bool isSuccess = await HealyWatchSDKImplementation.instance.editClock(list);
     showMsgDialog(context, "SetAlarmClock");
-    print("$isSuccess");
+    debugPrint("$isSuccess");
   }
 
   bool isEmpty(String value) {

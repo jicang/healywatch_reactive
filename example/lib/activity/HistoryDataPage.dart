@@ -323,7 +323,7 @@ class HistoryDataPageState extends State<HistoryDataPage> {
         Stream<HealyBaseModel> stream =
             HealyWatchSDKImplementation.instance.getAllDataFromWatch();
         stream.listen((event) {
-          print(event.toString());
+          debugPrint(event.toString());
         }).onDone(() {
           syncFinish();
         });
@@ -367,7 +367,7 @@ class HistoryDataPageState extends State<HistoryDataPage> {
         await HealyWatchSDKImplementation.instance.deleteAllECGData();
         break;
     }
-    print("delete");
+    debugPrint("delete");
     startReadData();
   }
 

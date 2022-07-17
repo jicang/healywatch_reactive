@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
@@ -39,7 +40,7 @@ class DeviceDetailState extends State<DeviceDetail> {
   @override
   void dispose() {
     super.dispose();
-    print("dispose");
+    debugPrint("dispose");
     HealyWatchSDKImplementation.instance.disconnectDevice();
   }
 
@@ -175,9 +176,9 @@ class DeviceDetailState extends State<DeviceDetail> {
     );
   }
   static void _callback(NotificationEvent evt) {
-    print("send evt to ui: $evt");
+    debugPrint("send evt to ui: $evt");
     final SendPort? send = IsolateNameServer.lookupPortByName("_listener_");
-    if (send == null) print("can't find the sender");
+    if (send == null) debugPrint("can't find the sender");
     send?.send(evt);
   }
   @override
@@ -187,8 +188,15 @@ class DeviceDetailState extends State<DeviceDetail> {
     init();
     //selected = BleSdk.generateValue(list.length);
   }
-  init(){
+  init() async {
     NotificationsListener.initialize(callbackHandle: _callback);
+
+    var device=await SharedPrefUtils.getConnectedDevice();
+    if(device!=null){
+      connected();
+    }
+
+
   }
   Widget getDialog() {
     return new AlertDialog(
@@ -326,9 +334,15 @@ class DeviceDetailState extends State<DeviceDetail> {
   }
   MethodChannel methodChannel=new MethodChannel("pairedDevice");
   getPairedDevice() async{
+
+
     var device=await SharedPrefUtils.getConnectedDevice();
     var isBind=await FlutterPlugin.isBind(device!.id);
-    print("${isBind}");
+    if(device!=null&&isBind){
+
+    }
+
+    debugPrint("${isBind}");
       //methodChannel.invokeMethod("paired");
   }
 
