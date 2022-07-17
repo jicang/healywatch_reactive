@@ -5,7 +5,6 @@
         <entry key="archive">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/archive-3.3.0/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/archive-3.3.0/lib" />
             </list>
           </value>
@@ -13,7 +12,6 @@
         <entry key="async">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/async-2.8.2/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/async-2.8.1/lib" />
             </list>
           </value>
@@ -21,7 +19,6 @@
         <entry key="boolean_selector">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/boolean_selector-2.1.0/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/boolean_selector-2.1.0/lib" />
             </list>
           </value>
@@ -29,7 +26,6 @@
         <entry key="characters">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/characters-1.2.0/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/characters-1.1.0/lib" />
             </list>
           </value>
@@ -37,7 +33,6 @@
         <entry key="charcode">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/charcode-1.3.1/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/charcode-1.3.1/lib" />
             </list>
           </value>
@@ -45,7 +40,6 @@
         <entry key="clock">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/clock-1.1.0/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/clock-1.1.0/lib" />
             </list>
           </value>
@@ -53,7 +47,6 @@
         <entry key="collection">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/collection-1.15.0/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/collection-1.15.0/lib" />
             </list>
           </value>
@@ -89,7 +82,7 @@
         <entry key="crypto">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/crypto-3.0.2/lib" />
+              <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/crypto-3.0.2/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/crypto-3.0.1/lib" />
             </list>
           </value>
@@ -146,7 +139,6 @@
         <entry key="dio">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/dio-4.0.6/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/dio-4.0.6/lib" />
             </list>
           </value>
@@ -161,7 +153,6 @@
         <entry key="fake_async">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/fake_async-1.2.0/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/fake_async-1.2.0/lib" />
             </list>
           </value>
@@ -169,7 +160,7 @@
         <entry key="ffi">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/ffi-1.2.1/lib" />
+              <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/ffi-1.2.1/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/ffi-1.1.2/lib" />
             </list>
           </value>
@@ -177,7 +168,6 @@
         <entry key="file">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/file-6.1.2/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/file-6.1.2/lib" />
             </list>
           </value>
@@ -185,7 +175,7 @@
         <entry key="fixnum">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/fixnum-1.0.1/lib" />
+              <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/fixnum-1.0.1/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/fixnum-1.0.0/lib" />
             </list>
           </value>
@@ -200,7 +190,6 @@
         <entry key="flutter">
           <value>
             <list>
-              <option value="G:/flutter/packages/flutter/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/packages/flutter/lib" />
             </list>
           </value>
@@ -215,7 +204,6 @@
         <entry key="flutter_reactive_ble">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/flutter_reactive_ble-5.0.1/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/flutter_reactive_ble-5.0.1/lib" />
             </list>
           </value>
@@ -223,7 +211,6 @@
         <entry key="flutter_test">
           <value>
             <list>
-              <option value="G:/flutter/packages/flutter_test/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/packages/flutter_test/lib" />
             </list>
           </value>
@@ -231,7 +218,6 @@
         <entry key="flutter_web_plugins">
           <value>
             <list>
-              <option value="G:/flutter/packages/flutter_web_plugins/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/packages/flutter_web_plugins/lib" />
             </list>
           </value>
@@ -239,7 +225,6 @@
         <entry key="functional_data">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/functional_data-1.0.0/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/functional_data-1.0.0/lib" />
             </list>
           </value>
@@ -247,7 +232,7 @@
         <entry key="http_parser">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/http_parser-4.0.1/lib" />
+              <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/http_parser-4.0.1/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/http_parser-4.0.0/lib" />
             </list>
           </value>
@@ -255,7 +240,6 @@
         <entry key="intl">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/intl-0.17.0/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/intl-0.17.0/lib" />
             </list>
           </value>
@@ -263,7 +247,6 @@
         <entry key="js">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/js-0.6.3/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/js-0.6.3/lib" />
             </list>
           </value>
@@ -271,22 +254,13 @@
         <entry key="matcher">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/matcher-0.12.11/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/matcher-0.12.10/lib" />
-            </list>
-          </value>
-        </entry>
-        <entry key="material_color_utilities">
-          <value>
-            <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/material_color_utilities-0.1.3/lib" />
             </list>
           </value>
         </entry>
         <entry key="meta">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/meta-1.7.0/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/meta-1.7.0/lib" />
             </list>
           </value>
@@ -301,7 +275,6 @@
         <entry key="nordic_dfu">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/nordic_dfu-3.3.0/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/nordic_dfu-3.3.0/lib" />
             </list>
           </value>
@@ -309,7 +282,6 @@
         <entry key="path">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path-1.8.0/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path-1.8.0/lib" />
             </list>
           </value>
@@ -317,7 +289,7 @@
         <entry key="path_provider">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider-2.0.11/lib" />
+              <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider-2.0.11/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider-2.0.9/lib" />
             </list>
           </value>
@@ -325,7 +297,7 @@
         <entry key="path_provider_android">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_android-2.0.14/lib" />
+              <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_android-2.0.16/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_android-2.0.11/lib" />
             </list>
           </value>
@@ -333,7 +305,7 @@
         <entry key="path_provider_ios">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_ios-2.0.9/lib" />
+              <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_ios-2.0.10/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_ios-2.0.7/lib" />
             </list>
           </value>
@@ -341,7 +313,7 @@
         <entry key="path_provider_linux">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_linux-2.1.7/lib" />
+              <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_linux-2.1.7/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_linux-2.1.5/lib" />
             </list>
           </value>
@@ -349,7 +321,7 @@
         <entry key="path_provider_macos">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_macos-2.0.6/lib" />
+              <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_macos-2.0.6/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_macos-2.0.5/lib" />
             </list>
           </value>
@@ -357,7 +329,7 @@
         <entry key="path_provider_platform_interface">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_platform_interface-2.0.4/lib" />
+              <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_platform_interface-2.0.4/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_platform_interface-2.0.3/lib" />
             </list>
           </value>
@@ -365,7 +337,7 @@
         <entry key="path_provider_windows">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_windows-2.0.7/lib" />
+              <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_windows-2.0.7/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_windows-2.0.5/lib" />
             </list>
           </value>
@@ -387,7 +359,6 @@
         <entry key="platform">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/platform-3.1.0/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/platform-3.1.0/lib" />
             </list>
           </value>
@@ -395,7 +366,6 @@
         <entry key="plugin_platform_interface">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/plugin_platform_interface-2.1.2/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/plugin_platform_interface-2.1.2/lib" />
             </list>
           </value>
@@ -403,7 +373,6 @@
         <entry key="process">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/process-4.2.4/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/process-4.2.4/lib" />
             </list>
           </value>
@@ -411,7 +380,7 @@
         <entry key="protobuf">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/protobuf-2.1.0/lib" />
+              <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/protobuf-2.1.0/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/protobuf-2.0.1/lib" />
             </list>
           </value>
@@ -426,7 +395,6 @@
         <entry key="reactive_ble_mobile">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/reactive_ble_mobile-5.0.1/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/reactive_ble_mobile-5.0.1/lib" />
             </list>
           </value>
@@ -434,7 +402,6 @@
         <entry key="reactive_ble_platform_interface">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/reactive_ble_platform_interface-5.0.2/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/reactive_ble_platform_interface-5.0.2/lib" />
             </list>
           </value>
@@ -442,7 +409,7 @@
         <entry key="shared_preferences">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences-2.0.15/lib" />
+              <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences-2.0.15/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences-2.0.13/lib" />
             </list>
           </value>
@@ -450,7 +417,7 @@
         <entry key="shared_preferences_android">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_android-2.0.12/lib" />
+              <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_android-2.0.12/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_android-2.0.10/lib" />
             </list>
           </value>
@@ -458,7 +425,7 @@
         <entry key="shared_preferences_ios">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_ios-2.1.1/lib" />
+              <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_ios-2.1.1/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_ios-2.0.9/lib" />
             </list>
           </value>
@@ -466,7 +433,7 @@
         <entry key="shared_preferences_linux">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_linux-2.1.1/lib" />
+              <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_linux-2.1.1/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_linux-2.1.0/lib" />
             </list>
           </value>
@@ -474,7 +441,7 @@
         <entry key="shared_preferences_macos">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_macos-2.0.4/lib" />
+              <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_macos-2.0.4/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_macos-2.0.3/lib" />
             </list>
           </value>
@@ -482,7 +449,6 @@
         <entry key="shared_preferences_platform_interface">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_platform_interface-2.0.0/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_platform_interface-2.0.0/lib" />
             </list>
           </value>
@@ -490,7 +456,7 @@
         <entry key="shared_preferences_web">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_web-2.0.4/lib" />
+              <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_web-2.0.4/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_web-2.0.3/lib" />
             </list>
           </value>
@@ -498,7 +464,7 @@
         <entry key="shared_preferences_windows">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_windows-2.1.1/lib" />
+              <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_windows-2.1.1/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_windows-2.1.0/lib" />
             </list>
           </value>
@@ -506,7 +472,6 @@
         <entry key="sky_engine">
           <value>
             <list>
-              <option value="G:/flutter/bin/cache/pkg/sky_engine/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/bin/cache/pkg/sky_engine/lib" />
             </list>
           </value>
@@ -514,7 +479,6 @@
         <entry key="source_span">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/source_span-1.8.1/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/source_span-1.8.1/lib" />
             </list>
           </value>
@@ -522,7 +486,6 @@
         <entry key="stack_trace">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/stack_trace-1.10.0/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/stack_trace-1.10.0/lib" />
             </list>
           </value>
@@ -530,7 +493,6 @@
         <entry key="stream_channel">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/stream_channel-2.1.0/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/stream_channel-2.1.0/lib" />
             </list>
           </value>
@@ -538,7 +500,6 @@
         <entry key="string_scanner">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/string_scanner-1.1.0/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/string_scanner-1.1.0/lib" />
             </list>
           </value>
@@ -546,7 +507,6 @@
         <entry key="term_glyph">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/term_glyph-1.2.0/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/term_glyph-1.2.0/lib" />
             </list>
           </value>
@@ -554,7 +514,6 @@
         <entry key="test_api">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/test_api-0.4.8/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/test_api-0.4.2/lib" />
             </list>
           </value>
@@ -562,7 +521,6 @@
         <entry key="typed_data">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/typed_data-1.3.0/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/typed_data-1.3.0/lib" />
             </list>
           </value>
@@ -570,7 +528,6 @@
         <entry key="vector_math">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/vector_math-2.1.1/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/vector_math-2.1.0/lib" />
             </list>
           </value>
@@ -578,7 +535,6 @@
         <entry key="win32">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/win32-2.5.2/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/win32-2.3.6/lib" />
             </list>
           </value>
@@ -586,7 +542,6 @@
         <entry key="xdg_directories">
           <value>
             <list>
-              <option value="G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/xdg_directories-0.2.0+1/lib" />
               <option value="E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/xdg_directories-0.2.0+1/lib" />
             </list>
           </value>
@@ -606,6 +561,7 @@
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/connectivity_macos-0.2.1+2/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/connectivity_platform_interface-2.0.1/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/crypto-3.0.1/lib" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/crypto-3.0.2/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/cupertino_icons-0.1.3/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/device_info_plus-3.2.2/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/device_info_plus_linux-2.1.1/lib" />
@@ -617,13 +573,16 @@
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/equatable-2.0.3/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/fake_async-1.2.0/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/ffi-1.1.2/lib" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/ffi-1.2.1/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/file-6.1.2/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/fixnum-1.0.0/lib" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/fixnum-1.0.1/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/fl_chart-0.40.6/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/flutter_notification_listener-1.0.7/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/flutter_reactive_ble-5.0.1/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/functional_data-1.0.0/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/http_parser-4.0.0/lib" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/http_parser-4.0.1/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/intl-0.17.0/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/js-0.6.3/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/matcher-0.12.10/lib" />
@@ -631,30 +590,45 @@
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/nested-1.0.0/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/nordic_dfu-3.3.0/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path-1.8.0/lib" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider-2.0.11/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider-2.0.9/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_android-2.0.11/lib" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_android-2.0.16/lib" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_ios-2.0.10/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_ios-2.0.7/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_linux-2.1.5/lib" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_linux-2.1.7/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_macos-2.0.5/lib" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_macos-2.0.6/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_platform_interface-2.0.3/lib" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_platform_interface-2.0.4/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_windows-2.0.5/lib" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_windows-2.0.7/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/permission_handler-8.3.0/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/permission_handler_platform_interface-3.7.0/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/platform-3.1.0/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/plugin_platform_interface-2.1.2/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/process-4.2.4/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/protobuf-2.0.1/lib" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/protobuf-2.1.0/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/provider-5.0.0/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/reactive_ble_mobile-5.0.1/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/reactive_ble_platform_interface-5.0.2/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences-2.0.13/lib" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences-2.0.15/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_android-2.0.10/lib" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_android-2.0.12/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_ios-2.0.9/lib" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_ios-2.1.1/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_linux-2.1.0/lib" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_linux-2.1.1/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_macos-2.0.3/lib" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_macos-2.0.4/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_platform_interface-2.0.0/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_web-2.0.3/lib" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_web-2.0.4/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_windows-2.1.0/lib" />
+      <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_windows-2.1.1/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/source_span-1.8.1/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/stack_trace-1.10.0/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/stream_channel-2.1.0/lib" />
@@ -669,64 +643,6 @@
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/packages/flutter/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/packages/flutter_test/lib" />
       <root url="file://E:/flutter_windows_2.5.0-stable/flutter/packages/flutter_web_plugins/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/archive-3.3.0/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/async-2.8.2/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/boolean_selector-2.1.0/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/characters-1.2.0/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/charcode-1.3.1/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/clock-1.1.0/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/collection-1.15.0/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/crypto-3.0.2/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/dio-4.0.6/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/fake_async-1.2.0/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/ffi-1.2.1/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/file-6.1.2/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/fixnum-1.0.1/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/flutter_reactive_ble-5.0.1/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/functional_data-1.0.0/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/http_parser-4.0.1/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/intl-0.17.0/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/js-0.6.3/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/matcher-0.12.11/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/material_color_utilities-0.1.3/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/meta-1.7.0/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/nordic_dfu-3.3.0/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path-1.8.0/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider-2.0.11/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_android-2.0.14/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_ios-2.0.9/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_linux-2.1.7/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_macos-2.0.6/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_platform_interface-2.0.4/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/path_provider_windows-2.0.7/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/platform-3.1.0/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/plugin_platform_interface-2.1.2/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/process-4.2.4/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/protobuf-2.1.0/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/reactive_ble_mobile-5.0.1/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/reactive_ble_platform_interface-5.0.2/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences-2.0.15/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_android-2.0.12/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_ios-2.1.1/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_linux-2.1.1/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_macos-2.0.4/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_platform_interface-2.0.0/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_web-2.0.4/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/shared_preferences_windows-2.1.1/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/source_span-1.8.1/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/stack_trace-1.10.0/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/stream_channel-2.1.0/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/string_scanner-1.1.0/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/term_glyph-1.2.0/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/test_api-0.4.8/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/typed_data-1.3.0/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/vector_math-2.1.1/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/win32-2.5.2/lib" />
-      <root url="file://G:/flutter/.pub-cache/hosted/mirrors.tuna.tsinghua.edu.cn%47dart-pub%47/xdg_directories-0.2.0+1/lib" />
-      <root url="file://G:/flutter/bin/cache/pkg/sky_engine/lib" />
-      <root url="file://G:/flutter/packages/flutter/lib" />
-      <root url="file://G:/flutter/packages/flutter_test/lib" />
-      <root url="file://G:/flutter/packages/flutter_web_plugins/lib" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
