@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 class BleDeviceInteractor {
@@ -65,7 +66,7 @@ class BleDeviceInteractor {
         'Error occured when reading ${characteristic.characteristicId} : $e',
       );
       // ignore: avoid_print
-      print(s);
+      debugPrintStack(stackTrace: s);
       rethrow;
     }
   }
@@ -81,7 +82,7 @@ class BleDeviceInteractor {
         'Error occured when writing ${characteristic.characteristicId} : $e',
       );
       // ignore: avoid_print
-      print(s);
+      debugPrintStack(stackTrace: s);
       rethrow;
     }
   }
@@ -97,7 +98,7 @@ class BleDeviceInteractor {
         'Error occured when writing ${characteristic.characteristicId} : $e',
       );
       // ignore: avoid_print
-      print(s);
+      debugPrintStack(stackTrace: s);
       rethrow;
     }
   }
