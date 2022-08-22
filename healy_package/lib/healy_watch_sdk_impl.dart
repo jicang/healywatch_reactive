@@ -89,7 +89,10 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   }
 
   @override
-  Future<void> disconnectDevice() {
+  Future<void> disconnectDevice() async{
+    if(Platform.isIOS){
+      await disableANCS();
+    }
     return bluetoothUtil.disconnect();
   }
 
