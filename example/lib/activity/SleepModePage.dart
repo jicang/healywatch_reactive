@@ -1,13 +1,8 @@
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
 import 'package:healy_watch_sdk/model/models.dart';
 
-import '../WeekDialog.dart';
 import '../button_view.dart';
 
 class SleepModePage extends StatefulWidget {
@@ -29,7 +24,6 @@ class SleepModePageState extends State<SleepModePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     healyWatchSDK = HealyWatchSDKImplementation.instance;
   }
@@ -65,7 +59,7 @@ class SleepModePageState extends State<SleepModePage> {
                       ),
                       Expanded(
                         flex: 2,
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           child: Text(startTime),
                           onPressed: () => showTimePickerDialog(0),
                         ),
@@ -83,7 +77,7 @@ class SleepModePageState extends State<SleepModePage> {
                       ),
                       Expanded(
                         flex: 2,
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           child: Text(endTime),
                           onPressed: () => showTimePickerDialog(1),
                         ),
@@ -130,7 +124,7 @@ class SleepModePageState extends State<SleepModePage> {
       ),
       content: Text("Set SuccessFul"),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -194,9 +188,7 @@ class SleepModePageState extends State<SleepModePage> {
   }
 
   changeEnable(bool param0) {
-    enableSedentaryReminder=param0;
-    setState(() {
-
-    });
+    enableSedentaryReminder = param0;
+    setState(() {});
   }
 }

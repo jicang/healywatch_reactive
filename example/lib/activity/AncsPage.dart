@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
 
 import 'package:healy_watch_sdk/model/models.dart';
-import 'package:healy_watch_sdk/util/ble_sdk.dart';
 
 import '../button_view.dart';
 
@@ -35,13 +33,10 @@ class AncsPageState extends State<AncsPage> {
     "In",
   ];
 
-  TextEditingController _titleController = TextEditingController();
-  TextEditingController _infoController = TextEditingController();
   late HealyWatchSDKImplementation healyWatchSDK;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     healyWatchSDK = HealyWatchSDKImplementation.instance;
     //selected = BleSdk.generateValue(list.length);
@@ -142,7 +137,7 @@ class AncsPageState extends State<AncsPage> {
     HealyDeviceBaseParameter healyDeviceBaseParameter =
         await HealyWatchSDKImplementation.instance.getDeviceBaseParameter();
     selected = healyDeviceBaseParameter.ancsList;
-    enableAncs=healyDeviceBaseParameter.ancsState;
+    enableAncs = healyDeviceBaseParameter.ancsState;
     setState(() {});
   }
 
@@ -154,7 +149,7 @@ class AncsPageState extends State<AncsPage> {
       ),
       content: Text(msg),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },

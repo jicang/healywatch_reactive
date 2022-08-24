@@ -499,7 +499,7 @@ class BleSdk {
 
   /// message content needed to be sent is converted to List<int>
   static List<int> _getInfoValue(String info, int maxLength) {
-    if (info == null || info.isEmpty) return [];
+    if (info.isEmpty) return [];
     final List<int> nameBytes = utf8.encode(info);
     if (nameBytes.length >= maxLength) {
       /// two commands in total 32 bytes, with only 24 bytes of content.

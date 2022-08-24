@@ -1,16 +1,8 @@
-
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
 import 'package:healy_watch_sdk/model/models.dart';
 
-
-
-
 import '../button_view.dart';
-
 
 class WorkFaceStylePage extends StatefulWidget {
   @override
@@ -20,17 +12,14 @@ class WorkFaceStylePage extends StatefulWidget {
 }
 
 class WorkFaceStylePageState extends State<WorkFaceStylePage> {
-
   @override
   void dispose() {
     super.dispose();
-
   }
 
   int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text("WorkFaceStyle"),
@@ -54,7 +43,7 @@ class WorkFaceStylePageState extends State<WorkFaceStylePage> {
                         Radio(
                           groupValue: selectedIndex,
                           value: 0,
-                          onChanged: (int ?value) => setSelectedValue(value),
+                          onChanged: (int? value) => setSelectedValue(value),
                         )
                       ],
                     ),
@@ -106,7 +95,7 @@ class WorkFaceStylePageState extends State<WorkFaceStylePage> {
                         Radio(
                           groupValue: selectedIndex,
                           value: 4,
-                          onChanged: (int ?value) => setSelectedValue(value),
+                          onChanged: (int? value) => setSelectedValue(value),
                         )
                       ],
                     ),
@@ -127,20 +116,19 @@ class WorkFaceStylePageState extends State<WorkFaceStylePage> {
   }
 
   bool isSet = false;
-  getWatchStyle() async{
-    HealyWatchFaceStyle healyWatchFaceStyle=await HealyWatchSDKImplementation.instance.getSelectedWatchFaceStyles();
+  getWatchStyle() async {
+    HealyWatchFaceStyle healyWatchFaceStyle =
+        await HealyWatchSDKImplementation.instance.getSelectedWatchFaceStyles();
     selectedIndex = healyWatchFaceStyle.imageId;
     setState(() {});
   }
 
-  setWatchStyle() async{
+  setWatchStyle() async {
     isSet = true;
-    bool isSuccess=await HealyWatchSDKImplementation.instance.setWatchFaceStyle(HealyWatchFaceStyle(selectedIndex));
+    bool isSuccess = await HealyWatchSDKImplementation.instance
+        .setWatchFaceStyle(HealyWatchFaceStyle(selectedIndex));
     debugPrint("$isSuccess");
-
   }
-
-
 
   Widget getDialog(String dataType) {
     return new AlertDialog(
@@ -150,7 +138,7 @@ class WorkFaceStylePageState extends State<WorkFaceStylePage> {
       ),
       content: Text("Set SuccessFul"),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -172,7 +160,7 @@ class WorkFaceStylePageState extends State<WorkFaceStylePage> {
     );
   }
 
-  setSelectedValue(int ?value) {
+  setSelectedValue(int? value) {
     this.selectedIndex = value!;
     setState(() {});
   }

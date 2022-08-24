@@ -1,6 +1,3 @@
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
@@ -152,7 +149,7 @@ class EditClockPageState extends State<EditClockPage> {
                       ),
                       Expanded(
                         flex: 2,
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           child: Text(startTime),
                           onPressed: () => showTimePickerDialog(),
                         ),
@@ -172,7 +169,7 @@ class EditClockPageState extends State<EditClockPage> {
                   Row(
                     children: <Widget>[
                       Expanded(
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           child: Text(weekString),
                           onPressed: () => showWeekDialog(),
                         ),
@@ -217,7 +214,7 @@ class EditClockPageState extends State<EditClockPage> {
       ),
       content: Text("Set SuccessFul"),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
             Navigator.of(context).pop();
@@ -268,7 +265,7 @@ class EditClockPageState extends State<EditClockPage> {
     );
   }
 
-  late WeekDialog weekDialog;
+  WeekDialog? weekDialog;
   List<int> selected = [];
   List<String> listWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -281,7 +278,7 @@ class EditClockPageState extends State<EditClockPage> {
       ),
       content: weekDialog,
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
             changeWeekText();
@@ -317,7 +314,7 @@ class EditClockPageState extends State<EditClockPage> {
   }
 
   bool isEmpty(String value) {
-    return null == value || value.length == 0;
+    return value.length == 0;
   }
 
   changeEnable(bool enable) {

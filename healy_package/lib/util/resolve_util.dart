@@ -3,7 +3,6 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import '../model/models.dart';
@@ -69,22 +68,22 @@ class ResolveUtil {
         _hexByte2Int(value[4], 0) == 1 ? WearingWrist.left : WearingWrist.right;
     deviceBaseParameter.vibrationLevel = _hexByte2Int(value[5], 0);
     deviceBaseParameter.ancsState = _hexByte2Int(value[6], 0) == 1;
-    List<int>low=_getAncsEnableList(value[7]);
+    List<int> low = _getAncsEnableList(value[7]);
     debugPrint("$low");
 
-    List<int>high=_getAncsEnableList(value[8]);
+    List<int> high = _getAncsEnableList(value[8]);
     debugPrint("$high");
-    List<HealyNotifierMode>ancsList=[];
-    List<int>selectedList=BleSdk.generateValue(12);
+    List<HealyNotifierMode> ancsList = [];
+    List<int> selectedList = BleSdk.generateValue(12);
     BleSdk.arrayCopy(low, 0, selectedList, 0, low.length);
     BleSdk.arrayCopy(high, 0, selectedList, low.length, 4);
     debugPrint("$selectedList");
-    for(int i=0;i<selectedList.length;i++){
-      if(selectedList[i]==1){
+    for (int i = 0; i < selectedList.length; i++) {
+      if (selectedList[i] == 1) {
         ancsList.add(HealyNotifierMode.values[i]);
       }
     }
-    deviceBaseParameter.ancsList=ancsList;
+    deviceBaseParameter.ancsList = ancsList;
     deviceBaseParameter.baseHeart = _hexByte2Int(value[9], 0);
     deviceBaseParameter.connectVibration = _hexByte2Int(value[10], 0) == 1;
     deviceBaseParameter.brightnessLevel = _hexByte2Int(value[11], 0);
@@ -343,7 +342,9 @@ class ResolveUtil {
         durationTime: periodTime,
         speedSeconds: speedMin * 60 + speedS,
         steps: steps,
-        workoutMode: mode==255?HealyWorkoutMode.autoRun:HealyWorkoutMode.values[mode],
+        workoutMode: mode == 255
+            ? HealyWorkoutMode.autoRun
+            : HealyWorkoutMode.values[mode],
       );
 
       list.add(healyWorkoutData);
@@ -537,9 +538,9 @@ class ResolveUtil {
         moodValue: moodValue,
         breathRate: breathRate,
       );
-    } else if(value[1]==15){
-      healyBaseMeasuremenetData=HealyOnlyPPGFinish();
-    }else {
+    } else if (value[1] == 15) {
+      healyBaseMeasuremenetData = HealyOnlyPPGFinish();
+    } else {
       final int failedCode = _hexByte2Int(value[1], 0);
       HealyEcgFailureDataFailedCode healyEcgFailureDataFailedCode;
       if (failedCode == 255) {
@@ -571,7 +572,7 @@ class ResolveUtil {
     burnedCalories = _intBitToDouble(valueCal);
 
     return HealyExerciseData(
-      isFinish: value[1]==255,
+      isFinish: value[1] == 255,
       steps: steps,
       burnedCalories: burnedCalories.floor(),
       heartRate: heartRate,
@@ -750,14 +751,15 @@ class ResolveUtil {
 
   static HealyWorkoutType getWorkOutType(List<int> value) {
     final int length = _hexByte2Int(value[1], 0);
-    final List<HealyWorkoutMode> selectedList = List.generate(length, (index) => HealyWorkoutMode.running);
-    List<HealyWorkoutMode> modeList=HealyWorkoutMode.values;;
+    final List<HealyWorkoutMode> selectedList =
+        List.generate(length, (index) => HealyWorkoutMode.running);
+    List<HealyWorkoutMode> modeList = HealyWorkoutMode.values;
+    ;
     for (int i = 0; i < length; i++) {
-       int selected = _hexByte2Int(value[i + 2], 0);
+      int selected = _hexByte2Int(value[i + 2], 0);
 
-       debugPrint("$selected");
+      debugPrint("$selected");
       selectedList[i] = modeList[selected];
-
     }
 
     return HealyWorkoutType(selectedList);
@@ -858,16 +860,17 @@ class ResolveUtil {
       dateTime: DateTime.now(),
     );
   }
-  static HealyResUpdateData getHealyResUpdate(List<int> value){
-    int updateIndex=_hexByte2Int(value[3], 0);
-    bool needUpdate=value[1] == 1 && value[2] == 1;
+
+  static HealyResUpdateData getHealyResUpdate(List<int> value) {
+    int updateIndex = _hexByte2Int(value[3], 0);
+    bool needUpdate = value[1] == 1 && value[2] == 1;
     return HealyResUpdateData(needUpdate: needUpdate, updateIndex: updateIndex);
   }
 
   static List<int> _getAncsEnableList(int b) {
     final List<int> array = BleSdk.generateValue(8);
     for (int i = 0; i < 8; i++) {
-      array[i] = b>>i & 1;
+      array[i] = b >> i & 1;
       // ignore: parameter_assignments
 
     }

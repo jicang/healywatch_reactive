@@ -4,13 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
 import 'package:healy_watch_sdk/model/models.dart';
 
-
-
-
-
 import '../button_view.dart';
 import 'EditClockPage.dart';
-
 
 class ClockListPage extends StatefulWidget {
   @override
@@ -20,15 +15,10 @@ class ClockListPage extends StatefulWidget {
 }
 
 class ClockState extends State<ClockListPage> {
-
-
   @override
   void dispose() {
     super.dispose();
-
   }
-
-
 
   @override
   void didChangeDependencies() {
@@ -36,14 +26,10 @@ class ClockState extends State<ClockListPage> {
     getClock();
   }
 
-
-
   List<HealyClock> list = [];
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       appBar: AppBar(
         title: Text("ClockList"),
@@ -207,14 +193,14 @@ class ClockState extends State<ClockListPage> {
       ),
       content: Text(msg),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
             deleteAllClock();
           },
           child: Text("Confirm"),
         ),
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -223,8 +209,6 @@ class ClockState extends State<ClockListPage> {
       ],
     );
   }
-
-
 
   syncFinish() {
     debugPrint("end s");
@@ -235,7 +219,8 @@ class ClockState extends State<ClockListPage> {
   getClock() async {
     list.clear();
     setState(() {});
-    Stream<List<HealyClock>> healySleepData = await HealyWatchSDKImplementation.instance.getAllClock();
+    Stream<List<HealyClock>> healySleepData =
+        await HealyWatchSDKImplementation.instance.getAllClock();
     healySleepData.listen((event) {
       list.addAll(event);
     }, onDone: () => syncFinish());
@@ -245,7 +230,7 @@ class ClockState extends State<ClockListPage> {
     setState(() {});
   }
 
-  toEditClock(int position) async{
+  toEditClock(int position) async {
     await Navigator.of(context).push(new MaterialPageRoute(builder: (context) {
       return EditClockPage(list, position);
     }));
@@ -253,7 +238,8 @@ class ClockState extends State<ClockListPage> {
   }
 
   void deleteAllClock() async {
-    bool deleteSuccess = await HealyWatchSDKImplementation.instance.deleteAllClock();
+    bool deleteSuccess =
+        await HealyWatchSDKImplementation.instance.deleteAllClock();
     if (deleteSuccess) getClock();
   }
 }

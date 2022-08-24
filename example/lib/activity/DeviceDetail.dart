@@ -10,18 +10,15 @@ import 'package:flutter_plugin/flutter_plugin.dart';
 
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
-import 'package:healy_watch_sdk/model/models.dart';
 import 'package:healy_watch_sdk/util/shared_pref.dart';
-import 'package:provider/provider.dart';
 
 import '../LoadingDialog.dart';
-import '../button_view.dart';
 import '../main.dart';
 import 'HistoryDataPage.dart';
 
 class DeviceDetail extends StatefulWidget {
-  String? deviceName;
-  String? deviceId;
+  final String? deviceName;
+  final String? deviceId;
 
   DeviceDetail(this.deviceName, this.deviceId);
 
@@ -175,30 +172,31 @@ class DeviceDetailState extends State<DeviceDetail> {
       },
     );
   }
+
   static void _callback(NotificationEvent evt) {
     debugPrint("send evt to ui: $evt");
     final SendPort? send = IsolateNameServer.lookupPortByName("_listener_");
     if (send == null) debugPrint("can't find the sender");
     send?.send(evt);
   }
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     init();
     //selected = BleSdk.generateValue(list.length);
   }
+
   init() async {
-    if(Platform.isAndroid){
+    if (Platform.isAndroid) {
       NotificationsListener.initialize(callbackHandle: _callback);
     }
-    var device=await SharedPrefUtils.getConnectedDevice();
-    if(device!=null){
+    var device = await SharedPrefUtils.getConnectedDevice();
+    if (device != null) {
       connected();
     }
-
-
   }
+
   Widget getDialog() {
     return new AlertDialog(
       title: Container(
@@ -207,13 +205,13 @@ class DeviceDetailState extends State<DeviceDetail> {
       ),
       content: Text("Are you sure exists?"),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             exitApp();
           },
           child: Text("Confirm"),
         ),
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.pop(context, false);
           },
@@ -325,7 +323,7 @@ class DeviceDetailState extends State<DeviceDetail> {
   }
 
   unPair() async {
-     await SharedPrefUtils.clearConnectedDevice();
+    await SharedPrefUtils.clearConnectedDevice();
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (_) => ScanDeviceWidget(),
@@ -333,21 +331,18 @@ class DeviceDetailState extends State<DeviceDetail> {
       (route) => false,
     );
   }
-  MethodChannel methodChannel=new MethodChannel("pairedDevice");
-  getPairedDevice() async{
 
-
-    var device=await SharedPrefUtils.getConnectedDevice();
-    var isBind=await FlutterPlugin.isBind(device!.id);
-    if(device!=null&&isBind){
-
-    }
+  MethodChannel methodChannel = new MethodChannel("pairedDevice");
+  getPairedDevice() async {
+    var device = await SharedPrefUtils.getConnectedDevice();
+    var isBind = device == null ? false : await FlutterPlugin.isBind(device.id);
+    if (device != null && isBind) {}
 
     debugPrint("${isBind}");
-      //methodChannel.invokeMethod("paired");
+    //methodChannel.invokeMethod("paired");
   }
 
-  void exitApp() async{
+  void exitApp() async {
     await HealyWatchSDKImplementation.instance.disconnectDevice();
     Navigator.pop(context, true);
   }

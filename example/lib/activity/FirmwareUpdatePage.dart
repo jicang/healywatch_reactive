@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:developer';
 
 import 'package:connectivity/connectivity.dart';
@@ -11,7 +10,6 @@ import '../button_view.dart';
 class FirmwareUpdatePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return FirmwareUpdatePageState();
   }
 }
@@ -36,9 +34,9 @@ class FirmwareUpdatePageState extends State<FirmwareUpdatePage> {
                 ButtonView(
                   "CheckFirmwareVersion",
                   action: () async {
-                    final String currentVersion =
-                        await HealyWatchSDKImplementation.instance
-                            .getFirmwareVersion();
+                    // final String currentVersion =
+                    //     await HealyWatchSDKImplementation.instance
+                    //         .getFirmwareVersion();
                     var connectivityResult =
                         await (Connectivity().checkConnectivity());
                     if (connectivityResult == ConnectivityResult.none) {

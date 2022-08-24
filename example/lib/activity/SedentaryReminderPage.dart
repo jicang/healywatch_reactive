@@ -1,6 +1,3 @@
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -31,7 +28,6 @@ class SedentaryReminderPageState extends State<SedentaryReminderPage> {
   late HealyWatchSDKImplementation healyWatchSDK;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     healyWatchSDK = HealyWatchSDKImplementation.instance;
   }
@@ -67,7 +63,7 @@ class SedentaryReminderPageState extends State<SedentaryReminderPage> {
                       ),
                       Expanded(
                         flex: 2,
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           child: Text(startTime),
                           onPressed: () => showTimePickerDialog(0),
                         ),
@@ -85,7 +81,7 @@ class SedentaryReminderPageState extends State<SedentaryReminderPage> {
                       ),
                       Expanded(
                         flex: 2,
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           child: Text(endTime),
                           onPressed: () => showTimePickerDialog(1),
                         ),
@@ -105,7 +101,7 @@ class SedentaryReminderPageState extends State<SedentaryReminderPage> {
                   Row(
                     children: <Widget>[
                       Expanded(
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           child: Text(week),
                           onPressed: () => showWeekDialog(),
                         ),
@@ -188,7 +184,7 @@ class SedentaryReminderPageState extends State<SedentaryReminderPage> {
       ),
       content: Text("Set SuccessFul"),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -260,7 +256,7 @@ class SedentaryReminderPageState extends State<SedentaryReminderPage> {
       ),
       content: weekDialog,
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
             changeWeekText();
@@ -312,7 +308,7 @@ class SedentaryReminderPageState extends State<SedentaryReminderPage> {
   }
 
   bool isEmpty(String value) {
-    return null == value || value.length == 0;
+    return value.length == 0;
   }
 
   changeEnable(bool param0) {}

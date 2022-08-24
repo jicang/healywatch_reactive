@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
@@ -63,92 +62,94 @@ class DeviceInfoPageState extends State<DeviceInfoPage> {
   void dispose() {
     super.dispose();
   }
+
   BuildContext? mContext;
   @override
   Widget build(BuildContext context) {
-    mContext=context;
+    mContext = context;
     return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        title: Text("DeviceInfo"),
-      ),
-      body: SingleChildScrollView(child: Column(
-        children: <Widget>[
-          Row(
+        key: _scaffoldKey,
+        appBar: AppBar(
+          title: Text("DeviceInfo"),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
             children: <Widget>[
-              ButtonView(
-                "MCUReset",
-                action: () => setMCUReset(),
+              Row(
+                children: <Widget>[
+                  ButtonView(
+                    "MCUReset",
+                    action: () => setMCUReset(),
+                  ),
+                  ButtonView("FactoryMode", action: () => enterFactoryMode())
+                ],
               ),
-              ButtonView("FactoryMode", action: () => enterFactoryMode())
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              ButtonView(
-                "Battery",
-                action: () => getDeviceBattery(),
+              Row(
+                children: <Widget>[
+                  ButtonView(
+                    "Battery",
+                    action: () => getDeviceBattery(),
+                  ),
+                  ButtonView("MacAddress", action: () => getMacAddress())
+                ],
               ),
-              ButtonView("MacAddress", action: () => getMacAddress())
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              ButtonView(
-                "DeviceVersion",
-                action: () => getDeviceVersion(),
+              Row(
+                children: <Widget>[
+                  ButtonView(
+                    "DeviceVersion",
+                    action: () => getDeviceVersion(),
+                  ),
+                  ButtonView("GetSerialNumber",
+                      action: () => toGetSerialNumber()),
+                ],
               ),
-              ButtonView("GetSerialNumber", action: () => toGetSerialNumber()),
+              Column(
+                children: <Widget>[
+                  SwitchListTile(
+                    title: Text("Camera control"),
+                    value: enterCamera,
+                    onChanged: (bool) => enterCameraMode(bool),
+                  )
+                ],
+              ),
+              Column(
+                children: <Widget>[
+                  SwitchListTile(
+                    title: Text("Music control"),
+                    value: enterMusic,
+                    onChanged: (bool) => enterMusicMode(bool),
+                  )
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(labelText: "DeviceId"),
+                      maxLength: 6,
+                      textAlign: TextAlign.center,
+                      controller: _userAgeController,
+                    ),
+                  ),
+                  ButtonView(
+                    "Set DeviceId",
+                    action: () => setDeviceID(context),
+                  )
+                ],
+              ),
+              Column(
+                children: <Widget>[
+                  SwitchListTile(
+                    title: Text("RealTimeStep"),
+                    value: realTimeStep,
+                    onChanged: (bool) => enableRealTime(bool),
+                  )
+                ],
+              ),
+              Text(info)
             ],
           ),
-          Column(
-            children: <Widget>[
-              SwitchListTile(
-                title: Text("Camera control"),
-                value: enterCamera,
-                onChanged: (bool) => enterCameraMode(bool),
-              )
-            ],
-          ),
-          Column(
-            children: <Widget>[
-              SwitchListTile(
-                title: Text("Music control"),
-                value: enterMusic,
-                onChanged: (bool) => enterMusicMode(bool),
-              )
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child:              TextField(
-                  decoration: InputDecoration(labelText: "DeviceId"),
-                  maxLength: 6,
-                  textAlign: TextAlign.center,
-                  controller: _userAgeController,
-                ) ,
-              )
-              ,
-              ButtonView(
-                "Set DeviceId",
-                action: () => setDeviceID(context),
-              )
-            ],
-          ),
-          Column(
-            children: <Widget>[
-              SwitchListTile(
-                title: Text("RealTimeStep"),
-                value: realTimeStep,
-                onChanged: (bool) => enableRealTime(bool),
-              )
-            ],
-          ),
-          Text(info)
-        ],
-      ),)
-    );
+        ));
   }
 
   getDeviceBattery() async {
@@ -192,7 +193,7 @@ class DeviceInfoPageState extends State<DeviceInfoPage> {
       ),
       content: Text(msg),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(mContext!).pop();
           },
@@ -232,14 +233,14 @@ class DeviceInfoPageState extends State<DeviceInfoPage> {
       ),
       content: Text(msg),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
             HealyWatchSDKImplementation.instance.setFactoryMode();
           },
           child: Text("Confirm"),
         ),
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -281,7 +282,7 @@ class DeviceInfoPageState extends State<DeviceInfoPage> {
     setState(() {});
 
     if (realTimeStep) {
-      if(!mounted)return;
+      if (!mounted) return;
       Stream<HealyRealTimeStep> realStream =
           await HealyWatchSDKImplementation.instance.enableRealTimeStep();
       realStream.listen((event) {
@@ -297,10 +298,10 @@ class DeviceInfoPageState extends State<DeviceInfoPage> {
   startRealTimeStep() async {}
   setDeviceID(BuildContext context) async {
     String deviceID = _userAgeController.text;
-    if (deviceID == null || deviceID.length == 0) {
+    if (deviceID.length == 0) {
       SnackBar snackBar = new SnackBar(content: new Text('DeviceId is empty'));
 
-      _scaffoldKey.currentState!.showSnackBar(snackBar);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return;
     }
     bool isSuccess =
@@ -323,7 +324,6 @@ class DeviceInfoPageState extends State<DeviceInfoPage> {
         "HeartRate: $heartRate bpm\n"
         "SportTime: $workoutMin second\n"
         "ExerciseTime: $activeMin min\n";
-    if(mounted)
-    setState(() {});
+    if (mounted) setState(() {});
   }
 }

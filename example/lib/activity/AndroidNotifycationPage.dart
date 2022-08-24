@@ -1,13 +1,11 @@
 import 'dart:isolate';
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_notification_listener/flutter_notification_listener.dart';
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
 
 import 'package:healy_watch_sdk/model/models.dart';
-import 'package:healy_watch_sdk/util/ble_sdk.dart';
 
 import '../button_view.dart';
 
@@ -20,22 +18,15 @@ class AndroidNotifycationPage extends StatefulWidget {
 }
 
 class AndroidNotifycationPageState extends State<AndroidNotifycationPage> {
-
-
-
-
   late HealyWatchSDKImplementation healyWatchSDK;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     healyWatchSDK = HealyWatchSDKImplementation.instance;
     initPlatformState();
     //selected = BleSdk.generateValue(list.length);
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -46,15 +37,13 @@ class AndroidNotifycationPageState extends State<AndroidNotifycationPage> {
         body: Container(
           child: Row(
             children: [
-            ButtonView("StartListener", action:() => startListening())
-
+              ButtonView("StartListener", action: () => startListening())
             ],
           ),
         ));
   }
 
-
- static const String PackageName_WeChat = "com.tencent.mm";
+  static const String PackageName_WeChat = "com.tencent.mm";
   static const String PackageName_Facebook = "com.facebook.katana";
   static const String PackageName_Facebook_orca = "com.facebook.orca";
   static const String PackageName_Twitter = "com.twitter.android";
@@ -65,8 +54,6 @@ class AndroidNotifycationPageState extends State<AndroidNotifycationPage> {
   static const String PackageName_Ins = "com.instagram.android";
   static const String PackageName_Tel = "org.telegram.messenger";
   static const String PackageName_Vk = "com.vkontakte.android";
-
-
 
   ReceivePort port = ReceivePort();
   Future<void> initPlatformState() async {
@@ -82,49 +69,51 @@ class AndroidNotifycationPageState extends State<AndroidNotifycationPage> {
 
     var isR = await NotificationsListener.isRunning;
     debugPrint("""Service is ${isR}aleary running""");
-
-
   }
 
   void onData(NotificationEvent event) {
-    var packageName=event.packageName;
-    HealyNotifierMode healyNotifierMode=HealyNotifierMode.dataOther;
-    switch(packageName){
+    var packageName = event.packageName;
+    HealyNotifierMode healyNotifierMode = HealyNotifierMode.dataOther;
+    switch (packageName) {
       case PackageName_Vk:
-        healyNotifierMode=HealyNotifierMode.dataVk;
+        healyNotifierMode = HealyNotifierMode.dataVk;
         break;
       case PackageName_Tel:
-        healyNotifierMode=HealyNotifierMode.dataTelegra;
+        healyNotifierMode = HealyNotifierMode.dataTelegra;
         break;
       case PackageName_Ins:
-        healyNotifierMode=HealyNotifierMode.dataINSTAGRAM;
+        healyNotifierMode = HealyNotifierMode.dataINSTAGRAM;
         break;
       case PackageName_Line:
-        healyNotifierMode=HealyNotifierMode.dataLine;
+        healyNotifierMode = HealyNotifierMode.dataLine;
         break;
       case PackageName_WhatsApp:
-        healyNotifierMode=HealyNotifierMode.dataWhatApp;
+        healyNotifierMode = HealyNotifierMode.dataWhatApp;
         break;
       case PackageName_WeChat:
-        healyNotifierMode=HealyNotifierMode.dataWeChat;
+        healyNotifierMode = HealyNotifierMode.dataWeChat;
         break;
       case PackageName_Skype:
-        healyNotifierMode=HealyNotifierMode.dataSkype;
+        healyNotifierMode = HealyNotifierMode.dataSkype;
         break;
       case PackageName_Twitter:
-        healyNotifierMode=HealyNotifierMode.dataTwitter;
+        healyNotifierMode = HealyNotifierMode.dataTwitter;
         break;
       case PackageName_Facebook:
       case PackageName_Facebook_orca:
-        healyNotifierMode=HealyNotifierMode.dataFacebook;
+        healyNotifierMode = HealyNotifierMode.dataFacebook;
         break;
       case PackageName_Email:
-        healyNotifierMode=HealyNotifierMode.dataEmail;
+        healyNotifierMode = HealyNotifierMode.dataEmail;
         break;
     }
-    healyWatchSDK.setNotifyData(HealyNotifier(healyNotifierMode: healyNotifierMode, info: event.text.toString(), title: event.title.toString()));
+    healyWatchSDK.setNotifyData(HealyNotifier(
+        healyNotifierMode: healyNotifierMode,
+        info: event.text.toString(),
+        title: event.title.toString()));
     debugPrint(event.toString());
   }
+
   static void _callback(NotificationEvent evt) {
     debugPrint("send evt to ui: $evt");
     final SendPort? send = IsolateNameServer.lookupPortByName("_listener_");
@@ -146,18 +135,11 @@ class AndroidNotifycationPageState extends State<AndroidNotifycationPage> {
           title: "Listener Running",
           description: "Let's scrape the notifactions...");
     }
-
-
   }
 
   void stopListening() async {
     debugPrint("stop listening");
 
-
-
     await NotificationsListener.stopService();
-
-
   }
-
 }

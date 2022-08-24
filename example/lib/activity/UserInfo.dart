@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -30,7 +29,6 @@ class UserInfoState extends State<UserInfo> {
   late HealyWatchSDKImplementation healyWatchSDK;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     healyWatchSDK = HealyWatchSDKImplementation.instance;
   }
@@ -87,9 +85,7 @@ class UserInfoState extends State<UserInfo> {
                     textAlign: TextAlign.center,
                     controller: _userAgeController,
                     onSubmitted: (value) => textSaved(value),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   ),
                 ),
                 SizedBox(
@@ -102,9 +98,7 @@ class UserInfoState extends State<UserInfo> {
                     textAlign: TextAlign.center,
                     controller: _userHeightController,
                     onSubmitted: (value) => textSaved(value),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   ),
                 ),
                 SizedBox(
@@ -117,9 +111,7 @@ class UserInfoState extends State<UserInfo> {
                     decoration: InputDecoration(labelText: "Weight"),
                     controller: _userWeightController,
                     onSubmitted: (value) => textSaved(value),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   ),
                 ),
                 SizedBox(
@@ -132,9 +124,7 @@ class UserInfoState extends State<UserInfo> {
                     decoration: InputDecoration(labelText: "Stride"),
                     controller: _userStrideController,
                     onSubmitted: (value) => textSaved(value),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   ),
                 ),
               ],
@@ -167,10 +157,8 @@ class UserInfoState extends State<UserInfo> {
   }
 
   Widget getItemChild(int value) {
-    return RaisedButton(
-      color: Colors.blue,
+    return ElevatedButton(
       child: Text(value.toString()),
-      textColor: Colors.white,
       onPressed: () => itemClick(value),
     );
   }
@@ -188,7 +176,7 @@ class UserInfoState extends State<UserInfo> {
     debugPrint(value);
   }
 
-  Widget getDialog(BuildContext context,String dataType, String msg) {
+  Widget getDialog(BuildContext context, String dataType, String msg) {
     return new AlertDialog(
       title: Container(
         width: MediaQuery.of(context).size.width,
@@ -196,7 +184,7 @@ class UserInfoState extends State<UserInfo> {
       ),
       content: Text(msg),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -213,7 +201,7 @@ class UserInfoState extends State<UserInfo> {
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return getDialog(context,title, msg);
+        return getDialog(context, title, msg);
       },
     );
   }
@@ -238,12 +226,12 @@ class UserInfoState extends State<UserInfo> {
   }
 
   bool isEmpty(String value) {
-    return null == value || value.length == 0;
+    return value.length == 0;
   }
 
   getTime() async {
     DateTime dateTime = await healyWatchSDK.getDeviceTime();
-    if(mounted) showMsgDialog(context, "healy", dateTime.toString());
+    if (mounted) showMsgDialog(context, "healy", dateTime.toString());
   }
 
   setTime() async {

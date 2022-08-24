@@ -1,7 +1,6 @@
 // ignore: file_names
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
@@ -261,7 +260,7 @@ class HistoryDataPageState extends State<HistoryDataPage> {
   }
 
   startReadData() async {
-    if(!mounted)return;
+    if (!mounted) return;
     list.clear();
     setState(() {});
     showLoading(context);
@@ -391,7 +390,7 @@ class HistoryDataPageState extends State<HistoryDataPage> {
       ),
       content: Text(msg),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -439,14 +438,14 @@ class HistoryDataPageState extends State<HistoryDataPage> {
       ),
       content: Text(msg),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
             deleteData();
           },
           child: Text("Confirm"),
         ),
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },

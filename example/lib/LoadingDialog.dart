@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class LoadingDialog extends Dialog {
-  String msg;
+  final String msg;
   LoadingDialog(this.msg);
   @override
   Widget build(BuildContext context) {

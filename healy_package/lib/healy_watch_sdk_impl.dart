@@ -89,8 +89,8 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   }
 
   @override
-  Future<void> disconnectDevice() async{
-    if(Platform.isIOS){
+  Future<void> disconnectDevice() async {
+    if (Platform.isIOS) {
       await disableANCS();
     }
     return bluetoothUtil.disconnect();
@@ -435,7 +435,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
             healyBaseMeasuremenetData.qualityPoints = qualityPoints;
             healyBaseMeasuremenetData.ecgData = healyEcgDataList;
             healyBaseMeasuremenetData.ppgData = healyPPGDataList;
-          }else if(healyBaseMeasuremenetData is HealyOnlyPPGFinish){
+          } else if (healyBaseMeasuremenetData is HealyOnlyPPGFinish) {
             healyBaseMeasuremenetData.ppgData = healyPPGDataList;
           }
           break;
@@ -833,7 +833,6 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   //固件没有返回数据
   @override
   bool disableRealTimeStep() {
-    // TODO add async
     _writeData(BleSdk.enableRealTimeStep(false));
 
     return true;
@@ -855,7 +854,6 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   //固件没有返回数据
   @override
   bool backWatchHomePage() {
-    // TODO add async
     _writeData(BleSdk.backWatchHomePage());
     return true;
   }
@@ -1129,12 +1127,11 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   // helper method for download stream, add progress
   Future<void> addProgress(
       StreamController<double> stream, double progress) async {
-    if (stream != null && !stream.isClosed) {
+    if (!stream.isClosed) {
       stream.add(progress);
     }
   }
 
-  /// TODO whats this for?
   // Future<bool> checkShouldUpgradeResourceFiles(String path) async {
   //
   //   final ResourceUpdateUtil resUpdateUtils =
@@ -1149,7 +1146,6 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   //   return healyResUpdateData.needUpdate;
   // }
 
-  /// TODO whats this for?
   /*Future updateResourceFiles() async {
     resUpdateUtils.sendFileByte();
   }*/
@@ -1217,11 +1213,9 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     }
   }
 
-  /// TODO what is "ota"
   Future<void> startOta(
       String id, String path, StreamController<double> progressStream) async {
     int dfuPercent = 0;
-    bool isDfuMode = false;
     SharedPrefUtils.setIsFirmware(true);
     await NordicDfu.startDfu(
       id,
@@ -1235,14 +1229,12 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
         currentPart,
         partsTotal,
       ) {
-        isDfuMode = percent != 100;
         dfuPercent = percent ?? 0;
         log('startOta: progressValue: $dfuPercent');
         addProgress(progressStream, 2 / 3 + (dfuPercent / 100) / 3);
       }, onDfuProcessStartedHandle: (address) {
         log("startOta: onDfuProcessStartedHandle");
       }, onDeviceConnectedHandle: (address) {
-        isDfuMode = true;
         log("startOta: onDeviceConnectedHandle");
       }, onDfuCompletedHandle: (address) async {
         log("startOta: onComplete");
@@ -1257,7 +1249,6 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     );
   }
 
-  /// TODO this maybe needs to be put in healy watch app
   /// Enter the upgrade mode (DFU = Device Firmware Update)
   Future<void> startDfuMode(
       String rootPath, StreamController<double> progressStream) async {
@@ -1368,7 +1359,6 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
 
   @override
   Stream<HealyBaseExerciseData> currentWorkoutData() {
-    // TODO: implement currentWorkoutData
     StreamController<HealyBaseExerciseData> controller =
         StreamController<HealyBaseExerciseData>();
     _filterValueStream(DeviceCmd.exerciseData).listen((value) {
@@ -1378,20 +1368,20 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     });
     return controller.stream;
   }
+
   @override
   Future<bool> setAncsState(List<HealyNotifierMode> enableList) async {
     await _writeData(BleSdk.setAncsState(enableList));
     return _filterValue(DeviceCmd.setDeviceInfo).then((value) => true);
   }
+
   @override
   Future<bool> isWorkoutRunning() {
-    // TODO: implement isWorkoutRunning
     throw UnimplementedError();
   }
 
   @override
   Stream<List<HealyCombinedSleepData>> getAllCombinedSleepData() {
-    // TODO: implement getAllCombinedSleepData
     Stream<List<HealySleepData>> sleepList = getAllSleepData();
     List<HealySleepData> list = [];
     StreamController<List<HealyCombinedSleepData>> streamController =

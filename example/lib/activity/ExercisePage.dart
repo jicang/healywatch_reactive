@@ -1,12 +1,9 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
 import 'package:healy_watch_sdk/model/models.dart';
-import 'package:provider/provider.dart';
 
 import '../button_view.dart';
 
@@ -70,42 +67,48 @@ class ExercisePageState extends State<ExercisePage> {
           ),
           Visibility(
             maintainSize: false,
-            visible: notifyType==HealyWorkoutMode.breathing,
-            child:  Column(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(top: 8),
-                child: Text(getBreathLevelText(breathLevel.toInt()),textAlign: TextAlign.center,),
-              ),
-              Slider(
-                value: breathLevel,
-                onChanged: (value) => changeBreathLevel(value),
-                min: 0,
-                divisions: 2,
-                max: 2,
-              ),
-              Divider(
-                height: 1.0,
-                color: Colors.amber,
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 8),
-                child: Text("Breath Count\n ${breathCount.toInt()}",textAlign: TextAlign.center,),
-              ),
-              Slider(
-                value: breathCount,
-                onChanged: (value) => changeBreathCount(value),
-                min: 1.0,
-                divisions: 59,
-                max: 60,
-              ),
-              Divider(
-                height: 1.0,
-                color: Colors.amber,
-              ),
-            ],
-          ),),
-
+            visible: notifyType == HealyWorkoutMode.breathing,
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(top: 8),
+                  child: Text(
+                    getBreathLevelText(breathLevel.toInt()),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Slider(
+                  value: breathLevel,
+                  onChanged: (value) => changeBreathLevel(value),
+                  min: 0,
+                  divisions: 2,
+                  max: 2,
+                ),
+                Divider(
+                  height: 1.0,
+                  color: Colors.amber,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 8),
+                  child: Text(
+                    "Breath Count\n ${breathCount.toInt()}",
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Slider(
+                  value: breathCount,
+                  onChanged: (value) => changeBreathCount(value),
+                  min: 1.0,
+                  divisions: 59,
+                  max: 60,
+                ),
+                Divider(
+                  height: 1.0,
+                  color: Colors.amber,
+                ),
+              ],
+            ),
+          ),
           Expanded(
             flex: 1,
             child: Container(
@@ -145,13 +148,13 @@ class ExercisePageState extends State<ExercisePage> {
     String mode = "";
     switch (value) {
       case 0:
-        mode="Beginner";
+        mode = "Beginner";
         break;
       case 1:
-        mode="Skilled";
+        mode = "Skilled";
         break;
       case 2:
-        mode="Advanced";
+        mode = "Advanced";
         break;
     }
     return "Breath Mode\n$mode";
@@ -200,9 +203,9 @@ class ExercisePageState extends State<ExercisePage> {
         var step = event.steps;
         var cal = event.burnedCalories;
         var time = event.timeInSeconds;
-        var isFinish=event.isFinish;
+        var isFinish = event.isFinish;
         debugPrint("isFinish $isFinish");
-        if(isFinish){
+        if (isFinish) {
           cancelTimer();
           showMsgDialog(context, "isFinish", "");
         }
@@ -302,7 +305,7 @@ class ExercisePageState extends State<ExercisePage> {
       ),
       content: Text(msg),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },

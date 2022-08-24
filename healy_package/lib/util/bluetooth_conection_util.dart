@@ -744,27 +744,29 @@ class BluetoothConnectionUtil {
         device == null) {
       return null;
     }
-    // print("stopScan");
     await stopScan();
     bool isBind = await FlutterPlugin.isBind(device.id);
     debugPrint("$isBind");
     if (isBind) {
       await connect(device);
-    } else {
-      StreamSubscription<List<DiscoveredDevice>> streamSubscription =
-          startScan(HealyWatchSDKImplementation.filterName, List.empty())
-              .listen((event) {});
-      streamSubscription.onData((data) async {
-        data.forEach((element) async {
-          if (element.id.toString() == device.id) {
-            debugPrint("start connect");
-            streamSubscription.cancel();
-            stopScan();
-            await connect(device);
-          }
-        });
-      });
+      return device;
     }
+
+    StreamSubscription<List<DiscoveredDevice>> streamSubscription =
+        startScan(HealyWatchSDKImplementation.filterName, List.empty())
+            .listen((event) {});
+    streamSubscription.onData((data) async {
+      data.forEach((element) async {
+        if (element.id.toString() == device.id) {
+          debugPrint("start connect");
+          streamSubscription.cancel();
+          stopScan();
+          await connect(device);
+        }
+      });
+    });
+
+    return device;
 
     // this.connectedDevice=value;connect(value.id);
     // return value;
