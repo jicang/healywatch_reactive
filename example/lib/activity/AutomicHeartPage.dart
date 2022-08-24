@@ -1,6 +1,3 @@
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
@@ -49,7 +46,7 @@ class AutomicHeartPageState extends State<AutomicHeartPage> {
                       Radio(
                         value: HeartRateMeasurementMode.on,
                         groupValue: workMode,
-                        onChanged: (HeartRateMeasurementMode ?value) =>
+                        onChanged: (HeartRateMeasurementMode? value) =>
                             changeWorkMode(value),
                       ),
                       Text("Interval"),
@@ -72,7 +69,7 @@ class AutomicHeartPageState extends State<AutomicHeartPage> {
                       ),
                       Expanded(
                         flex: 2,
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           child: Text(startTime),
                           onPressed: () => showTimePickerDialog(0),
                         ),
@@ -90,7 +87,7 @@ class AutomicHeartPageState extends State<AutomicHeartPage> {
                       ),
                       Expanded(
                         flex: 2,
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           child: Text(endTime),
                           onPressed: () => showTimePickerDialog(1),
                         ),
@@ -110,7 +107,7 @@ class AutomicHeartPageState extends State<AutomicHeartPage> {
                   Row(
                     children: <Widget>[
                       Expanded(
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           child: Text(weekString),
                           onPressed: () => showWeekDialog(),
                         ),
@@ -144,7 +141,7 @@ class AutomicHeartPageState extends State<AutomicHeartPage> {
     );
   }
 
-  bool ?isSet;
+  bool? isSet;
 
   getSedentaryReminder() async {
     HealyHeartRateMeasurementSettings automicHeart =
@@ -179,7 +176,7 @@ class AutomicHeartPageState extends State<AutomicHeartPage> {
       ),
       content: Text("Set SuccessFul"),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -189,7 +186,7 @@ class AutomicHeartPageState extends State<AutomicHeartPage> {
     );
   }
 
-  AlertDialog ?alertDialog;
+  AlertDialog? alertDialog;
 
   void showMsgDialog(BuildContext context, String title) {
     showDialog(
@@ -251,7 +248,7 @@ class AutomicHeartPageState extends State<AutomicHeartPage> {
       ),
       content: weekDialog,
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
             changeWeekText();
@@ -301,7 +298,7 @@ class AutomicHeartPageState extends State<AutomicHeartPage> {
   }
 
   bool isEmpty(String value) {
-    return null == value || value.length == 0;
+    return value.length == 0;
   }
 
   changeEnable(bool param0) {}

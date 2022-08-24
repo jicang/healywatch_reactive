@@ -1,6 +1,3 @@
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -25,10 +22,9 @@ class WorkOutReminderPageState extends State<WorkOutReminderPage> {
     super.dispose();
   }
 
- late HealyWatchSDKImplementation healyWatchSDK;
+  late HealyWatchSDKImplementation healyWatchSDK;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     healyWatchSDK = HealyWatchSDKImplementation.instance;
   }
@@ -67,7 +63,7 @@ class WorkOutReminderPageState extends State<WorkOutReminderPage> {
                       ),
                       Expanded(
                         flex: 2,
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           child: Text(startTime),
                           onPressed: () => showTimePickerDialog(),
                         ),
@@ -87,7 +83,7 @@ class WorkOutReminderPageState extends State<WorkOutReminderPage> {
                   Row(
                     children: <Widget>[
                       Expanded(
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           child: Text(week),
                           onPressed: () => showWeekDialog(),
                         ),
@@ -167,7 +163,7 @@ class WorkOutReminderPageState extends State<WorkOutReminderPage> {
       ),
       content: Text(dataType),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -177,7 +173,7 @@ class WorkOutReminderPageState extends State<WorkOutReminderPage> {
     );
   }
 
- late AlertDialog alertDialog;
+  late AlertDialog alertDialog;
 
   void showMsgDialog(BuildContext context, String title) {
     showDialog(
@@ -221,7 +217,7 @@ class WorkOutReminderPageState extends State<WorkOutReminderPage> {
     );
   }
 
- late WeekDialog weekDialog;
+  late WeekDialog weekDialog;
   List<int> selected = [];
   List<String> listWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -234,7 +230,7 @@ class WorkOutReminderPageState extends State<WorkOutReminderPage> {
       ),
       content: weekDialog,
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
             changeWeekText();
@@ -284,7 +280,7 @@ class WorkOutReminderPageState extends State<WorkOutReminderPage> {
   }
 
   bool isEmpty(String value) {
-    return null == value || value.length == 0;
+    return value.length == 0;
   }
 
   changeEnable(bool param0) {

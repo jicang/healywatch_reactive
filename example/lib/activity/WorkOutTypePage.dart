@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
 import 'package:healy_watch_sdk/model/models.dart';
@@ -50,7 +48,6 @@ class WorkOutTypePageState extends State<WorkOutTypePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     healyWatchSDK = HealyWatchSDKImplementation.instance;
   }
@@ -102,10 +99,8 @@ class WorkOutTypePageState extends State<WorkOutTypePage> {
     HealyWorkoutMode mode = listWorkMode[index];
     return CheckboxListTile(
       title: Text(workOutType),
-
       value: selected.contains(mode),
-      onChanged: (bool) =>
-         changeChecked(bool!, listWorkMode[index]),
+      onChanged: (bool) => changeChecked(bool!, listWorkMode[index]),
     );
   }
 
@@ -144,7 +139,7 @@ class WorkOutTypePageState extends State<WorkOutTypePage> {
       ),
       content: Text("Set SuccessFul"),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },

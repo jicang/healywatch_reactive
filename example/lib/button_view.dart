@@ -4,7 +4,7 @@ import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
 
 class ButtonView extends StatelessWidget {
   final String _text;
-  Function()? action;
+  final Function()? action;
 
   ButtonView(this._text, {required this.action});
 

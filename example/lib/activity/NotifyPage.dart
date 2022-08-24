@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
 import 'package:healy_watch_sdk/model/models.dart';
@@ -38,7 +37,6 @@ class NotifyPageState extends State<NotifyPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     healyWatchSDK = HealyWatchSDKImplementation.instance;
   }
@@ -82,7 +80,7 @@ class NotifyPageState extends State<NotifyPage> {
     );
   }
 
-  sendNotify(HealyNotifierMode ?value) async {
+  sendNotify(HealyNotifierMode? value) async {
     notifyType = value!;
     title = _titleController.text;
     info = _infoController.text;

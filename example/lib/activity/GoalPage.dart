@@ -1,16 +1,8 @@
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
 
-
-
-
-
 import '../button_view.dart';
-
-
 
 class GoalPage extends StatefulWidget {
   @override
@@ -20,15 +12,10 @@ class GoalPage extends StatefulWidget {
 }
 
 class GoalPageState extends State<GoalPage> {
-
   TextEditingController _userAgeController = TextEditingController();
-
-
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Goal"),
@@ -45,9 +32,7 @@ class GoalPageState extends State<GoalPage> {
                     textAlign: TextAlign.center,
                     controller: _userAgeController,
                     keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   ),
                 ),
               ],
@@ -78,7 +63,7 @@ class GoalPageState extends State<GoalPage> {
       ),
       content: Text(msg),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -100,20 +85,20 @@ class GoalPageState extends State<GoalPage> {
     );
   }
 
-
-  setGoal() async{
+  setGoal() async {
     String goal = _userAgeController.text;
     if (isEmpty(goal)) return;
-    bool isSuccess=await HealyWatchSDKImplementation.instance.setStepTarget(int.parse(goal));
+    bool isSuccess = await HealyWatchSDKImplementation.instance
+        .setStepTarget(int.parse(goal));
     showMsgDialog(context, "SetStepTargetResponse", "$isSuccess");
   }
 
   bool isEmpty(String value) {
-    return null == value || value.length == 0;
+    return value.length == 0;
   }
 
-  getGoal() async{
-    int goal =await HealyWatchSDKImplementation.instance.getStepTarget();
+  getGoal() async {
+    int goal = await HealyWatchSDKImplementation.instance.getStepTarget();
     _userAgeController.text = goal.toString();
     setState(() {});
   }

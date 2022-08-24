@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -109,7 +108,7 @@ class EcgPageState extends State<EcgPage> {
       ),
       content: Text(msg),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -266,7 +265,7 @@ class EcgPageState extends State<EcgPage> {
   }
 
   bool isEmpty(String value) {
-    return null == value || value.length == 0;
+    return value.length == 0;
   }
 
   _enableOnlyPPg(bool onlyPPG) {

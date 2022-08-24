@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_plugin/flutter_plugin.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
@@ -105,8 +104,7 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
     debugPrint("build deviceId $deviceId");
     final results = deviceId == null
         ? StreamBuilder<List<DiscoveredDevice>>(
-            stream: HealyWatchSDKImplementation.instance
-                .scanResults(),
+            stream: HealyWatchSDKImplementation.instance.scanResults(),
             initialData: [],
             builder: (c, snapshot) => ListView(
               children: ListTile.divideTiles(
@@ -165,7 +163,7 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            RaisedButton(
+            ElevatedButton(
               onPressed: () => toStartScan(),
               child: const Text("StartScan"),
             ),
@@ -227,11 +225,6 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
     listDevice.clear();
     setState(() {});
     HealyWatchSDKImplementation.instance.scanResults();
-
-
-
-
-
   }
 
   void stopScan() {
@@ -243,13 +236,13 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
       title: Text("PermissionRequest"),
       content: Text("$permissionName权限已经被拒绝，是否现在开启"),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
           child: Text("取消"),
         ),
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
             openAppSettings();
@@ -285,7 +278,6 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     // HealyWatchSDKImplementation.instance.cancelScanningDevices();
     //  HealyWatchSDKImplementation.instance.disconnectDevice();

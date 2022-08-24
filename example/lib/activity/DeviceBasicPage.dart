@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -303,7 +302,7 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
       screenLight = HealyDeviceBaseParameter.defaultBrightnessLevel.toDouble();
 
     enableSos = deviceBaseParameter.sosEnable!;
-    enableAncs=deviceBaseParameter.ancsState;
+    enableAncs = deviceBaseParameter.ancsState;
     _userAgeController.text = deviceBaseParameter.baseHeart.toString();
     enableConnectVibration = deviceBaseParameter.connectVibration!;
     setState(() {});
@@ -313,8 +312,7 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
     HealyDeviceBaseParameter deviceBaseParameter =
         new HealyDeviceBaseParameter();
     String hr = _userAgeController.text;
-    if (hr != null && hr.length != 0)
-      deviceBaseParameter.baseHeart = int.parse(hr);
+    if (hr.length != 0) deviceBaseParameter.baseHeart = int.parse(hr);
     deviceBaseParameter.screenOnTime = screenOnTime.toInt();
     deviceBaseParameter.brightnessLevel = screenLight.toInt();
     deviceBaseParameter.wristOnSensitivity = wristOnSensitivity.toInt();
@@ -324,7 +322,7 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
     deviceBaseParameter.wristOnEnable = enableWristOn;
     deviceBaseParameter.distanceUnit = distanceUnit;
     deviceBaseParameter.hourMode = timeMode;
-    deviceBaseParameter.ancsState=enableAncs;
+    deviceBaseParameter.ancsState = enableAncs;
     deviceBaseParameter.wearingWrist = wearingWrist;
     bool isSuccess = await HealyWatchSDKImplementation.instance
         .setDeviceBaseParameter(deviceBaseParameter);
@@ -339,7 +337,7 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
       ),
       content: Text(msg),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
