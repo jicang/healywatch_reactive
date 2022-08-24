@@ -661,6 +661,8 @@ class BluetoothConnectionUtil {
         writeData(Uint8List.fromList(BleSdk.disableANCS()));
       }
 
+      SharedPrefUtils.clearConnectedDevice();
+
       isConnect = false;
       isNeedReconnect = false;
       this.device = null;
