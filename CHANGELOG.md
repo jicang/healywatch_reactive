@@ -1,6 +1,7 @@
 # Versions
 ## [2.3] - 2022-08-26
 * Removed connected device info from cache when the device is disconnected.
+* Updated README
 
 ## [2.2] - 2022-08-22
 * disableAncs when disconnectDevice
