@@ -138,7 +138,7 @@ class DeviceSettingPageState extends State<DeviceSettingPage> {
 
   toWatchFaceStyle() {
     Navigator.of(context).push(new MaterialPageRoute(builder: (context) {
-      return WorkFaceStylePage();
+      return WatchFaceStylePage();
     }));
   }
 

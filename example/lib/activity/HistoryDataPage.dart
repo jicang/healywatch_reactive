@@ -1,5 +1,6 @@
 // ignore: file_names
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
@@ -322,7 +323,7 @@ class HistoryDataPageState extends State<HistoryDataPage> {
         Stream<HealyBaseModel> stream =
             HealyWatchSDKImplementation.instance.getAllDataFromWatch();
         stream.listen((event) {
-          debugPrint(event.toString());
+          log('[$HistoryDataPage] ${event.toString()}');
         }).onDone(() {
           syncFinish();
         });
@@ -366,7 +367,7 @@ class HistoryDataPageState extends State<HistoryDataPage> {
         await HealyWatchSDKImplementation.instance.deleteAllECGData();
         break;
     }
-    debugPrint("delete");
+    log("[$HistoryDataPage] delete");
     startReadData();
   }
 

@@ -55,9 +55,9 @@ class FirmwareUpdatePageState extends State<FirmwareUpdatePage> {
                       setState(() {
                         _downloadUrl = downloadUrl;
                       });
-                      log('Firmware Update available');
+                      log('[$FirmwareUpdatePage] Firmware Update available');
                     } else {
-                      debugPrint('already lastVersion');
+                      log('[$FirmwareUpdatePage] already lastVersion');
                     }
                   },
                 ),
@@ -79,9 +79,9 @@ class FirmwareUpdatePageState extends State<FirmwareUpdatePage> {
                       dfuPercent = (event * 3 - 2) * 100;
                       setState(() {});
                     }, onError: (msg) {
-                      debugPrint("dfu error $msg");
+                      log("[$FirmwareUpdatePage] dfu error $msg");
                     }, onDone: () {
-                      debugPrint("dfu onDone");
+                      log("[$FirmwareUpdatePage] dfu onDone");
                     });
                   },
                 ),

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -164,7 +166,7 @@ class UserInfoState extends State<UserInfo> {
   }
 
   void itemClick(int value) {
-    debugPrint("$value");
+    log("[$UserInfo] $value");
   }
 
   setGenderValue(HealyGender? value) {
@@ -173,7 +175,7 @@ class UserInfoState extends State<UserInfo> {
   }
 
   textSaved(String value) {
-    debugPrint(value);
+    log('[$UserInfo] $value');
   }
 
   Widget getDialog(BuildContext context, String dataType, String msg) {

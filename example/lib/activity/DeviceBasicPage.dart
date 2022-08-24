@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -326,7 +328,7 @@ class DeviceBasicPageState extends State<DeviceBasicPage> {
     deviceBaseParameter.wearingWrist = wearingWrist;
     bool isSuccess = await HealyWatchSDKImplementation.instance
         .setDeviceBaseParameter(deviceBaseParameter);
-    debugPrint("$isSuccess");
+    log("[$DeviceBasicPage] $isSuccess");
   }
 
   Widget getDialog(String dataType, String msg) {

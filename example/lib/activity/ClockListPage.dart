@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
@@ -211,7 +212,7 @@ class ClockState extends State<ClockListPage> {
   }
 
   syncFinish() {
-    debugPrint("end s");
+    log("[$ClockListPage] end s");
     //Navigator.of(context).pop(loadingDialog);
     setState(() {});
   }

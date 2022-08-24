@@ -1,6 +1,6 @@
 import 'dart:async';
+import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 import 'reactive_state.dart';
@@ -35,7 +35,7 @@ class BleDeviceConnector extends ReactiveState<ConnectionStateUpdate> {
         _logMessage(
             'ConnectionState for device $deviceId : ${update.connectionState}');
         _deviceConnectionController.add(update);
-        debugPrint("enableNotification${update.connectionState}");
+        log("[$BleDeviceConnector] enableNotification${update.connectionState}");
         if (update.connectionState == DeviceConnectionState.connected) {
           enableNotification(deviceId);
         }
@@ -47,19 +47,17 @@ class BleDeviceConnector extends ReactiveState<ConnectionStateUpdate> {
 
   Future<void> enableNotification(String deviceId) async {
     _logMessage('enableNotification');
-    debugPrint("enableNotification");
     final characteristic = QualifiedCharacteristic(
         characteristicId: Uuid.parse("0000fff7-0000-1000-8000-00805f9b34fb"),
         serviceId: Uuid.parse("0000fff0-0000-1000-8000-00805f9b34fb"),
         deviceId: deviceId);
     _ble.subscribeToCharacteristic(characteristic).listen((event) {
-      debugPrint("notifyData $event");
+      log("[$BleDeviceConnector] notifyData $event");
     });
   }
 
   void writeData(String deviceId) {
-    _logMessage('writeData');
-    debugPrint("writeData $deviceId");
+    _logMessage('[$BleDeviceConnector] writeData $deviceId');
     final characteristic = QualifiedCharacteristic(
         characteristicId: Uuid.parse("0000fff6-0000-1000-8000-00805f9b34fb"),
         serviceId: Uuid.parse("0000fff0-0000-1000-8000-00805f9b34fb"),

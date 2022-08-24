@@ -6,7 +6,6 @@ import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:healy_watch_sdk/util/shared_pref.dart';
 import 'package:nordic_dfu/nordic_dfu.dart';
@@ -471,7 +470,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   }
 
   bool _workOutData(List<int> values) {
-    debugPrint("notify${BleSdk.hex2String(values)}");
+    log("[$HealyWatchSDKImplementation] notify${BleSdk.hex2String(values)}");
     return values.isNotEmpty &&
         (values[0] == DeviceCmd.startExercise ||
             values[0] == DeviceCmd.exerciseData);
@@ -803,7 +802,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     await bluetoothUtil.writeData(Uint8List.fromList(value),
         transactionId: transactionId);
     final String write = BleSdk.hex2String(value);
-    debugPrint("write: $write");
+    log("[$HealyWatchSDKImplementation] write: $write");
   }
 
   Future<List<int>> _filterValue(int cmd) async {
@@ -1103,14 +1102,14 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
   /// [downloadUrl] can be retrieved by calling [checkIfFirmwareUpdateAvailable]
   @override
   Stream<double> downloadLatestFirmwareUpdate(String downloadUrl) async* {
-    debugPrint('downloadLatestFirmwareUpdate');
+    log('[$HealyWatchSDKImplementation] downloadLatestFirmwareUpdate');
     final downloadProgressStream = StreamController<double>();
 
     final Directory directory = await getApplicationDocumentsDirectory();
     final String rootPath = directory.path;
     final String savePath = "$rootPath/update.zip";
 
-    debugPrint('Firmware update will be saved here: $rootPath');
+    log('[$HealyWatchSDKImplementation] Firmware update will be saved here: $rootPath');
 
     await Dio().download(downloadUrl, savePath,
         onReceiveProgress: (receivedBytes, totalBytes) {
@@ -1189,7 +1188,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     final HealyResUpdateData healyResUpdateData =
         await checkNeedResUpdate(checkBytes);
     bool needUpdate = healyResUpdateData.needUpdate;
-    debugPrint("resUpdate $needUpdate");
+    log("[$HealyWatchSDKImplementation] resUpdate $needUpdate");
     if (needUpdate) {
       final healySetDeviceTime = await HealyWatchSDKImplementation.instance
           .setDeviceTime(DateTime.now());
@@ -1208,7 +1207,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
           progressCallback: (progress) =>
               addProgress(progressStream, 1 / 3 + progress / 3));
     } on Exception catch (e) {
-      debugPrint(e.toString());
+      log('[$HealyWatchSDKImplementation] ${e.toString()}');
       progressStream.addError(e);
     }
   }
@@ -1291,7 +1290,7 @@ class HealyWatchSDKImplementation implements HealyWatchSDK {
     );
     streamSubscription.onData((data) async {
       for (DiscoveredDevice peripheral in data) {
-        debugPrint("dfu " + peripheral.id.toString());
+        log("[$HealyWatchSDKImplementation] dfu " + peripheral.id.toString());
         streamSubscription.cancel();
         await cancelScanningDevices();
         await startOta(peripheral.id, "$rootPath/firmware.zip", progressStream);
