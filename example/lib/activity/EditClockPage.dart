@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
@@ -310,7 +312,7 @@ class EditClockPageState extends State<EditClockPage> {
   void setClock() async {
     bool isSuccess = await HealyWatchSDKImplementation.instance.editClock(list);
     showMsgDialog(context, "SetAlarmClock");
-    debugPrint("$isSuccess");
+    log("[$EditClockPage] $isSuccess");
   }
 
   bool isEmpty(String value) {

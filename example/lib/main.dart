@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
@@ -101,7 +102,7 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("build deviceId $deviceId");
+    log("[$ScanDeviceWidget] build deviceId $deviceId");
     final results = deviceId == null
         ? StreamBuilder<List<DiscoveredDevice>>(
             stream: HealyWatchSDKImplementation.instance.scanResults(),
@@ -185,7 +186,7 @@ class ScanDeviceWidgetState extends State<ScanDeviceWidget> {
           .showSnackBar(SnackBar(content: Text('BluetoothState is off')));
       return;
     }
-    debugPrint("scan");
+    log("[$ScanDeviceWidget] scan");
     if (Platform.isAndroid) {
       bool isGranted = await Permission.location.request().isGranted;
 

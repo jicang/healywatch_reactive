@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:isolate';
 import 'dart:ui';
 
@@ -68,7 +69,9 @@ class AndroidNotifycationPageState extends State<AndroidNotifycationPage> {
     // NotificationsListener.receivePort.listen((evt) => onData(evt));
 
     var isR = await NotificationsListener.isRunning;
-    debugPrint("""Service is ${isR}aleary running""");
+    log("[$AndroidNotifycationPage] "
+        "Service is ${isR} already running"
+        "");
   }
 
   void onData(NotificationEvent event) {
@@ -111,21 +114,21 @@ class AndroidNotifycationPageState extends State<AndroidNotifycationPage> {
         healyNotifierMode: healyNotifierMode,
         info: event.text.toString(),
         title: event.title.toString()));
-    debugPrint(event.toString());
+    log('[$AndroidNotifycationPage] ${event.toString()}');
   }
 
   static void _callback(NotificationEvent evt) {
-    debugPrint("send evt to ui: $evt");
+    log('[$AndroidNotifycationPage] send evt to ui: $evt');
     final SendPort? send = IsolateNameServer.lookupPortByName("_listener_");
-    if (send == null) debugPrint("can't find the sender");
+    if (send == null) log("[$AndroidNotifycationPage] can't find the sender");
     send?.send(evt);
   }
 
   void startListening() async {
-    debugPrint("start listening");
+    log("[$AndroidNotifycationPage] start listening");
     var hasPermission = await NotificationsListener.hasPermission;
     if (!hasPermission!) {
-      debugPrint("no permission, so open settings");
+      log("[$AndroidNotifycationPage] no permission, so open settings");
       NotificationsListener.openPermissionSettings();
       return;
     }
@@ -138,7 +141,7 @@ class AndroidNotifycationPageState extends State<AndroidNotifycationPage> {
   }
 
   void stopListening() async {
-    debugPrint("stop listening");
+    log("[$AndroidNotifycationPage] stop listening");
 
     await NotificationsListener.stopService();
   }

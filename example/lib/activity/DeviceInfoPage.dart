@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
@@ -31,28 +32,28 @@ class DeviceInfoPageState extends State<DeviceInfoPage> {
     stream.listen((function) {
       switch (function) {
         case HealyFunction.camera:
-          debugPrint("camera");
+          log("[$DeviceInfoPage] camera");
           break;
         case HealyFunction.rejectTel:
-          debugPrint("rejectTel");
+          log("[$DeviceInfoPage] rejectTel");
           break;
         case HealyFunction.tel:
-          debugPrint("tel");
+          log("[$DeviceInfoPage] tel");
           break;
         case HealyFunction.findPhone:
-          debugPrint("findPhone");
+          log("[$DeviceInfoPage] findPhone");
           break;
         case HealyFunction.musicControlPlay:
-          debugPrint("musicControlPlay");
+          log("[$DeviceInfoPage] musicControlPlay");
           break;
         case HealyFunction.musicControlNext:
-          debugPrint("musicControlNext");
+          log("[$DeviceInfoPage] musicControlNext");
           break;
         case HealyFunction.musicControlPre:
-          debugPrint("musicControlPre");
+          log("[$DeviceInfoPage] musicControlPre");
           break;
         case HealyFunction.musicControlPause:
-          debugPrint("musicControlPause");
+          log("[$DeviceInfoPage] musicControlPause");
           break;
       }
     });

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_plugin/flutter_plugin.dart';
 
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
@@ -63,12 +62,12 @@ class BluetoothConnectionUtil {
   BluetoothConnectionUtil() {
     bleManager = FlutterReactiveBle();
     bleManager.statusStream.listen((event) async {
-      debugPrint("$event");
+      log("[$BluetoothConnectionUtil] $event");
       if (event == BleStatus.poweredOff) {
         //disconnect();
       } else if (event == BleStatus.ready) {
         bool? isFirmware = await SharedPrefUtils.isFirmware();
-        debugPrint("isFirmware $isFirmware");
+        log("[$BluetoothConnectionUtil] isFirmware $isFirmware");
         if (isFirmware != null && isFirmware) {
           final Directory directory = await getApplicationDocumentsDirectory();
           final String rootPath = directory.path;
@@ -629,7 +628,7 @@ class BluetoothConnectionUtil {
     final stream = bleManager.subscribeToCharacteristic(_characteristicNotify);
 
     streamSubscription = stream.listen((event) {
-      debugPrint("notifyData ${BleSdk.hex2String(event)}");
+      log("[$BluetoothConnectionUtil] notifyData ${BleSdk.hex2String(event)}");
       streamController.add(event);
     }, onError: (Object error) {
       log(
@@ -746,7 +745,7 @@ class BluetoothConnectionUtil {
     }
     await stopScan();
     bool isBind = await FlutterPlugin.isBind(device.id);
-    debugPrint("$isBind");
+    log("[$BluetoothConnectionUtil] $isBind");
     if (isBind) {
       await connect(device);
       return device;
@@ -758,7 +757,7 @@ class BluetoothConnectionUtil {
     streamSubscription.onData((data) async {
       data.forEach((element) async {
         if (element.id.toString() == device.id) {
-          debugPrint("start connect");
+          log("[$BluetoothConnectionUtil] start connect");
           streamSubscription.cancel();
           stopScan();
           await connect(device);

@@ -1,8 +1,8 @@
 import 'dart:convert';
+import 'dart:developer' as dev;
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
 import '../model/models.dart';
@@ -69,15 +69,15 @@ class ResolveUtil {
     deviceBaseParameter.vibrationLevel = _hexByte2Int(value[5], 0);
     deviceBaseParameter.ancsState = _hexByte2Int(value[6], 0) == 1;
     List<int> low = _getAncsEnableList(value[7]);
-    debugPrint("$low");
+    dev.log("[$ResolveUtil] $low");
 
     List<int> high = _getAncsEnableList(value[8]);
-    debugPrint("$high");
+    dev.log("[$ResolveUtil] $high");
     List<HealyNotifierMode> ancsList = [];
     List<int> selectedList = BleSdk.generateValue(12);
     BleSdk.arrayCopy(low, 0, selectedList, 0, low.length);
     BleSdk.arrayCopy(high, 0, selectedList, low.length, 4);
-    debugPrint("$selectedList");
+    dev.log("[$ResolveUtil] $selectedList");
     for (int i = 0; i < selectedList.length; i++) {
       if (selectedList[i] == 1) {
         ancsList.add(HealyNotifierMode.values[i]);
@@ -758,7 +758,7 @@ class ResolveUtil {
     for (int i = 0; i < length; i++) {
       int selected = _hexByte2Int(value[i + 2], 0);
 
-      debugPrint("$selected");
+      dev.log("[$ResolveUtil] $selected");
       selectedList[i] = modeList[selected];
     }
 

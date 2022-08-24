@@ -1,17 +1,19 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
 import 'package:healy_watch_sdk/model/models.dart';
 
 import '../button_view.dart';
 
-class WorkFaceStylePage extends StatefulWidget {
+class WatchFaceStylePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return WorkFaceStylePageState();
+    return WatchFaceStylePageState();
   }
 }
 
-class WorkFaceStylePageState extends State<WorkFaceStylePage> {
+class WatchFaceStylePageState extends State<WatchFaceStylePage> {
   @override
   void dispose() {
     super.dispose();
@@ -127,7 +129,7 @@ class WorkFaceStylePageState extends State<WorkFaceStylePage> {
     isSet = true;
     bool isSuccess = await HealyWatchSDKImplementation.instance
         .setWatchFaceStyle(HealyWatchFaceStyle(selectedIndex));
-    debugPrint("$isSuccess");
+    log("[$WatchFaceStylePage] $isSuccess");
   }
 
   Widget getDialog(String dataType) {

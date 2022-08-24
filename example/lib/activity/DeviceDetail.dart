@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
@@ -37,7 +38,7 @@ class DeviceDetailState extends State<DeviceDetail> {
   @override
   void dispose() {
     super.dispose();
-    debugPrint("dispose");
+    log("[$DeviceDetail] dispose");
     HealyWatchSDKImplementation.instance.disconnectDevice();
   }
 
@@ -174,9 +175,9 @@ class DeviceDetailState extends State<DeviceDetail> {
   }
 
   static void _callback(NotificationEvent evt) {
-    debugPrint("send evt to ui: $evt");
+    log("[$DeviceDetail] send evt to ui: $evt");
     final SendPort? send = IsolateNameServer.lookupPortByName("_listener_");
-    if (send == null) debugPrint("can't find the sender");
+    if (send == null) log("[$DeviceDetail] can't find the sender");
     send?.send(evt);
   }
 
@@ -338,7 +339,7 @@ class DeviceDetailState extends State<DeviceDetail> {
     var isBind = device == null ? false : await FlutterPlugin.isBind(device.id);
     if (device != null && isBind) {}
 
-    debugPrint("${isBind}");
+    log("[$DeviceDetail] ${isBind}");
     //methodChannel.invokeMethod("paired");
   }
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:healy_watch_sdk/healy_watch_sdk_impl.dart';
 import 'package:healy_watch_sdk/model/models.dart';
@@ -90,7 +92,7 @@ class NotifyPageState extends State<NotifyPage> {
       title: title,
     );
     bool success = await healyWatchSDK.setNotifyData(healyNotifier);
-    debugPrint("$success");
+    log("[$NotifyPage] $success");
     setState(() {});
   }
 }

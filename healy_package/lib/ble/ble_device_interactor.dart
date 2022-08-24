@@ -65,8 +65,9 @@ class BleDeviceInteractor {
       _logMessage(
         'Error occured when reading ${characteristic.characteristicId} : $e',
       );
-      // ignore: avoid_print
-      debugPrintStack(stackTrace: s);
+      if (kDebugMode) {
+        debugPrintStack(stackTrace: s);
+      }
       rethrow;
     }
   }
@@ -81,8 +82,9 @@ class BleDeviceInteractor {
       _logMessage(
         'Error occured when writing ${characteristic.characteristicId} : $e',
       );
-      // ignore: avoid_print
-      debugPrintStack(stackTrace: s);
+      if (kDebugMode) {
+        debugPrintStack(stackTrace: s);
+      }
       rethrow;
     }
   }
@@ -97,8 +99,9 @@ class BleDeviceInteractor {
       _logMessage(
         'Error occured when writing ${characteristic.characteristicId} : $e',
       );
-      // ignore: avoid_print
-      debugPrintStack(stackTrace: s);
+      if (kDebugMode) {
+        debugPrintStack(stackTrace: s);
+      }
       rethrow;
     }
   }
