@@ -3,6 +3,7 @@
 * Removed connected device info from cache when the device is disconnected.
 * Updated README file.
 * Fixed all analyzer issues.
+* Replaced `debugPrint` with `log` or `kDebugMode` check.
 
 ## [2.2] - 2022-08-22
 * disableAncs when disconnectDevice

@@ -24,6 +24,8 @@ public class SwiftFlutterPlugin: NSObject, Flutter.FlutterPlugin {
           let teams:String = teamJSON["deviceId"] as! String
           let isPeri = getPeripheral(idStr: teams)
           result(isPeri)
+      } else if call.method == "getPlatformVersion" {
+          result("iOS " + UIDevice.current.systemVersion)
       }
   }
     
