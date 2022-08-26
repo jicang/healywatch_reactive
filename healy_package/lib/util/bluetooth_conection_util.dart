@@ -166,33 +166,53 @@ class BluetoothConnectionUtil {
       name: loggerName,
       time: DateTime.now(),
     );
+
     _devices.clear();
     _subscription?.cancel();
-    _subscription = bleManager
-        .scanForDevices(withServices: serviceIds)
-        .where((event) => filterForName == null
-            ? true
-            : event.name.toLowerCase().contains(filterForName))
-        .listen((device) {
-      log(
-        'startScan found device: ${device.id}',
-        name: loggerName,
-        time: DateTime.now(),
-      );
-      final knownDeviceIndex = _devices.indexWhere((d) => d.id == device.id);
-      if (knownDeviceIndex >= 0) {
-        _devices[knownDeviceIndex] = device;
-      } else {
-        _devices.add(device);
+
+    FlutterPlugin.pairedDevices.then((devices) {
+      print('devices param type = ${devices.runtimeType}');
+
+      for (var device in devices) {
+        print('device id=${device.key}, name=${device.value}');
+
+        _devices.add(DiscoveredDevice(
+          id: device.key,
+          name: device.value,
+          serviceData: {},
+          manufacturerData: Uint8List.fromList([]),
+          rssi: -1,
+          serviceUuids: [],
+        ));
       }
-      _pushState();
-    }, onError: (Object e) {
-      log(
-        'startScan fails with error: $e',
-        name: loggerName,
-        time: DateTime.now(),
-      );
+
+      _subscription = bleManager
+          .scanForDevices(withServices: serviceIds)
+          .where((event) => filterForName == null
+              ? true
+              : event.name.toLowerCase().contains(filterForName))
+          .listen((device) {
+        log(
+          'startScan found device: ${device.id}',
+          name: loggerName,
+          time: DateTime.now(),
+        );
+        final knownDeviceIndex = _devices.indexWhere((d) => d.id == device.id);
+        if (knownDeviceIndex >= 0) {
+          _devices[knownDeviceIndex] = device;
+        } else {
+          _devices.add(device);
+        }
+        _pushState();
+      }, onError: (Object e) {
+        log(
+          'startScan fails with error: $e',
+          name: loggerName,
+          time: DateTime.now(),
+        );
+      });
     });
+
     _pushState();
     return _stateStreamController.stream;
   }
@@ -656,9 +676,9 @@ class BluetoothConnectionUtil {
         time: DateTime.now(),
       );
 
-      if (Platform.isIOS) {
-        writeData(Uint8List.fromList(BleSdk.disableANCS()));
-      }
+      // if (Platform.isIOS) {
+      //   writeData(Uint8List.fromList(BleSdk.disableANCS()));
+      // }
 
       SharedPrefUtils.clearConnectedDevice();
 
@@ -745,7 +765,7 @@ class BluetoothConnectionUtil {
     }
     await stopScan();
     bool isBind = await FlutterPlugin.isBind(device.id);
-    log("[$BluetoothConnectionUtil] $isBind");
+    log("[$BluetoothConnectionUtil] is ${device.id} bound to the system? $isBind");
     if (isBind) {
       await connect(device);
       return device;
