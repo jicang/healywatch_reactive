@@ -21,7 +21,7 @@ dependencies:
   flutter_plugin:
     git:
       url: https://github.com/jicang/healywatch_reactive
-      ref: fix_ios_pairing_issue
+      ref: master
       path: flutter_plugin
 
 dependency_overrides:

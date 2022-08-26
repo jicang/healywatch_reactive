@@ -101,8 +101,8 @@ packages:
     dependency: "direct main"
     description:
       path: flutter_plugin
-      ref: fix_ios_pairing_issue
-      resolved-ref: a41d74ddc088791f4fe8108190f8f18a55f4938b
+      ref: master
+      resolved-ref: "58ee67d2a8434da4866f7e39142c9fcb4e8df076"
       url: "https://github.com/jicang/healywatch_reactive"
     source: git
     version: "0.0.2"
