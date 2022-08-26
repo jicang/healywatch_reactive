@@ -51,6 +51,9 @@ class BluetoothConnectionUtil {
   DeviceConnectionState _deviceConnectionState =
       DeviceConnectionState.disconnected;
 
+  Timer? scanDeviceTimer;
+  final scanFinishSecsWhenPairedDevicesExist = 7;
+
   static BluetoothConnectionUtil? instance() {
     if (_singleton == null) {
       _singleton = BluetoothConnectionUtil();
@@ -170,20 +173,31 @@ class BluetoothConnectionUtil {
     _devices.clear();
     _subscription?.cancel();
 
+    scanDeviceTimer ??= Timer(
+      Duration(seconds: scanFinishSecsWhenPairedDevicesExist),
+      () {
+        if (_devices.isNotEmpty) {
+          _pushState();
+        }
+        scanDeviceTimer?.cancel();
+        scanDeviceTimer = null;
+      },
+    );
+
     FlutterPlugin.pairedDevices.then((devices) {
-      print('devices param type = ${devices.runtimeType}');
+      if (devices != null) {
+        final mapDevices = Map<String, String>.from(devices);
 
-      for (var device in devices) {
-        print('device id=${device.key}, name=${device.value}');
-
-        _devices.add(DiscoveredDevice(
-          id: device.key,
-          name: device.value,
-          serviceData: {},
-          manufacturerData: Uint8List.fromList([]),
-          rssi: -1,
-          serviceUuids: [],
-        ));
+        for (var deviceId in mapDevices.keys) {
+          _devices.add(DiscoveredDevice(
+            id: deviceId,
+            name: mapDevices[deviceId] ?? '',
+            serviceData: {},
+            manufacturerData: Uint8List.fromList([]),
+            rssi: -1,
+            serviceUuids: [],
+          ));
+        }
       }
 
       _subscription = bleManager

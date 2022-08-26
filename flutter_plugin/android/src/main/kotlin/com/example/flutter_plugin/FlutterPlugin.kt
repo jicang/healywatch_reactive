@@ -24,14 +24,29 @@ class FlutterPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-        if (call.method == "getPlatformVersion") {
 
-            result.success(isBind("ss"))
-        } else if (call.method == "getPaired") {
-            var deviceId :String= call.argument("deviceId")!!;
-            result.success(isBind(deviceId))
-        } else {
-            result.notImplemented()
+        when (call.method) {
+            "getPaired" -> {
+
+                var deviceId :String= call.argument("deviceId")!!;
+                result.success(isBind(deviceId))
+
+            }
+            "getPairedDevices" -> {
+
+                result.success(null)
+
+            }
+            "getPlatformVersion" -> {
+
+                result.success("Android ${android.os.Build.VERSION.RELEASE}")
+
+            }
+            else -> {
+
+                result.notImplemented()
+
+            }
         }
     }
 

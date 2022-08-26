@@ -1,9 +1,10 @@
 # Versions
-## [2.3] - 2022-08-26
-* Removed connected device info from cache when the device is disconnected.
+## [2.2.1] - 2022-08-26
+* Removed a connected device info from cache when the device is disconnected.
 * Updated README file.
 * Fixed all analyzer issues.
 * Replaced `debugPrint` with `log` or `kDebugMode` check.
+* [iOS] Fixed the issue that Healy watches which paired to the system are not connectable.
 
 ## [2.2] - 2022-08-22
 * disableAncs when disconnectDevice

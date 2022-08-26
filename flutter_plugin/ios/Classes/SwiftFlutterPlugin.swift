@@ -31,7 +31,7 @@ public class SwiftFlutterPlugin: NSObject, Flutter.FlutterPlugin {
           
           let teamJSON:Dictionary = call.arguments as! Dictionary<String, Any>;
           let deviceId:String = teamJSON["deviceId"] as! String
-          let isPeri = isPheriperalConnected(idStr: deviceId)
+          let isPeri = isPeripheralConnected(idStr: deviceId)
           result(isPeri)
       
       } else if call.method == "getPairedDevices" {
@@ -64,7 +64,7 @@ public class SwiftFlutterPlugin: NSObject, Flutter.FlutterPlugin {
     }
     
     // Checks if the given device is connected to the system.
-    func isPheriperalConnected (idStr:String) ->(Bool) {
+    func isPeripheralConnected (idStr:String) ->(Bool) {
              
         let peripherals = getConnectedPeripherals()
         return peripherals?.keys.contains(idStr) ?? false
@@ -81,21 +81,51 @@ final class CentralManagerDelegate: NSObject, CBCentralManagerDelegate {
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
 
       switch central.state {
+          
         case .poweredOff:
-            print("Is Powered Off.")
+          
+          #if DEBUG
+          print("Is Powered Off.")
+          #endif
+          
         case .poweredOn:
-            print("Is Powered On.")
+          
+          #if DEBUG
+          print("Is Powered On.")
+          #endif
+          
           isPoweredOn = true
+          
         case .unsupported:
-            print("Is Unsupported.")
+          
+          #if DEBUG
+          print("Is Unsupported.")
+          #endif
+          
         case .unauthorized:
-        print("Is Unauthorized.")
+          
+          #if DEBUG
+          print("Is Unauthorized.")
+          #endif
+          
         case .unknown:
-            print("Unknown")
+          
+          #if DEBUG
+          print("Unknown")
+          #endif
+          
         case .resetting:
-            print("Resetting")
+          
+          #if DEBUG
+          print("Resetting")
+          #endif
+          
         @unknown default:
+          
+          #if DEBUG
           print("Error")
+          #endif
+          
         }
     }
 }

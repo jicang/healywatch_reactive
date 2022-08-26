@@ -1,6 +1,6 @@
 name: healy_watch_sdk
 description: A new Flutter package.
-version: 0.0.1
+version: 2.2.1
 homepage: www.healy.com
 publish_to: none
 
@@ -21,7 +21,7 @@ dependencies:
   flutter_plugin:
     git:
       url: https://github.com/jicang/healywatch_reactive
-      ref: fix_ios_pairing_issue
+      ref: 91dc735c8e0efb79e99760ce5e0cb9dc9fbd75ae
       path: flutter_plugin
 
 dependency_overrides:

@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/services.dart';
 
 class FlutterPlugin {
@@ -16,8 +15,7 @@ class FlutterPlugin {
   }
 
   static Future<dynamic> get pairedDevices async {
-    var devices = await _channel.invokeMapMethod('getPairedDevices');
-    print('Type of devices variable = ${devices.runtimeType}');
+    final devices = await _channel.invokeMapMethod('getPairedDevices');
     return devices;
   }
 }
