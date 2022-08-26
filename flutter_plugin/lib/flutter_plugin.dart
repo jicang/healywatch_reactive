@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/services.dart';
 
 class FlutterPlugin {
@@ -13,5 +12,10 @@ class FlutterPlugin {
   static Future<dynamic> isBind(String id) async {
     var isBind = await _channel.invokeMethod('getPaired', {"deviceId": id});
     return isBind;
+  }
+
+  static Future<dynamic> get pairedDevices async {
+    final devices = await _channel.invokeMapMethod('getPairedDevices');
+    return devices;
   }
 }

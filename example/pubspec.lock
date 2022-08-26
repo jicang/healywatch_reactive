@@ -199,8 +199,8 @@ packages:
     dependency: transitive
     description:
       path: flutter_plugin
-      ref: master
-      resolved-ref: "08299555ad58b674295621958329a410122facfb"
+      ref: "91dc735c8e0efb79e99760ce5e0cb9dc9fbd75ae"
+      resolved-ref: "91dc735c8e0efb79e99760ce5e0cb9dc9fbd75ae"
       url: "https://github.com/jicang/healywatch_reactive"
     source: git
     version: "0.0.1"
@@ -234,7 +234,7 @@ packages:
       path: "../healy_package"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "2.2.1"
   http_parser:
     dependency: transitive
     description:
