@@ -14,4 +14,10 @@ class FlutterPlugin {
     var isBind = await _channel.invokeMethod('getPaired', {"deviceId": id});
     return isBind;
   }
+
+  static Future<dynamic> get pairedDevices async {
+    var devices = await _channel.invokeMapMethod('getPairedDevices');
+    print('Type of devices variable = ${devices.runtimeType}');
+    return devices;
+  }
 }
