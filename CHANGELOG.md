@@ -5,6 +5,7 @@
 * Fixed all analyzer issues.
 * Replaced `debugPrint` with `log` or `kDebugMode` check.
 * [iOS] Fixed the issue that Healy watches which paired to the system are not connectable.
+* Fixed wrong change in iOS example app.
 
 ## [2.2] - 2022-08-22
 * disableAncs when disconnectDevice
