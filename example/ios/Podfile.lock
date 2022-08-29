@@ -73,15 +73,15 @@ SPEC CHECKSUMS:
   flutter_plugin: 09381f07b75d132b629c9022700fc50ab47c324b
   iOSDFULibrary: 3500ac00451aa7d8ec48a752e91099669a2c1d27
   nordic_dfu: 78bec1a41a3e959b3fcab283a8bad3594b936e1d
-  path_provider_ios: 7d7ce634493af4477d156294792024ec3485acd5
+  path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   Protobuf: 235750e4696ff59fb07d949a9dbbc92b3c0700fe
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   reactive_ble_mobile: 9ce6723d37ccf701dbffd202d487f23f5de03b4c
-  shared_preferences_ios: aef470a42dc4675a1cdd50e3158b42e3d1232b32
+  shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   SwiftProtobuf: 6ef3f0e422ef90d6605ca20b21a94f6c1324d6b3
   ZIPFoundation: b1f0de4eed33e74a676f76e12559ab6b75990197
 
 PODFILE CHECKSUM: 512d5be9bed51a8238f1437a7761c050bd0b240e
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3
